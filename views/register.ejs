@@ -3,9 +3,169 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <!-- CSS for Styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <!-- JavaScript for Interactivity -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <!-- ADDED JavaScript -->
+    <script src="javascripts/registerScript.js"></script>
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <form id="register_form" action="register" role="form" method="post">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your NUSNET username" required="required">
+      </div>
+      <div>
+          <label id="username_invalid" name="username_invalid" style="display:none;color:red;font-style:italic;">Invalid username! Use your NUSNET username.</label>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
+      </div>
+      <div>
+          <label id="password_invalid" name="password_invalid" style="display:none;color:red;font-style:italic;">Invalid password! Password must have at least 10 characters.</label>
+      </div>
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter your first name" required="required">
+      </div>
+      <div>
+          <label id="first_name_invalid" name="first_name_invalid" style="display:none;color:red;font-style:italic;">Invalid first name!</label>
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter your last name" required="required">
+      </div>
+      <div>
+          <label id="last_name_invalid" name="last_name_invalid" style="display:none;color:red;font-style:italic;">Invalid last name!</label>
+      </div>
+      <div class="form-group">
+          <label for="Role">Role</label>
+          <select class="form-control" id="role" name="role" required="required" onchange="onChangeRole()">
+            <option value="" disabled="disabled" selected="selected">Select Role</option>
+            <option value="Student">Student</option>
+            <option value="Admin">Admin</option>
+          </select> 
+      </div>
+      <div class="form-group" id="div-level" name="div-level" style="display:none;">
+        <label for="Level">Level</label>
+        <select class="form-control" id="level" name="level" required="required">
+          <option value="" disabled="disabled" selected="selected">Select Level</option>
+          <option value="Undergraduate">Undergraduate</option>
+          <option value="Graduate">Graduate</option>
+        </select> 
+      </div>
+      <div class="form-group" id="div-program" name="div-program" style="display:none;">
+        <label for="Program">Program</label>
+        <select class="form-control" id="program" name="program" required="required">
+          <option value="" disabled="disabled" selected="selected">Select Program</option>
+          <option value="Program 1">Program 1</option>
+          <option value="Program 2">Program 2</option>
+          <option value="Program 3">Program 3</option>
+        </select> 
+      </div>
+      <div class="form-group" id="div-year" name="div-year" style="display:none;">
+        <label for="Year">Year of Study</label>
+        <select class="form-control" id="year" name="year" required="required">
+          <option value="" disabled="disabled" selected="selected">Select Year of Study</option>
+          <option value="1">Year 1</option>
+          <option value="2">Year 2</option>
+          <option value="3">Year 3</option>
+          <option value="4">Year 4</option>
+          <option value="5">Year 5</option>
+        </select> 
+      </div>
+      <div class="form-group" id="div-modules-taken" name="div-modules-taken" style="display:none;">
+        <label for="Modules">Modules Taken</label>
+        <select multiple="multiple" class="form-control" id="modules_taken" name="modules_taken">
+          <!-- <option value="" disabled="disabled" selected="selected">Select Modules Taken</option> -->
+          <option value="CS1010">CS1010</option>
+          <option value="CS1010J">CS1010J</option>
+          <option value="ACC1701">ACC1701</option>
+          <option value="CS2102">CS2102</option>
+        </select> 
+      </div>
+      <div class="form-group" id="div-modules-set" name="div-modules-set" style="display:none;">
+          <label for="Modules">Modules Set</label>
+          <select multiple="multiple" class="form-control" id="modules_set" name="modules_set">
+            <!-- <option value="" disabled="disabled" selected="selected">Select Modules Set</option> -->
+            <option value="CS1010">CS1010</option>
+            <option value="CS1010J">CS1010J</option>
+            <option value="ACC1701">ACC1701</option>
+            <option value="CS2102">CS2102</option>
+          </select> 
+        </div>
+      <div>
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      </div>
+    </form>
+    <script>
+      function onChangeRole() {
+        if (document.getElementById('role').value == 'Student' || document.getElementById('role').value == '' ) {
+          // Hide
+          document.getElementById('div-modules-set').style.display = "none";
+
+          // Display
+          document.getElementById('div-level').style.display = "block";
+          document.getElementById('div-program').style.display = "block";
+          document.getElementById('div-year').style.display = "block";
+          document.getElementById('div-modules-taken').style.display = "block";
+          document.getElementById('level').required = "required";
+          document.getElementById('program').required = "required";
+          document.getElementById('year').required = "required";
+        } else if (document.getElementById('role').value == 'Admin') {
+          // Display
+          document.getElementById('div-modules-set').style.display = "block";
+
+          // Hide
+          document.getElementById('div-level').style.display = "none";
+          document.getElementById('div-program').style.display = "none";
+          document.getElementById('div-year').style.display = "none";
+          document.getElementById('div-modules-taken').style.display = "none";
+          document.getElementById('level').required = "";
+          document.getElementById('program').required = "";
+          document.getElementById('year').required = "";
+        }
+      }
+    </script>
+    <script>
+      window.onmousedown = function (event) {
+        var eventTarget = event.target;
+        if (eventTarget.tagName.toLowerCase() == 'option' && 
+            eventTarget.parentNode.hasAttribute('multiple')) {
+            event.preventDefault();
+
+            // toggle selection
+            if (eventTarget.hasAttribute('selected')) {
+              eventTarget.removeAttribute('selected');
+            } else {
+              eventTarget.setAttribute('selected', '');
+            }
+
+            // hack to correct buggy behavior
+            var select = eventTarget.parentNode.cloneNode(true);
+            eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+        }
+      }
+    </script>
+    <script>
+      (function() {
+        window.addEventListener('load', function() {
+          var forms = [document.getElementById('register_form')];
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', check, false);
+          })
+        });
+      })();
+    </script>
   </body>
 </html>

@@ -16,8 +16,11 @@ var loginRouter = require('./routes/login');
 /* Add Register Page */
 var registerRouter = require('./routes/register');
 
-/* Add Display Page */
-// var displayRouter = require('./routes/display');
+/* Add Student Dashboard Page */
+var dashboardStudentRouter = require('./routes/dashboard_student');
+
+/* Add Admin Dashboard Page */
+var dashboardAdminRouter = require('./routes/dashboard_admin');
 
 var app = express();
 
@@ -31,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', loginRouter);
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 /* Add Login Page */
@@ -40,8 +43,11 @@ app.use('/login', loginRouter);
 /* Add Register Page */
 app.use('/register', registerRouter);
 
-/* Add Display Page */
-// app.use('/display', displayRouter);
+/* Add Student Dashboard Page */
+app.use('/dashboard_student', dashboardStudentRouter);
+
+/* Add Admin Dashboard Page */
+app.use('/dashboard_admin', dashboardAdminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

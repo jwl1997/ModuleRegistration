@@ -13,9 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-
-    <!-- ADDED JavaScript -->
-    <script src="javascripts/loginScript.js"></script>
   </head>
   <body>
     <h1><%= title %></h1>
@@ -26,14 +23,18 @@
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="text" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
       </div>
       <div class="form-group">
           <label for="Role">Role</label>
           <select class="form-control" id="role" name="role" required="required">
+            <option value="" disabled="disabled" selected="selected">Select Role</option>
             <option value="Student">Student</option>
             <option value="Admin">Admin</option>
           </select> 
+      </div>
+      <div>
+        <label id="login_failed" name="login_failed" style="display:none;">Login unsuccessful</label>
       </div>
       <div class="form-group text-center">
           <a class="d-block small mt-3" href="/register">Register an account</a>
@@ -42,16 +43,5 @@
         <button type="submit" class="btn btn-primary btn-block">Submit</button>
       </div>
     </form>
-
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          var forms = [document.getElementById('login_form')];
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', check, false);
-          })
-        });
-      })();
-    </script>
   </body>
 </html>
