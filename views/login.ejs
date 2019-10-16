@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
@@ -40,8 +40,14 @@
           <a class="d-block small mt-3" href="/register">Register an account</a>
       </div>
       <div>
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <button type="submit" class="btn btn-primary btn-block" onclick="saveSession();">Submit</button>
       </div>
     </form>
+    <script>
+      function saveSession() {
+        sessionStorage.setItem("username", document.getElementById('username').value);
+        sessionStorage.setItem("role", document.getElementById('role').value);
+      }
+    </script>
   </body>
 </html>

@@ -1,14 +1,14 @@
 function check(event) {
 	// Get Values
-	var username = document.getElementById('username').value;
-	var password = document.getElementById('password').value;
+	const username = document.getElementById('username').value;
+	const password = document.getElementById('password').value;
 	console.info(myTag);
 
 	document.getElementById('username_invalid').style.display = "none";
 	document.getElementById('password_invalid').style.display = "none";
 	
 	// Simple Check
-	if (username.length != 8) {
+	if (username.length !== 8) {
 		document.getElementById('username_invalid').style.display = "block";
 		event.preventDefault();
 		event.stopPropagation();

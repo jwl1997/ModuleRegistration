@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const { Pool } = require('pg')
 const pool = new Pool({
@@ -14,9 +14,9 @@ router.get('/', function(req, res, next) {
 /* POST */
 router.post('/', function(req, res, next) {
   // Retrieve Information
-  var username = req.body.username;
-  var password = req.body.password;
-  var role = req.body.role;
+  const username = req.body.username;
+  const password = req.body.password;
+  const role = req.body.role;
 
   // Construct SQL Query
   var sql_query = "SELECT EXISTS (SELECT * FROM Users WHERE username = '" + username + "' AND password = '" + password + "')";
@@ -28,24 +28,24 @@ router.post('/', function(req, res, next) {
       return;
     }
 
-    var isExist = data.rows[0].exists;
+    const isExist = data.rows[0].exists;
     if (isExist) {
       console.info('User exist in database');
-      if (role == 'Student') {
+      if (role === 'Student') {
         console.info('User is a student');
         return res.redirect('/dashboard_student');
-      } else if (role == 'Admin') {
+      } else if (role === 'Admin') {
         console.info('User is an admin');
         return res.redirect('/dashboard_admin');
       } else {
-        console.err('Something went wrong');
+        console.error('Something went wrong', err);
         return res.redirect('/users');
       }
     } else if (!isExist) {
       console.info('User does not exist in database');
       return res.redirect('/login');
     } else {
-      console.err('Something went wrong');
+      console.error('Something went wrong', err);
       return res.redirect('/login');
     }
   });

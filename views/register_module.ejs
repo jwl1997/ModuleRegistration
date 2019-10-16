@@ -13,47 +13,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-
-    <!-- ADDED JavaScript -->
-    <script src="javascripts/registerScript.js"></script>
   </head>
   <body>
+    <script>
+
+    </script>
     <h1><%= title %></h1>
-    <form id="register_form" action="register" role="form" method="post">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your NUSNET username" required="required">
-      </div>
-      <div>
-        <label id="username_invalid" name="username_invalid" style="display:none;color:red;font-style:italic;">Invalid username! Use your NUSNET username.</label>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
-      </div>
-      <div>
-        <label id="password_invalid" name="password_invalid" style="display:none;color:red;font-style:italic;">Invalid password! Password must have at least 10 characters.</label>
-      </div>
-      <div class="form-group">
-        <label for="Role">Role</label>
-        <select class="form-control" id="role" name="role" required="required" onchange="onChangeRole()">
-          <option value="" disabled="disabled" selected="selected">Select Role</option>
-          <option value="Student">Student</option>
-          <option value="Admin">Admin</option>
+    <form id="register_module_form" action="register_module" role="form" method="post">
+      <div class="form-group" id="div-program">
+        <label for="program">Program</label>
+        <select class="form-control" id="program" name="program" required="required" onchange="onChangeRole()">
+          <option value="" disabled="disabled" selected="selected">Select Program</option>
+          <% for(var i=1; i<data.length; i++) { %>
+            <option value="<%= data[i].prog_name%>"><%= data[i].prog_name%></option>
+          <% } %>
+          <!-- <option value="Program 1">Program 1</option>
+          <option value="Program 2">Program 2</option>
+          <option value="Program 3">Program 3</option> -->
         </select> 
       </div>
-      <div class="form-group" id="div-seniority" name="div-seniority" style="display:none;">
-        <label for="Year">Year of Study</label>
-        <select class="form-control" id="seniority" name="seniority" required="required">
-          <option value="" disabled="disabled" selected="selected">Select Year of Study</option>
-          <option value="1">Year 1</option>
-          <option value="2">Year 2</option>
-          <option value="3">Year 3</option>
-          <option value="4">Year 4</option>
-          <option value="5">Year 5</option>
+      <div class="form-group" id="div-module" style="display:block;">
+        <label for="Module">Module</label>
+        <select class="form-control" id="module" name="module" required="required">
+          <option value="" disabled="disabled" selected="selected">Select Module</option>
+          <!-- <option value="Module 1">Module 1</option>
+          <option value="Module 2">Module 2</option>
+          <option value="Module 3">Module 3</option> -->
         </select> 
       </div>
-      <div class="form-group" id="div-modules-taken" name="div-modules-taken" style="display:none;">
+      <div class="form-group" id="div-lecture" style="display:block;">
+        <label for="Lecture">Lecture Slot</label>
+        <select class="form-control" id="lecture" name="lecture" required="required">
+          <option value="" disabled="disabled" selected="selected">Select Lecture Slot</option>
+          <!-- <option value="Lecture 1">Lecture 1</option>
+          <option value="Lecture 2">Lecture 2</option>
+          <option value="Lecture 3">Lecture 3</option> -->
+        </select> 
+      </div>
+      <div class="form-group" id="div-modules-taken" style="display:none;">
         <label for="Modules">Modules Taken</label>
         <select multiple="multiple" class="form-control" id="modules_taken" name="modules_taken">
           <!-- <option value="" disabled="disabled" selected="selected">Select Modules Taken</option> -->
@@ -63,7 +60,7 @@
           <option value="CS2102">CS2102</option>
         </select> 
       </div>
-      <div class="form-group" id="div-modules-set" name="div-modules-set" style="display:none;">
+      <div class="form-group" id="div-modules-set" style="display:none;">
         <label for="Modules">Modules Set</label>
         <select multiple="multiple" class="form-control" id="modules_set" name="modules_set">
           <!-- <option value="" disabled="disabled" selected="selected">Select Modules Set</option> -->
@@ -79,7 +76,7 @@
     </form>
     <script>
       function onChangeRole() {
-        if (document.getElementById('role').value == 'Student' || document.getElementById('role').value == '' ) {
+        if (document.getElementById('role').value === 'Student' || document.getElementById('role').value === '') {
           // Hide
           document.getElementById('div-modules-set').style.display = "none";
 
@@ -90,7 +87,7 @@
           // Compulsory to be Filled
           document.getElementById('seniority').required = "required";
         } 
-        else if (document.getElementById('role').value == 'Admin') {
+        else if (document.getElementById('role').value === 'Admin') {
           // Hide
           document.getElementById('div-seniority').style.display = "none";
           document.getElementById('div-modules-taken').style.display = "none";
@@ -104,29 +101,9 @@
       }
     </script>
     <script>
-      window.onmousedown = function (event) {
-        var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() == 'option' && 
-          eventTarget.parentNode.hasAttribute('multiple')) {
-          event.preventDefault();
-
-          // toggle selection
-          if (eventTarget.hasAttribute('selected')) {
-            eventTarget.removeAttribute('selected');
-          } else {
-            eventTarget.setAttribute('selected', '');
-          }
-
-          // hack to correct buggy behavior
-          var select = eventTarget.parentNode.cloneNode(true);
-          eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
-        }
-      }
-    </script>
-    <script>
       (function() {
         window.addEventListener('load', function() {
-          var forms = [document.getElementById('register_form')];
+          var forms = [document.getElementById('register_module_form')];
           var validation = Array.prototype.filter.call(forms, function(form) {
             form.addEventListener('submit', check, false);
           })

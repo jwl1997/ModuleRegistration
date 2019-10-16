@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
@@ -16,6 +16,70 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <form id="dashboard_admin_form" action="dashboard_admin" role="form" 
+    method="post" onload="activateForm()">
+      <input type="text" id="username" name="username" style="display:block;">
+      <input type="text" id="role" name="role" style="display:block;">
+    </form>
+    <table class="table">
+      <thead>
+        <tr>
+		  <th scope="col">Module Code</th>
+          <th scope="col">Module Name</th>
+          <th scope="col">Sem</th>
+          <th scope="col">Day</th>
+          <th scope="col">Registration Start Date</th>
+          <th scope="col">Registration End Date</th>
+          <th scope="col">Quota</th>
+          <!-- <th scope="col">Registering Students</th>
+          <th scope="col">Successful Registrants</th>
+          <th scope="col">Unsuccessful Registrants</th> -->
+          <th scope="col">Edit / Delete / Allocate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CS2102</td>
+          <td>Database Systems</td>
+          <td>1</td>
+          <td>Wednesday</td>
+          <td>15-Oct-2019 10:00 am</td>
+          <td>15-Oct-2019 05:00 pm</td>
+          <td>260</td>
+          <td>
+            <button type="submit" class="btn" id="btn_edit_mod" name="btn_edit_mod">Edit</button>
+            <button type="submit" class="btn" id="btn_del_mod" name="btn_del_mod">Delete</button>
+            <button type="submit" class="btn" id="btn_add_prog" name="btn_add_prog">Allocate</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button type="submit" class="btn btn-block" id="btn_add_prog" name="btn_add_prog" onclick="window.location.href='add_program'">Add program</button>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-block" id="btn_add_mod" name="btn_add_mod" onclick="window.location.href='add_module'">Add module</button>
+    </div>
   </body>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        var forms = [document.getElementById('dashboard_admin_form')];
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('load', check, false);
+        })
+      });
+    })();
+
+    function check() {
+      document.getElementById('username').value = 
+        sessionStorage.getItem('username');
+    }
+  </script>
+  <script>
+    document.getElementById('username').value = 
+        sessionStorage.getItem('username');
+    document.getElementById('role').value = 
+        sessionStorage.getItem('role');
+  </script>
 </html>

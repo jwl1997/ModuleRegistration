@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const { Pool } = require('pg')
 const pool = new Pool({
@@ -14,52 +14,34 @@ router.get('/', function(req, res, next) {
 /* POST */
 router.post('/', function(req, res, next) {
   // Retrieve Information
-  var username = req.body.username;
-  var password = req.body.password;
-  var first_name = req.body.first_name;
-  var last_name = req.body.last_name;
-  var role = req.body.role;
+  const username = req.body.username;
+  const password = req.body.password;
+  const role = req.body.role;
+  const seniority = req.body.seniority;
 
   // Construct SQL Query
   var sql_query = "INSERT INTO Users VALUES ('" + username + "', '" + password + "')";
 
   // POST SQL Query
   pool.query(sql_query, (err, data) => {
+    /* Catches duplicate keys. Prevents a user to register as Admin
+    and as Student */
     if (err) {
       console.error('Unable to insert into Users table\n' + err);
-      return;
+      return res.redirect('/login');
     }
 
-    if (role == 'Student') {
+    if (role === 'Student') {
       console.info('Inserting into Students table');
-      var level = req.body.level;
-      var program = req.body.program;
-      var year = req.body.year;
-      var modules_taken = req.body.modules_taken;
-      console.log(JSON.stringify(modules_taken));
   
       // Construct SQL Query
-      sql_query = "INSERT INTO Students VALUES (" + 
-      "'" + username + "', " +
-      "'" + first_name + "', " + 
-      "'" + last_name + "', " + 
-      "'" + level + "', " + 
-      "'" + program + "', " + 
-      "'" + year + "', " + 
-      "'{" + modules_taken + "}')";
-    } else if (role == 'Admin') {
-      var modules_set = req.body.modules_set;
-      // console.log(JSON.stringify(modules_set));
-      // console.log(JSON.parse(modules_set));
-      // console.log(modules_set);
-  
+      sql_query = "INSERT INTO Students (s_username, seniority)" + "VALUES ('" + username + "', " + seniority + ")";
+    } 
+    else if (role === 'Admin') {
       console.info('Inserting into Admins table');
-      sql_query = "INSERT INTO Admins VALUES (" + 
-      "'" + username + "', " +
-      "'" + first_name + "', " + 
-      "'" + last_name + "', " + 
-      "'{" + modules_set + "}')";
-    } else {
+      sql_query = "INSERT INTO Admins VALUES ('" + username + "')";
+    } 
+    else {
       console.error('Something went wrong');
     }
   
@@ -69,13 +51,13 @@ router.post('/', function(req, res, next) {
         console.error('Unable to insert into Students or Admins tables\n' + err);
         sql_query = "DELETE FROM Users WHERE username = '" + username + "'";
         pool.query(sql_query, (err, data) => {});
+        return res.redirect('/login');
       } else {
         console.info('Successfully inserted');
         return res.redirect('/login');
       }
-      return;
     });
   });
-})
+});
 
 module.exports = router;

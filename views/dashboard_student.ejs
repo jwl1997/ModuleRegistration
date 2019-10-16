@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
@@ -16,6 +16,64 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Module Code</th>
+          <th scope="col">Module Name</th>
+          <th scope="col">Prerequisites</th>
+          <th scope="col">Registration Start Date</th>
+          <th scope="col">Registration End Date</th>
+          <th scope="col">Quota</th>
+          <th scope="col">Rank</th>
+          <th scope="col">Status</th>
+          <th scope="col">Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+        <tr>
+          <td>CS2102</td>
+          <td>Database Systems</td>
+          <td>CS1010, CS1231</td>
+          <td>15-Oct-2019 10:00 am</td>
+          <td>15-Oct-2019 05:00 pm</td>
+          <td>260</td>
+          <td>
+            <select class="form-control" id="rank" name="rank" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Rank</option>
+              <option value="1">1</option>
+            </select>
+          </td>
+          <td>Pending</td>
+          <td>
+            <button type="submit" class="btn" id="btn_del_mod" name="btn_del_mod">Delete</button>
+          </td>
+        </tr>
+				<% for(var i=0; i<data.length; i++) { %>
+				<tr>
+					<td><%= data[i].mod_code%></td>
+					<td><%= data[i].mod_name%></td>
+          <td><%= data[i].prereq%></td>
+          <td><%= data[i].s_reg%></td>
+          <td><%= data[i].e_reg%></td>
+          <td><%= data[i].quota%></td>
+				</tr>
+				<% } %>
+			</tbody>
+    </table>
+    <div>
+      <button type="submit" class="btn btn-block" id="btn_reg_mod" name="btn_reg_mod" onclick="window.location.href='register_module'">Register module</button>
+    </div>
+    <!-- <script>
+
+      (function() {
+        window.addEventListener('load', function() {
+          var forms = [document.getElementById('register_form')];
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', check, false);
+          })
+        });
+      })();
+    </script> -->
   </body>
 </html>

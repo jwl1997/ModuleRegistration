@@ -6,14 +6,13 @@ const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
-var sql_query = 'SELECT * FROM DummyStudentDashboard';
+/* SQL Query */
+let sql_query = 'SELECT * FROM Programs';
 
 /* GET home page */
 router.get('/', function(req, res, next) {
-	pool.query(sql_query, (err, data) => {
-		res.render('dashboard_student', { 
-      		title: 'Dashboard - Student', data: data.rows
-    	});
+  pool.query(sql_query, (err, data) => {
+		res.render('register_module', { title: 'Register Module', data: data.rows });
 	});
 });
 
