@@ -25,7 +25,7 @@
         <label for="modules">Required Modules</label>
         <select class="form-control" id="modules" name="modules" required="required" multiple="multiple" size="8">
           <% for (var i=0; i<data.length; i++) { %>
-            <option value="<% data[i].mod_code %>"><%= data[i].mod_code +
+            <option value="<%= data[i].mod_code%>"><%= data[i].mod_code +
               " " + data[i].mod_name%></option>
           <% } %>
         </select>
@@ -47,7 +47,7 @@
     <script>
       window.onmousedown = function (event) {
         var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() == 'option' && 
+        if (eventTarget.tagName.toLowerCase() === 'option' &&
           eventTarget.parentNode.hasAttribute('multiple')) {
           event.preventDefault();
 

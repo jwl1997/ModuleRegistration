@@ -1,24 +1,20 @@
 const express = require('express');
 const router = express.Router();
+const sql = require('../sql');
 
-const { Pool } = require('pg')
+const { Pool } = require('pg');
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
-// Construct SQL Query
-let sql_query = "SELECT mod_code, mod_name FROM Modules ORDER BY mod_code ASC";
-
-/* GET Add Program page */
+/* GET Add Program Page */
 router.get('/', function(req, res, next) {
-
-	// GET SQL Query
-	pool.query(sql_query, (err, data) => {
+	pool.query(sql.query.load_modules, (err, data) => {
 		if (err) {
 			console.error(err);
+			return res.redirect('/dashboard_admin');
 		}
-		console.info(data.rows);
-		res.render('add_program', { 
+		res.render('add_program', {
 			title: 'Add Program', data: data.rows
 		});
 	});
@@ -27,19 +23,22 @@ router.get('/', function(req, res, next) {
 /* POST */
 router.post('/', function(req, res, next) {
 	const program = req.body.program;
-
-	// Construct SQL Query
-	sql_query = "INSERT INTO Programs VALUES ('" + program + "')";
-
-	// POST SQL Query
-	pool.query(sql_query, (err, data) => {
+	pool.query(sql.query.add_program, [program], (err, data) => {
 		if (err) {
 			console.error('Unable to insert into Programs');
 			return res.redirect('add_program');
-		} else {
-			console.info('Successfully inserted program');
-			return res.redirect('/dashboard_admin');
 		}
+		const modules = req.body.modules;
+		for (let i = 0; i < modules.length; i++) {
+			pool.query(sql.query.add_required_modules_to_program, [program, modules[i]], (err, data) => {
+				if (err) {
+					console.error('Unable to insert into Require');
+					return res.redirect('/program');
+				}
+			});
+		}
+		// TODO prompt admin insert queries successful
+		return res.redirect('/dashboard_admin');
 	});
 });
 

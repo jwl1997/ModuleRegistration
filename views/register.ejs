@@ -79,7 +79,7 @@
     </form>
     <script>
       function onChangeRole() {
-        if (document.getElementById('role').value == 'Student' || document.getElementById('role').value == '' ) {
+        if (document.getElementById('role').value === 'Student') {
           // Hide
           document.getElementById('div-modules-set').style.display = "none";
 
@@ -90,7 +90,7 @@
           // Compulsory to be Filled
           document.getElementById('seniority').required = "required";
         } 
-        else if (document.getElementById('role').value == 'Admin') {
+        else if (document.getElementById('role').value === 'Admin') {
           // Hide
           document.getElementById('div-seniority').style.display = "none";
           document.getElementById('div-modules-taken').style.display = "none";
@@ -106,7 +106,7 @@
     <script>
       window.onmousedown = function (event) {
         var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() == 'option' && 
+        if (eventTarget.tagName.toLowerCase() === 'option' &&
           eventTarget.parentNode.hasAttribute('multiple')) {
           event.preventDefault();
 

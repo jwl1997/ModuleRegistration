@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const sql = require('../sql');
 
-const { Pool } = require('pg')
+const { Pool } = require('pg');
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
-/* GET register page */
+/* GET Register Page */
 router.get('/', function(req, res, next) {
   res.render('register', { title: 'Register' });
 });
@@ -19,45 +20,44 @@ router.post('/', function(req, res, next) {
   const role = req.body.role;
   const seniority = req.body.seniority;
 
-  // Construct SQL Query
-  var sql_query = "INSERT INTO Users VALUES ('" + username + "', '" + password + "')";
+  console.log(req.body.modules_taken);
+  console.log(req.body.modules_set);
 
-  // POST SQL Query
-  pool.query(sql_query, (err, data) => {
-    /* Catches duplicate keys. Prevents a user to register as Admin
-    and as Student */
-    if (err) {
-      console.error('Unable to insert into Users table\n' + err);
-      return res.redirect('/login');
-    }
-
-    if (role === 'Student') {
-      console.info('Inserting into Students table');
-  
-      // Construct SQL Query
-      sql_query = "INSERT INTO Students (s_username, seniority)" + "VALUES ('" + username + "', " + seniority + ")";
-    } 
-    else if (role === 'Admin') {
-      console.info('Inserting into Admins table');
-      sql_query = "INSERT INTO Admins VALUES ('" + username + "')";
-    } 
-    else {
-      console.error('Something went wrong');
-    }
-  
-    // POST SQL Query
-    pool.query(sql_query, (err, data) => {
+  if (role === 'Student') {
+    pool.query(sql.query.add_user, [username, password], (err, data) => {
       if (err) {
-        console.error('Unable to insert into Students or Admins tables\n' + err);
-        sql_query = "DELETE FROM Users WHERE username = '" + username + "'";
-        pool.query(sql_query, (err, data) => {});
-        return res.redirect('/login');
-      } else {
-        console.info('Successfully inserted');
-        return res.redirect('/login');
+        console.error('Unable to insert into Users', err);
+        return res.redirect('/register');
       }
+      pool.query(sql.query.add_student, [username, seniority], (err, data) => {
+        if (err) {
+          console.error('Unable to insert into Students', err);
+          return res.redirect('/register');
+        }
+      });
     });
-  });
+    // TODO prompt student registration successful
+    return res.redirect('/login');
+  } else if (role === 'Admin') {
+    pool.query(sql.query.add_user, [username, password], (err, data) => {
+      if (err) {
+        console.error('Unable to insert into Users', err);
+        return res.redirect('/register');
+      }
+      pool.query(sql.query.add_admin, [username], (err, data) => {
+        if (err) {
+          console.error('Unable to insert into Admins', err);
+          return res.redirect('/register');
+        }
+      });
+    });
+    // TODO prompt admin registration successful
+    return res.redirect('/login');
+  } else {
+    console.error('Something went wrong');
+    // TODO prompt user registration failed
+    return res.redirect('/register');
+  }
 });
 
 module.exports = router;
