@@ -13,16 +13,16 @@ router.get('/', function(req, res, next) {
 
 /* POST */
 router.post('/', function(req, res, next) {
-	var mod_code = req.body.mod_code;
-	var mod_name = req.body.mod_name;
-	var sem = req.body.sem;
-	var username = req.body.username;
-	var quota = req.body.quota;
-	var day = req.body.day;
-	var start_time = req.body.start_time;
-	var end_time = req.body.end_time;
+    const mod_code = req.body.mod_code;
+    const mod_name = req.body.mod_name;
+    const sem = req.body.sem;
+    const username = req.body.username;
+    const quota = req.body.quota;
+    const day = req.body.day;
+    const start_time = req.body.start_time;
+    const end_time = req.body.end_time;
 
-	// Construct SQL Query
+    // Construct SQL Query
 	var sql_query = "INSERT INTO Modules VALUES ('" + mod_code + "', '" + 
 	mod_name + "', " + sem + ", '" + username + "')";
 
@@ -49,7 +49,6 @@ router.post('/', function(req, res, next) {
 			}
 		});
 	});
-
 });
 
 module.exports = router;

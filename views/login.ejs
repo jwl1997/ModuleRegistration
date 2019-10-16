@@ -26,18 +26,18 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
       </div>
       <div class="form-group">
-          <label for="Role">Role</label>
-          <select class="form-control" id="role" name="role" required="required">
-            <option value="" disabled="disabled" selected="selected">Select Role</option>
-            <option value="Student">Student</option>
-            <option value="Admin">Admin</option>
-          </select> 
+        <label for="Role">Role</label>
+        <select class="form-control" id="role" name="role" required="required">
+          <option value="" disabled="disabled" selected="selected">Select Role</option>
+          <option value="Student">Student</option>
+          <option value="Admin">Admin</option>
+        </select>
       </div>
       <div>
         <label id="login_failed" name="login_failed" style="display:none;">Login unsuccessful</label>
       </div>
       <div class="form-group text-center">
-          <a class="d-block small mt-3" href="/register">Register an account</a>
+        <a class="d-block small mt-3" href="/register">Register an account</a>
       </div>
       <div>
         <button type="submit" class="btn btn-primary btn-block" onclick="saveSession();">Submit</button>

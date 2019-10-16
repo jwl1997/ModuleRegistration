@@ -8,6 +8,15 @@ const session = require('express-session');
 /* Using dotenv */
 require('dotenv').config();
 
+const {
+  NODE_ENV = 'development',
+  SESSION_NAME = 'sid',
+  SESSION_SECRET = 'secret',
+  SESSION_LIFETIME = 1000 * 60 * 60 * 2
+} = process.env;
+
+const IN_PROD = NODE_ENV === 'production';
+
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
@@ -43,15 +52,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+/* Configure Session */
 app.use(session({
-  secret: "secret",
+  name: SESSION_NAME,
+  // Symmetric key used to sign the cookie
+  secret: SESSION_SECRET,
+  // Does not force the session to be saved back to the session store
   resave: false,
-  saveUninitialized: true,
+  // Does not force an uninitialized (new but unmodified) session to be saved
+  // back to the session store
+  saveUninitialized: false,
   cookie: {
-    secure: true,
+    // JS on client-side won't be able to access the cookies
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 2, // 2 hours
-    sameSite: true
+    // 2 hours before cookies expire
+    maxAge: SESSION_LIFETIME,
+    // Browser will only accept cookies from same domain
+    sameSite: true,
+    // HTTP in development and HTTPS in production
+    secure: IN_PROD
   }
 }));
 
