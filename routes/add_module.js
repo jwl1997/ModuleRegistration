@@ -18,14 +18,14 @@ router.post('/', function(req, res, next) {
     req.body.sem, req.body.username], (err, data) => {
 		if (err) {
 			console.error('Unable to insert into Modules', err);
-			return res.redirect('/add_module');
+			return res.redirect('/add_module?insert=fail');
 		}
 
 		pool.query(sql.query.add_lecture, [req.body.day, req.body.start_time,
       req.body.end_time, req.body.quota, req.body.mod_code], (err, data) => {
 			if (err) {
 				console.error('Unable to insert into LectureSlots', err);
-				return res.redirect('/add_module');
+				return res.redirect('/add_module?insert=fail');
 			}
       return res.redirect('/dashboard_admin');
 		});

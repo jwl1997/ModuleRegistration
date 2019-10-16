@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 	pool.query(sql.query.load_modules, (err, data) => {
 		if (err) {
 			console.error(err);
-			return res.redirect('/dashboard_admin');
+			return res.redirect('/dashboard_admin?load=fail');
 		}
 		res.render('add_program', {
 			title: 'Add Program', data: data.rows
@@ -26,14 +26,14 @@ router.post('/', function(req, res, next) {
 	pool.query(sql.query.add_program, [program], (err, data) => {
 		if (err) {
 			console.error('Unable to insert into Programs');
-			return res.redirect('add_program');
+			return res.redirect('add_program?insert=fail');
 		}
 		const modules = req.body.modules;
 		for (let i = 0; i < modules.length; i++) {
 			pool.query(sql.query.add_required_modules_to_program, [program, modules[i]], (err, data) => {
 				if (err) {
 					console.error('Unable to insert into Require');
-					return res.redirect('/program');
+					return res.redirect('/program?insert=fail');
 				}
 			});
 		}

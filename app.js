@@ -18,7 +18,6 @@ const {
 const IN_PROD = NODE_ENV === 'production';
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 
 /* Login Page */
 const loginRouter = require('./routes/login');
@@ -76,7 +75,6 @@ app.use(session({
 }));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 /* Login Page */
 app.use('/login', loginRouter);

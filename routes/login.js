@@ -26,22 +26,19 @@ router.post('/', function(req, res, next) {
     }
     console.info(data.rows);
     const isExist = data.rows[0].exists;
-    if (isExist) {
-      console.info('User exist in database');
-      if (role === 'Student') {
-        return res.redirect('/dashboard_student');
-      } else if (role === 'Admin') {
-        return res.redirect('/dashboard_admin');
-      } else {
-        console.error('Something went wrong', err);
-        return res.redirect('/users');
-      }
-    } else if (!isExist) {
+    if (!isExist) {
       console.info('User does not exist in database');
-      return res.redirect('/login');
+      return res.redirect('/login?login=fail');
+    }
+
+    console.info('User exist in database');
+    if (role === 'Student') {
+      return res.redirect('/dashboard_student');
+    } else if (role === 'Admin') {
+      return res.redirect('/dashboard_admin');
     } else {
       console.error('Something went wrong', err);
-      return res.redirect('/login');
+      return res.redirect('/login?login=fail');
     }
   });
 });

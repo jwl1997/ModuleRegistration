@@ -42,12 +42,12 @@ router.post('/', function(req, res, next) {
     pool.query(sql.query.add_user, [username, password], (err, data) => {
       if (err) {
         console.error('Unable to insert into Users', err);
-        return res.redirect('/register');
+        return res.redirect('/register?insert=fail');
       }
       pool.query(sql.query.add_admin, [username], (err, data) => {
         if (err) {
           console.error('Unable to insert into Admins', err);
-          return res.redirect('/register');
+          return res.redirect('/register?insert=fail');
         }
       });
     });
@@ -55,8 +55,7 @@ router.post('/', function(req, res, next) {
     return res.redirect('/login');
   } else {
     console.error('Something went wrong');
-    // TODO prompt user registration failed
-    return res.redirect('/register');
+    return res.redirect('/register?insert=fail');
   }
 });
 
