@@ -101,11 +101,23 @@ app.use('/module', require('./routes/module'));
 /* Rounds Page */
 app.use('/round', require('./routes/round'));
 
-/* Delete Program Page */
+/* Delete Program */
 app.use('/delete_program', require('./routes/delete_program'));
 
-/* Delete Module Page */
+/* Delete Module */
 app.use('/delete_module', require('./routes/delete_module'));
+
+/* Logout */
+app.post('/logout', redirectLogin(), (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Unable to clear cookies', err);
+      return res.redirect('/login');
+    }
+    res.clearCookie(SESSION_NAME);
+    res.redirect('/login');
+  })
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
