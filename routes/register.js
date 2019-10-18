@@ -1,63 +1,127 @@
 const express = require('express');
 const router = express.Router();
+const sql = require('../sql');
+const bcrypt = require('bcryptjs');
 
-const { Pool } = require('pg')
+const { Pool } = require('pg');
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
-/* GET register page */
+const saltRounds = 10;
+
+/* GET Register Page */
 router.get('/', function(req, res, next) {
   res.render('register', { title: 'Register' });
 });
 
-/* POST */
 router.post('/', function(req, res, next) {
-  // Retrieve Information
+  const username = req.body.username;
+
+  // Check if username exists
+  pool.query(sql.query.auth_user, [username], (err, data) => {
+    if (err) {
+      unknownError(err, res);
+    } else if (data.rows[0].exists) {
+      userExistsError(res);
+    } else {
+      next();
+    }
+  });
+});
+
+router.post('/', function(req, res, next) {
   const username = req.body.username;
   const password = req.body.password;
+
+  // Generate hash
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    if (err) {
+      hashFailedError(err, res);
+    }
+    bcrypt.hash(password, salt, function(err, hash) {
+      if (err) {
+        hashFailedError(err, res);
+      }
+      // Insert user to Users
+      else {
+        pool.query(sql.query.add_user, [username, hash], (err, data) => {
+          if (err) {
+            insertError('Users', err, res);
+          } else if (data === undefined) {
+            dataUndefinedError(res);
+          } else {
+            next();
+          }
+        });
+      }
+    })
+  });
+});
+
+router.post('/', function(req, res, next) {
+  const username = req.body.username;
   const role = req.body.role;
   const seniority = req.body.seniority;
 
-  // Construct SQL Query
-  var sql_query = "INSERT INTO Users VALUES ('" + username + "', '" + password + "')";
-
-  // POST SQL Query
-  pool.query(sql_query, (err, data) => {
-    /* Catches duplicate keys. Prevents a user to register as Admin
-    and as Student */
-    if (err) {
-      console.error('Unable to insert into Users table\n' + err);
-      return res.redirect('/login');
-    }
-
-    if (role === 'Student') {
-      console.info('Inserting into Students table');
-  
-      // Construct SQL Query
-      sql_query = "INSERT INTO Students (s_username, seniority)" + "VALUES ('" + username + "', " + seniority + ")";
-    } 
-    else if (role === 'Admin') {
-      console.info('Inserting into Admins table');
-      sql_query = "INSERT INTO Admins VALUES ('" + username + "')";
-    } 
-    else {
-      console.error('Something went wrong');
-    }
-  
-    // POST SQL Query
-    pool.query(sql_query, (err, data) => {
+  // If user is a Student, insert to Students
+  if (role === 'Student') {
+    pool.query(sql.query.add_student, [username, seniority], (err, data) => {
       if (err) {
-        console.error('Unable to insert into Students or Admins tables\n' + err);
-        sql_query = "DELETE FROM Users WHERE username = '" + username + "'";
-        pool.query(sql_query, (err, data) => {});
-        return res.redirect('/login');
-      } else {
-        console.info('Successfully inserted');
-        return res.redirect('/login');
+        insertError('Students', err, res);
+      } else if (data === undefined) {
+        dataUndefinedError(res);
       }
     });
-  });
+    // TODO: prompt student registration successful
+    return res.redirect('/login');
+  }
+  // If user is an Admin, insert to Admins
+  else if (role === 'Admin') {
+    pool.query(sql.query.add_admin, [username], (err, data) => {
+      if (err) {
+        insertError('Admins', err, res);
+      } else if (data === undefined) {
+        dataUndefinedError(res);
+      }
+    });
+    // TODO prompt admin registration successful
+    return res.redirect('/login');
+  }
+  // User's role is neither a Student or an Admin
+  else {
+    noRoleError(res);
+  }
 });
+
+function dataUndefinedError(res) {
+  console.error('Data is undefined');
+  return res.redirect('/register?undefined=fail');
+}
+
+function hashFailedError(err, res) {
+  console.error('Hash failed');
+  return res.redirect('/register?hash=fail');
+}
+
+function insertError(databaseName, err, res) {
+  console.error('Unable to insert into ' + databaseName, err);
+  return res.redirect('/register?insert=fail');
+}
+
+function noRoleError(res) {
+  console.error('Role is neither a Student nor an Admin');
+  return res.redirect('/register?role=fail');
+}
+
+function unknownError(err, res) {
+  console.error('Something went wrong', err);
+  return res.redirect('/register?unknown=fail');
+}
+
+function userExistsError(res) {
+  console.info('User already exists in database');
+  return res.redirect('/register?exists=fail');
+}
 
 module.exports = router;

@@ -5,17 +5,26 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     
     <!-- CSS for Styling -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
 
     <!-- JavaScript for Interactivity -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
         
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
+  <h1><%= title %> (<%= username %>)</h1>
     <table class="table">
       <thead>
         <tr>
@@ -27,7 +36,7 @@
           <th scope="col">Quota</th>
           <th scope="col">Rank</th>
           <th scope="col">Status</th>
-          <th scope="col">Delete</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -46,33 +55,25 @@
           </td>
           <td>Pending</td>
           <td>
-            <button type="submit" class="btn" id="btn_del_mod" name="btn_del_mod">Delete</button>
+            <!-- TODO: Add functionality for the DELETE button to delete the row -->
+            <input type="button" id="btn-delete" value="Delete"/>
           </td>
         </tr>
-        <tr>
-          <% for(var i=0; i<data.length; i++) { %>
-          <td><%= data[i].mod_code%></td>
-          <td><%= data[i].mod_name%></td>
-          <td><%= data[i].prereq%></td>
-          <td><%= data[i].s_reg%></td>
-          <td><%= data[i].e_reg%></td>
-          <td><%= data[i].quota%></td>
-          <% } %>
-        </tr>
+        <% values.forEach(value => { %>
+          <tr>
+            <td><%= value.mod_code%></td>
+            <td><%= value.mod_name%></td>
+            <td><%= value.prereq%></td>
+            <td><%= value.s_reg%></td>
+            <td><%= value.e_reg%></td>
+            <td><%= value.quota%></td>
+          </tr>
+        <% }); %>
       </tbody>
     </table>
-    <div>
-      <button type="submit" class="btn btn-block" id="btn_reg_mod" name="btn_reg_mod" onclick="window.location.href='register_module'">Register module</button>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" id="btn_reg_mod" name="btn_reg_mod"
+              onclick="window.location.href='register_module'">Register Module</button>
     </div>
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          var forms = [document.getElementById('register_form')];
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', check, false);
-          })
-        });
-      })();
-    </script>
   </body>
 </html>
