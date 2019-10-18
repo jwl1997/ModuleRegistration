@@ -5,14 +5,23 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
     <!-- CSS for Styling -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
 
     <!-- JavaScript for Interactivity -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
         
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
 
     <!-- ADDED JavaScript -->
     <script src="javascripts/registerScript.js"></script>
@@ -22,21 +31,26 @@
     <form id="register_form" action="register" role="form" method="post">
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your NUSNET username" required="required">
+        <input type="text" class="form-control" id="username" name="username"
+               placeholder="Enter your NUSNET username" required="required">
       </div>
       <div>
-        <label id="username_invalid" name="username_invalid" style="display:none;color:red;font-style:italic;">Invalid username! Use your NUSNET username.</label>
+        <label id="username_invalid" name="username_invalid"
+               style="display:none;color:red;font-style:italic;">Invalid username! Use your NUSNET username.</label>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
+        <input type="password" class="form-control" id="password" name="password"
+               placeholder="Enter your password" required="required">
       </div>
       <div>
-        <label id="password_invalid" name="password_invalid" style="display:none;color:red;font-style:italic;">Invalid password! Password must have at least 10 characters.</label>
+        <label id="password_invalid" name="password_invalid" style="display:none;color:red;font-style:italic;">
+          Invalid password! Password must have at least 10 characters.</label>
       </div>
       <div class="form-group">
         <label for="Role">Role</label>
-        <select class="form-control" id="role" name="role" required="required" onchange="onChangeRole()">
+        <select class="form-control" id="role" name="role" required="required"
+                onchange="onChangeRole()">
           <option value="" disabled="disabled" selected="selected">Select Role</option>
           <option value="Student">Student</option>
           <option value="Admin">Admin</option>

@@ -17,29 +17,6 @@ const {
 
 const IN_PROD = NODE_ENV === 'production';
 
-const indexRouter = require('./routes/index');
-
-/* Login Page */
-const loginRouter = require('./routes/login');
-
-/* Register Page */
-const registerRouter = require('./routes/register');
-
-/* Student Dashboard Page */
-const dashboardStudentRouter = require('./routes/dashboard_student');
-
-/* Admin Dashboard Page */
-const dashboardAdminRouter = require('./routes/dashboard_admin');
-
-/* Register Module Page */
-const regModRouter = require('./routes/register_module');
-
-/* Add Program Page */
-const addProgRouter = require('./routes/add_program');
-
-/* Add Program Page */
-const addModRouter = require('./routes/add_module');
-
 const app = express();
 
 // view engine setup
@@ -74,28 +51,61 @@ app.use(session({
   }
 }));
 
-app.use('/', indexRouter);
+const redirectLogin = (req, res, next) => {
+  console.log(req.session.username);
+  if (!req.session.username) {
+    res.redirect('/login');
+  } else {
+    next()
+  }
+};
+
+const redirectHome = (req, res, next) => {
+  console.log(req.session.username);
+  if (req.session.username) {
+    if (req.session.role === 'Student') {
+      res.redirect('/dashboard_student')
+    } else {
+      res.redirect('/dashboard_admin')
+    }
+  } else {
+    next()
+  }
+};
+
+// TODO: Have middleware to ensure all unauthenticated users be rerouted to login page
+
+app.use('/', require('./routes/index'));
 
 /* Login Page */
-app.use('/login', loginRouter);
+app.use('/login', require('./routes/login'));
 
 /* Register Page */
-app.use('/register', registerRouter);
+app.use('/register', require('./routes/register'));
 
 /* Student Dashboard Page */
-app.use('/dashboard_student', dashboardStudentRouter);
+app.use('/dashboard_student', require('./routes/dashboard_student'));
 
 /* Admin Dashboard Page */
-app.use('/dashboard_admin', dashboardAdminRouter);
+app.use('/dashboard_admin', require('./routes/dashboard_admin'));
 
 /* Register Module Page */
-app.use('/register_module', regModRouter);
+app.use('/register_module', require('./routes/register_module'));
 
-/* Add Program Page */
-app.use('/add_program', addProgRouter);
+/* Program Page */
+app.use('/program', require('./routes/program'));
 
-/* Add Module Page */
-app.use('/add_module', addModRouter);
+/* Module Page */
+app.use('/module', require('./routes/module'));
+
+/* Rounds Page */
+app.use('/round', require('./routes/round'));
+
+/* Delete Program Page */
+app.use('/delete_program', require('./routes/delete_program'));
+
+/* Delete Module Page */
+app.use('/delete_module', require('./routes/delete_module'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

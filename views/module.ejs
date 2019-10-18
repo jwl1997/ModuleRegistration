@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <!-- CSS for Styling -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <!-- JavaScript for Interactivity -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <form id="module_form" action="module" role="form" method="post">
+      <div class="form-group">
+        <label style="font-weight:bold;font-size:larger;">Module Info</label>
+        <div class="form-group" id="div-mod-code">
+          <label for="mod_code">Module Code</label>
+          <input type="text" class="form-control" id="mod_code" name="mod_code" placeholder="Enter Module Code" required="required">
+        </div>
+        <div class="form-group" id="div-mod-name">
+          <label for="mod_name">Module Name</label>
+          <input type="text" class="form-control" id="mod_name" name="mod_name" placeholder="Enter Module Name" required="required">
+        </div>
+        <div class="form-group" id="div-sem">
+          <label for="sem">Semester</label>
+          <select class="form-control" id="sem" name="sem" required="required">
+            <option value="" disabled="disabled" selected="selected">Select Semester</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label style="font-weight:bold;font-size:larger;">Lecture Slot Info</label>
+        <div class="form-group">
+          <label for="day">Lecture Day</label>
+          <select class="form-control" id="day" name="day" required="required">
+            <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="start_time">Lecture Start Time</label>
+          <input type="time" class="form-control" id="start_time"
+                 name="start_time" required="required">
+        </div>
+        <div class="form-group">
+          <label for="end_time">Lecture End Time</label>
+          <input type="time" class="form-control" id="end_time"
+                 name="end_time" required="required">
+        </div>
+        <div class="form-group">
+          <label for="quota">Lecture Quota</label>
+          <input type="number" class="form-control" id="quota" name="quota"
+                 placeholder="Enter Lecture Quota" required="required">
+        </div>
+      </div>
+      <div id="btn-submit">
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      </div>
+    </form>
+    <table class="table" id="table-modules">
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Module Code</th>
+        <th scope="col">Module Name</th>
+        <th scope="col">Semester</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let i = 1; %>
+      <% modules.forEach(module => { %>
+        <tr>
+          <td><%= i %></td>
+          <td><%= module.mod_code %></td>
+          <td><%= module.mod_name %></td>
+          <td><%= module.sem %></td>
+          <td>
+            <input type="button" id="btn-delete-module" value="Delete"/>
+            <!-- TODO: When LECTURES button is clicked, show all lecture slots for that row's module code -->
+            <input type="button" id="btn-lectures" value="Lectures"/>
+          </td>
+        </tr>
+        <% i++; %>
+      <% }); %>
+      </tbody>
+    </table>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='dashboard_admin'">Back to Home</button>
+    </div>
+    <div id="div-lecture-slots">
+      <table class="table" id="table-lectures">
+        <tr>
+          <th>Day</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Quota</th>
+          <th>Module Code</th>
+          <th>Action</th>
+        </tr>
+        <% lectures.forEach(lecture => { %>
+          <tr>
+            <td><%= lecture.day %></td>
+            <td><%= lecture.s_time_lect %></td>
+            <td><%= lecture.e_time_lect %></td>
+            <td><%= lecture.quota %></td>
+            <td><%= lecture.mod_code %></td>
+            <td>
+              <!-- TODO: Add functionality for the DELETE button to delete the row -->
+              <input type="button" id="btn-delete-lecture" value="Delete"/>
+            </td>
+          </tr>
+        <% }); %>
+      </table>
+    </div>
+    <script>
+      $("#table-modules").on('click','#btn-delete-module',function() {
+        const currentRow = $(this).closest("tr"); // get the current row
+        const mod_code = currentRow.find("td:eq(1)").text(); // get current row 3rd TD
+        window.location.href='delete_module?module=' + mod_code;
+      });
+    </script>
+    <script>
+      $(document).ready(function() {
+        // code to read selected table row cell data (values).
+        $("#table-modules").on('click','#btn-lectures',function() {
+          const currentRow = $(this).closest("tr"); // get the current row
+          const mod_code = currentRow.find("td:eq(1)").text(); // get current row 3rd TD
+
+          // var content = '<table>' +
+          //         '<thead>' +
+          //         '<tr>' +
+          //         '<th>Day</th>' +
+          //         '<th>Start Time</th>' +
+          //         '<th>End Time</th>' +
+          //         '<th>Quota</th>' +
+          //         '<th>Module Code</th>' +
+          //         '<th>Action</th>' +
+          //         '</tr>' +
+          //         '</thead>' +
+          //         '<tbody>';
+          //
+          // content += '</tbody></table>';
+          // $('#div-lecture-slots').append(content);
+        });
+      });
+    </script>
+    <script>
+      $(document).delegate('#btn-lectures','click',function() {
+        $('[colspan="5"]').parent('tr').remove();
+        $(this).parents('tr').after('<tr/>').next().append('<td colspan="5"/>')
+                .children('td').append('<div/>').children()
+                .css('background','#fcfcfc').html($('#div-lecture-slots').html());
+      });
+    </script>
+    <script>
+      (function() {
+        window.addEventListener('load', function() {
+          var forms = [document.getElementById('module_form')];
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', check, false);
+          })
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -9,9 +9,13 @@ const pool = new Pool({
 
 /* GET Student Dashboard Page */
 router.get('/', function(req, res, next) {
-	pool.query(sql.query.load_student_dashboard, (err, data) => {
-		res.render('dashboard_student', { 
-      		title: 'Dashboard - Student', data: data.rows
+	pool.query(sql.query.load_student_dashboard, (err, values) => {
+		res.render('dashboard_student', {
+			title: 'Dashboard - Student',
+			values: values.rows,
+			username: req.session.username,
+			password: req.session.password,
+			role: req.session.role
     	});
 	});
 });

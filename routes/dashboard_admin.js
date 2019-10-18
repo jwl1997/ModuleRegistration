@@ -9,9 +9,13 @@ const pool = new Pool({
 
 /* GET Admin Dashboard Page */
 router.get('/', function(req, res, next) {
-	pool.query(sql.query.load_admin_dashboard, (err, data) => {
+	pool.query(sql.query.load_admin_dashboard, [req.session.username], (err, values) => {
 		res.render('dashboard_admin', {
-			title: 'Dashboard - Admin', data: data.rows
+			title: 'Dashboard - Admin',
+			values: values.rows,
+			username: req.session.username,
+			password: req.session.password,
+			role: req.session.role
 		});
 	});
 });

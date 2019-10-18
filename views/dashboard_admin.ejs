@@ -5,22 +5,26 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
     <!-- CSS for Styling -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
 
     <!-- JavaScript for Interactivity -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
         
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <form id="dashboard_admin_form" action="dashboard_admin" role="form" 
-    method="post" onload="activateForm()">
-      <input type="text" id="username" name="username" style="display:block;">
-      <input type="text" id="role" name="role" style="display:block;">
-    </form>
+    <h1><%= title %> (<%= username %>)</h1>
     <table class="table">
       <thead>
         <tr>
@@ -28,13 +32,15 @@
           <th scope="col">Module Name</th>
           <th scope="col">Sem</th>
           <th scope="col">Day</th>
-          <th scope="col">Registration Start Date</th>
-          <th scope="col">Registration End Date</th>
+          <th scope="col">Lecture Start</th>
+          <th scope="col">Lecture End</th>
           <th scope="col">Quota</th>
+          <th scope="col">Registration Start</th>
+          <th scope="col">Registration End</th>
           <!-- <th scope="col">Registering Students</th>
           <th scope="col">Successful Registrants</th>
           <th scope="col">Unsuccessful Registrants</th> -->
-          <th scope="col">Edit / Delete / Allocate</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -43,43 +49,49 @@
           <td>Database Systems</td>
           <td>1</td>
           <td>Wednesday</td>
+          <td>10:00 am</td>
+          <td>12:00 pm</td>
+          <td>260</td>
           <td>15-Oct-2019 10:00 am</td>
           <td>15-Oct-2019 05:00 pm</td>
-          <td>260</td>
           <td>
-            <button type="submit" class="btn" id="btn_edit_mod" name="btn_edit_mod">Edit</button>
-            <button type="submit" class="btn" id="btn_del_mod" name="btn_del_mod">Delete</button>
-            <button type="submit" class="btn" id="btn_add_prog" name="btn_add_prog">Allocate</button>
+            <input type="button" id="btn-edit" value="Edit"/>
+            <input type="button" id="btn-delete" value="Delete"/>
+            <input type="button" id="btn-allocate" value="Allocate"/>
           </td>
         </tr>
+        <% values.forEach(value => { %>
+          <tr>
+            <td><%= value.mod_code %></td>
+            <td><%= value.mod_name %></td>
+            <td><%= value.sem %></td>
+            <td><%= value.day %></td>
+            <td><%= value.s_time_lect %></td>
+            <td><%= value.e_time_lect %></td>
+            <td><%= value.quota %></td>
+            <td></td>
+            <td></td>
+            <td>
+              <!-- TODO: Add functionality for the DELETE, EDIT and ALLOCATE buttons -->
+              <input type="button" id="btn-edit" value="Edit"/>
+              <input type="button" id="btn-delete" value="Delete"/>
+              <input type="button" id="btn-allocate" value="Allocate"/>
+            </td>
+          </tr>
+        <% }); %>
       </tbody>
     </table>
-    <div>
-      <button type="submit" class="btn btn-block" id="btn_add_prog" name="btn_add_prog" onclick="window.location.href='add_program'">Add program</button>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='program'">Program</button>
     </div>
-    <div>
-      <button type="submit" class="btn btn-block" id="btn_add_mod" name="btn_add_mod" onclick="window.location.href='add_module'">Add module</button>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='module'">Module</button>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='round'">Round</button>
     </div>
   </body>
-  <script>
-    (function() {
-      window.addEventListener('load', function() {
-        var forms = [document.getElementById('dashboard_admin_form')];
-        var validation = Array.prototype.filter.call(forms, function(form) {
-          form.addEventListener('load', check, false);
-        })
-      });
-    })();
-
-    function check() {
-      document.getElementById('username').value = 
-        sessionStorage.getItem('username');
-    }
-  </script>
-  <script>
-    document.getElementById('username').value = 
-        sessionStorage.getItem('username');
-    document.getElementById('role').value = 
-        sessionStorage.getItem('role');
-  </script>
 </html>

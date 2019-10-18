@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <!-- CSS for Styling -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <!-- JavaScript for Interactivity -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <form id="program_form" action="program" role="form" method="post">
+      <div class="form-group">
+        <label for="program">Program</label>
+        <input type="text" class="form-control" id="program" name="program"
+               placeholder="Enter Program" required="required">
+      </div>
+      <div class="form-group">
+        <label for="modules">Required Modules</label>
+        <select class="form-control" id="modules" name="modules"
+                required="required" multiple="multiple" size="8">
+          <% modules.forEach(module => { %>
+            <option value="<%= module.mod_code %>">
+              <%= module.mod_code + " "%><%= module.mod_name%></option>
+          <% }); %>
+        </select>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      </div>
+    </form>
+    <table class="table" id="table-programs">
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Programs</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let i = 1; %>
+      <% programs.forEach(program => { %>
+        <% if (program.prog_name !== 'Unspecified') { %>
+          <tr>
+            <td><%= i %></td>
+            <td><%= program.prog_name %></td>
+            <td>
+              <input type="button" id="btn-delete" value="Delete"/>
+            </td>
+          </tr>
+          <% i++; %>
+        <% } %>
+      <% }); %>
+      </tbody>
+    </table>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='dashboard_admin'">Back to Home</button>
+    </div>
+    <script>
+      $("#table-programs").on('click','#btn-delete',function() {
+        const currentRow = $(this).closest("tr"); // get the current row
+        const prog_name = currentRow.find("td:eq(1)").text(); // get current row 3rd TD
+        window.location.href='delete_program?program=' + prog_name;
+      });
+    </script>
+    <script>
+      (function() {
+        window.addEventListener('load', function() {
+          var forms = [document.getElementById('program_form')];
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', check, false);
+          })
+        });
+      })();
+    </script>
+    <script>
+      window.onmousedown = function (event) {
+        var eventTarget = event.target;
+        if (eventTarget.tagName.toLowerCase() === 'option' &&
+          eventTarget.parentNode.hasAttribute('multiple')) {
+          event.preventDefault();
+
+          // toggle selection
+          if (eventTarget.hasAttribute('selected')) {
+            eventTarget.removeAttribute('selected');
+          } else {
+            eventTarget.setAttribute('selected', '');
+          }
+
+          // hack to correct buggy behavior
+          var select = eventTarget.parentNode.cloneNode(true);
+          eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+        }
+      }
+    </script>
+  </body>
+</html>
