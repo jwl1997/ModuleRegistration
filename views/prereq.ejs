@@ -14,7 +14,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
-
+        
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
             integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
             crossorigin="anonymous"></script>
@@ -25,57 +25,44 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <form id="round_form" action="round" role="form" method="post">
-      <div class="form-group">
-        <label for="reg_start">Registration Start Date</label>
-        <div class="form-group">
-          <input type="date" class="form-control" id="reg_start_date"
-                 name="reg_start_date" required="required">
-        </div>
-        <div class="form-group">
-          <input type="time" class="form-control" id="reg_start_time"
-                 name="reg_start_time" required="required">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="reg_end">Registration End Date</label>
-        <div class="form-group">
-          <input type="date" class="form-control" id="reg_end_date"
-                 name="reg_end_date" required="required">
-        </div>
-        <div class="form-group">
-          <input type="time" class="form-control" id="reg_end_time"
-                 name="reg_end_time" required="required">
-        </div>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-      </div>
-    </form>
     <div class="form-group">
-      <table class="table" id="table-rounds">
-        <caption style="text-align: center;">Rounds</caption>
+      <label for="parent">Module</label>
+      <select class="form-control" id="parent" name="parent" required="required">
+        <option value="" disabled="disabled" selected="selected">Select Module</option>
+        <% parents.forEach(parent => { %>
+          <option value="<%= parent.mod_code %>">
+            <%= parent.mod_code %> <%= parent.mod_name%>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-primary btn-block"
+              onclick="submitParentForm()">Submit</button>
+    </div>
+    <div class="form-group" id="div-prereqs">
+      <table class="table" id="table-prereqs">
+        <caption style="text-align: center;">Prerequisites</caption>
         <thead>
         <tr>
           <th scope="col">No.</th>
-          <th scope="col">Round Start Time</th>
-          <th scope="col">Round End Time</th>
+          <th scope="col">Module</th>
+          <th scope="col">Prerequisite</th>
           <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
-        <% let i = 1; %>
-        <% rounds.forEach(round => { %>
-        <tr>
-          <td><%= i %></td>
-          <td><%= round.s_time_round %></td>
-          <td><%= round.e_time_round %></td>
-          <td>
-            <!-- TODO: Add functionality for the DELETE button to delete the row -->
-            <input type="button" id="btn-delete" value="Delete"/>
-          </td>
-        </tr>
-          <% i++; %>
+        <% let j = 1; %>
+        <% prereqs.forEach(prereq => { %>
+          <tr>
+            <td><%= j %></td>
+            <td><%= prereq.parent %></td>
+            <td><%= prereq.child %></td>
+            <td>
+              <input type="button" id="btn-delete-prereq" value="Delete"/>
+            </td>
+          </tr>
+          <% j++; %>
         <% }); %>
         </tbody>
       </table>
@@ -90,10 +77,24 @@
       </form>
     </div>
     <script>
+      function submitParentForm() {
+        const parent = document.getElementById('parent').value;
+        window.location.href='prereq/select_parent?' + 'parent=' + parent;
+      }
+    </script>
+    <script>
+      $("#table-prereqs").on('click','#btn-delete-prereq',function() {
+        const currentRow = $(this).closest("tr"); // get the current row
+        const parent = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+        const child = currentRow.find("td:eq(2)").text();
+        window.location.href='prereq/delete_prereq?' + 'parent=' + parent + '&child=' + child;
+      });
+    </script>
+    <script>
       (function() {
         window.addEventListener('load', function() {
-          <% if (rounds.length === 0) { %>
-          document.getElementById('table-rounds').style.display = "none";
+          <% if (prereqs.length === 0) { %>
+          document.getElementById('table-prereqs').style.display = "none";
           <% } %>
         });
       })();
