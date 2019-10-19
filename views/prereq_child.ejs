@@ -27,7 +27,7 @@
     <h1><%= title %></h1>
     <div class="form-group">
       <form id="prereq_form" role="form" method="post">
-        <h4 id="h4-no-prereqs">This module has no prerequisites.</h4>
+        <h5 id="h5-no-prereqs">This module has no prerequisites.</h5>
         <div class="form-group" id="div-prereqs">
           <label for="children">Prerequisites</label>
           <select multiple="multiple" class="form-control" id="children"
@@ -68,9 +68,13 @@
       (function() {
         window.addEventListener('load', function() {
           <% if (children.length === 0) { %>
-          document.getElementById('div-prereqs').style.display = "none";
-          document.getElementById('btn-prereqs').style.display = "none";
-          document.getElementById('h4-no-prereqs').style.display = "block";
+            document.getElementById('div-prereqs').style.display = "none";
+            document.getElementById('btn-prereqs').style.display = "none";
+            document.getElementById('h5-no-prereqs').style.display = "block";
+          <% } else { %>
+          document.getElementById('div-prereqs').style.display = "block";
+          document.getElementById('btn-prereqs').style.display = "block";
+          document.getElementById('h5-no-prereqs').style.display = "none";
           <% } %>
         });
       })();

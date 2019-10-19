@@ -79,7 +79,11 @@
     <script>
       function submitParentForm() {
         const parent = document.getElementById('parent').value;
-        window.location.href='prereq/select_parent?' + 'parent=' + parent;
+        // Returns false for null, undefined, 0, 000, "", false
+        // Returns true for string "0" and whitespace " "
+        if (Boolean(parent)) {
+          window.location.href='prereq/select_parent?' + 'parent=' + parent;
+        }
       }
     </script>
     <script>
