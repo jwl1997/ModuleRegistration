@@ -52,18 +52,20 @@
         <button type="submit" class="btn btn-primary btn-block">Submit</button>
       </div>
     </form>
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col">No.</th>
-        <th scope="col">Round Start Time</th>
-        <th scope="col">Round End Time</th>
-        <th scope="col">Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% let i = 1; %>
-      <% rounds.forEach(round => { %>
+    <div class="form-group">
+      <table class="table" id="table-rounds">
+        <caption style="text-align: center;">Rounds</caption>
+        <thead>
+        <tr>
+          <th scope="col">No.</th>
+          <th scope="col">Round Start Time</th>
+          <th scope="col">Round End Time</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% let i = 1; %>
+        <% rounds.forEach(round => { %>
         <tr>
           <td><%= i %></td>
           <td><%= round.s_time_round %></td>
@@ -73,10 +75,11 @@
             <input type="button" id="btn-delete" value="Delete"/>
           </td>
         </tr>
-        <% i++; %>
-      <% }); %>
-      </tbody>
-    </table>
+          <% i++; %>
+        <% }); %>
+        </tbody>
+      </table>
+    </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary"
               onclick="window.location.href='dashboard_admin'">Back to Home</button>
@@ -89,10 +92,9 @@
     <script>
       (function() {
         window.addEventListener('load', function() {
-          var forms = [document.getElementById('round_form')];
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', check, false);
-          })
+          <% if (rounds.length === 0) { %>
+          document.getElementById('table-rounds').style.display = "none";
+          <% } %>
         });
       })();
     </script>
