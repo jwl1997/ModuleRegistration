@@ -1,9 +1,10 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const session = require('express-session');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
+let session = require('express-session');
+let favicon = require('serve-favicon');
 
 /* Using dotenv */
 require('dotenv').config();
@@ -17,7 +18,7 @@ const {
 
 const IN_PROD = NODE_ENV === 'production';
 
-const app = express();
+let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 /* Configure Session */
 app.use(session({
@@ -41,7 +43,7 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     // JS on client-side won't be able to access the cookies
-    httpOnly: true,
+    httpOnly: false,
     // 2 hours before cookies expire
     maxAge: SESSION_LIFETIME,
     // Browser will only accept cookies from same domain
@@ -98,14 +100,29 @@ app.use('/program', require('./routes/program'));
 /* Module Page */
 app.use('/module', require('./routes/module'));
 
+/* Lecture Slot Page */
+app.use('/lecture_slot', require('./routes/lecture_slot'));
+
+/* Prereq Parent Page */
+app.use('/prereq', require('./routes/prereq'));
+
+/* Prereq Child Page */
+app.use('/prereq_child', require('./routes/prereq_child'));
+
 /* Rounds Page */
 app.use('/round', require('./routes/round'));
 
-/* Delete Program Page */
-app.use('/delete_program', require('./routes/delete_program'));
-
-/* Delete Module Page */
-app.use('/delete_module', require('./routes/delete_module'));
+/* Logout */
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Unable to clear cookies', err);
+      return res.redirect('/login?clear_cookie=fail');
+    }
+    res.clearCookie(SESSION_NAME);
+    res.redirect('/login');
+  })
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

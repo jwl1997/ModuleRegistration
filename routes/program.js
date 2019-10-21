@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  pool.query(sql.query.load_modules_1, (err, modules) => {
+  pool.query(sql.query.load_modules, (err, modules) => {
     if (err) {
       unknownError(err, res);
     } else {
@@ -52,7 +52,7 @@ router.post('/', function(req, res, next) {
   const modules = req.body.modules;
 
   for (let i = 0; i < modules.length; i++) {
-    pool.query(sql.query.add_required_modules_to_program,
+    pool.query(sql.query.add_require,
       [program, modules[i]], (err, data) => {
       if (err) {
         insertError('Require', err, res);
@@ -62,6 +62,25 @@ router.post('/', function(req, res, next) {
   // TODO: prompt admin insert queries successful
   return res.redirect('/program');
 });
+
+// TODO: As of now, unable to delete programs that are being referenced in Students
+
+router.get('/delete_program', function(req, res, next) {
+  const prog_name = req.query.program;
+
+  pool.query(sql.query.delete_program, [prog_name], (err, data) => {
+    if (err) {
+      deleteError('Program', err, res);
+    } else {
+      return res.redirect('/program');
+    }
+  });
+});
+
+function deleteError(database, err, res) {
+  console.error('Unable to delete from ' + database, err);
+  return res.redirect('/program?delete=fail');
+}
 
 function unknownError(err, res) {
   console.error('Something went wrong', err);

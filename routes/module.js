@@ -10,7 +10,7 @@ const pool = new Pool({
 let modules;
 
 router.get('/', function(req, res, next) {
-	pool.query(sql.query.load_modules_2, (err, m) => {
+	pool.query(sql.query.load_modules, (err, m) => {
 		if (err) {
 			unknownError(err, res);
 		} else {
@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
 			res.render('module', {
 				title: 'Module',
 				modules: modules.rows,
-				lectures: lectures.rows
+				lectures: lectures.rows,
 			});
 		}
 	});
@@ -38,7 +38,6 @@ router.post('/', function(req, res, next) {
 	pool.query(sql.query.add_module, [
 		req.body.mod_code,
 		req.body.mod_name,
-    req.body.sem,
 		req.session.username
 	], (err, data) => {
 		if (err) {
@@ -54,17 +53,64 @@ router.post('/', function(req, res, next) {
 		req.body.day,
 		req.body.start_time,
 		req.body.end_time,
+		req.body.sem,
 		req.body.quota,
 		req.body.mod_code
 	], (err, data) => {
 		if (err) {
       insertError('LectureSlots', err, res);
 		} else {
-      // TODO: prompt admin insert queries successful
-			return res.redirect('/module');
+      next();
 		}
 	});
 });
+
+router.post('/', function(req, res, next) {
+	const prereqs = req.body.prereqs;
+	const mod_code = req.body.mod_code;
+
+	for (let i = 0; i < prereqs.length; i++) {
+		pool.query(sql.query.add_prereq,
+			[mod_code, prereqs[i]], (err, data) => {
+				if (err) {
+					insertError('Prereq', err, res);
+				}
+			});
+	}
+	// TODO: prompt admin insert queries successful
+	return res.redirect('/module');
+});
+
+// Deleting modules from Module will affect Require and Prereq
+
+// router.get('/delete_module', function(req, res, next) {
+// 	const mod_code = req.query.module;
+//
+// 	pool.query(sql.query.delete_require, [mod_code], (err, data) => {
+// 		if (err) {
+// 			deleteError(err, res);
+// 		} else {
+// 			next();
+// 		}
+// 	});
+// });
+//
+// router.get('/delete_module', function(req, res, next) {
+// 	const mod_code = req.query.module;
+//
+// 	pool.query(sql.query.delete_module, [mod_code], (err, data) => {
+// 		if (err) {
+// 			deleteError('Module', err, res);
+// 		} else {
+// 			return res.redirect('/module');
+// 		}
+// 	});
+// });
+
+function deleteError(database, err, res) {
+	console.error('Unable to delete from ' + database, err);
+	return res.redirect('/module?delete=fail');
+}
 
 function unknownError(err, res) {
 	console.error('Something went wrong', err);

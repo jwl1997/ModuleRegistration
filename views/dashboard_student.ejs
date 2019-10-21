@@ -59,21 +59,21 @@
             <input type="button" id="btn-delete" value="Delete"/>
           </td>
         </tr>
-        <% values.forEach(value => { %>
-          <tr>
-            <td><%= value.mod_code%></td>
-            <td><%= value.mod_name%></td>
-            <td><%= value.prereq%></td>
-            <td><%= value.s_reg%></td>
-            <td><%= value.e_reg%></td>
-            <td><%= value.quota%></td>
-          </tr>
-        <% }); %>
       </tbody>
     </table>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary" id="btn_reg_mod" name="btn_reg_mod"
+      <button type="submit" class="btn btn-primary"
               onclick="window.location.href='register_module'">Register Module</button>
+    </div>
+    <!-- TODO: Button to redirect to Appeal page -->
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='appeal'">Appeal</button>
+    </div>
+    <div class="form-group">
+      <form action="logout" role="form" method="post">
+        <button type="submit" class="btn btn-primary">Logout</button>
+      </form>
     </div>
   </body>
 </html>

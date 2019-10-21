@@ -80,6 +80,16 @@
         <button type="submit" class="btn btn-primary btn-block">Submit</button>
       </div>
     </form>
+    <div class="form-group"></div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='dashboard_student'">Back to Home</button>
+    </div>
+    <div class="form-group">
+      <form action="logout" role="form" method="post">
+        <button type="submit" class="btn btn-primary">Logout</button>
+      </form>
+    </div>
     <script>
       function onChangeRole() {
         if (document.getElementById('role').value === 'Student' || document.getElementById('role').value === '') {
