@@ -25,55 +25,151 @@
   </head>
   <body>
   <h1><%= title %> (<%= username %>)</h1>
-    <table class="table">
+  <div class="form-group" id="div-no-register">
+    <h5>You are not currently registered for any modules.</h5>
+  </div>
+  <div class="form-group" id="div-register">
+    <h5 id="h5-register-table-title">Registered Modules and Lecture Slots</h5>
+    <table class="table" id="table-register">
       <thead>
-        <tr>
-          <th scope="col">Module Code</th>
-          <th scope="col">Module Name</th>
-          <th scope="col">Prerequisites</th>
-          <th scope="col">Registration Start Date</th>
-          <th scope="col">Registration End Date</th>
-          <th scope="col">Quota</th>
-          <th scope="col">Rank</th>
-          <th scope="col">Status</th>
-          <th scope="col">Action</th>
-        </tr>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Code</th>
+        <th scope="col">Name</th>
+        <th scope="col">Semester</th>
+        <th scope="col">Day</th>
+        <th scope="col">Start Lecture</th>
+        <th scope="col">End Lecture</th>
+        <th scope="col">Start Round</th>
+        <th scope="col">End Round</th>
+        <th scope="col">Quota</th>
+        <th scope="col">Rank Preference</th>
+        <th scope="col">Status</th>
+        <th scope="col">Prerequisites</th>
+        <th scope="col">Action</th>
+      </tr>
       </thead>
       <tbody>
+      <% let i = 1; %>
+      <% registeredLectures.forEach(lecture => { %>
         <tr>
-          <td>CS2102</td>
-          <td>Database Systems</td>
-          <td>CS1010, CS1231</td>
-          <td>15-Oct-2019 10:00 am</td>
-          <td>15-Oct-2019 05:00 pm</td>
-          <td>260</td>
+          <td><%= i %></td>
+          <td><%= lecture.mod_code %></td>
+          <td><%= lecture.mod_name %></td>
+          <td><%= lecture.sem %></td>
+          <td><%= lecture.day %></td>
+          <td><%= lecture.s_time_lect %></td>
+          <td><%= lecture.e_time_lect %></td>
+          <td><%= lecture.s_time_round %></td>
+          <td><%= lecture.e_time_round %></td>
+          <td><%= lecture.quota %></td>
+          <td><%= lecture.rank_pref %></td>
+          <td><%= lecture.status %></td>
+          <td>Prereq</td>
+          <% if (lecture.status === 'Success') { %>
+          <td>No action required</td>
+          <% } else if (lecture.status === 'Fail') { %>
           <td>
-            <select class="form-control" id="rank" name="rank" required="required">
-              <option value="" disabled="disabled" selected="selected">Select Rank</option>
-              <option value="1">1</option>
-            </select>
+            <input type="button" id="btn-appeal" value="Appeal"/>
           </td>
-          <td>Pending</td>
+          <% } else { %>
           <td>
-            <!-- TODO: Add functionality for the DELETE button to delete the row -->
             <input type="button" id="btn-delete" value="Delete"/>
           </td>
+          <% } %>
         </tr>
+        <% i++; %>
+      <% }); %>
       </tbody>
     </table>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='register_module'">Register Module</button>
-    </div>
-    <!-- TODO: Button to redirect to Appeal page -->
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='appeal'">Appeal</button>
-    </div>
-    <div class="form-group">
-      <form action="logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
+  </div>
+  <div class="form-group" id="div-no-enrolled">
+    <h5>You are not currently enrolled in any modules.</h5>
+  </div>
+  <div class="form-group" id="div-enrolled">
+    <h5 id="h5-enrolled-table-title">Enrolled Modules and Lecture Slots</h5>
+    <table class="table" id="table-enrolled">
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Code</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let j = 1; %>
+      <% enrolledLectures.forEach(eLecture => { %>
+        <tr>
+          <td><%= j %></td>
+          <td><%= eLecture.mod_code %></td>
+        </tr>
+        <% j++; %>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='register_module'">Register Module</button>
+  </div>
+  <div class="form-group">
+    <form action="logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
   </body>
+  <script>
+    $("#table-register").on('click','#btn-appeal',function() {
+      const currentRow = $(this).closest("tr"); // get the current row
+      const mod_code = currentRow.find("td:eq(1)").text();
+      const sem = currentRow.find("td:eq(3)").text();
+      const day = currentRow.find("td:eq(4)").text();
+      const s_time_lect = currentRow.find("td:eq(5)").text();
+      const e_time_lect = currentRow.find("td:eq(6)").text();
+      window.location.href='dashboard_student/appeal?' +
+              'mod_code=' + mod_code +
+              '&sem=' + sem +
+              '&day=' + day +
+              '&s_time_lect=' + s_time_lect +
+              '&e_time_lect=' + e_time_lect +
+              '&s_username=' + '<%= username %>';
+    });
+  </script>
+  <script>
+    $("#table-register").on('click','#btn-delete',function() {
+      const currentRow = $(this).closest("tr"); // get the current row
+      const mod_code = currentRow.find("td:eq(1)").text();
+      const sem = currentRow.find("td:eq(3)").text();
+      const day = currentRow.find("td:eq(4)").text();
+      const s_time_lect = currentRow.find("td:eq(5)").text();
+      const e_time_lect = currentRow.find("td:eq(6)").text();
+      window.location.href='dashboard_student/delete?' +
+              'mod_code=' + mod_code +
+              '&sem=' + sem +
+              '&day=' + day +
+              '&s_time_lect=' + s_time_lect +
+              '&e_time_lect=' + e_time_lect +
+              '&s_username=' + '<%= username %>';
+    });
+  </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (registeredLectures.length === 0) { %>
+        document.getElementById('div-register').style.display = "none";
+        document.getElementById('div-no-register').style.display = "block";
+        <% } else { %>
+        document.getElementById('div-register').style.display = "block";
+        document.getElementById('div-no-register').style.display = "none";
+        <% } %>
+
+        <% if (enrolledLectures.length === 0) { %>
+        document.getElementById('div-enrolled').style.display = "none";
+        document.getElementById('div-no-enrolled').style.display = "block";
+        <% } else { %>
+        document.getElementById('div-enrolled').style.display = "block";
+        document.getElementById('div-no-enrolled').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
 </html>

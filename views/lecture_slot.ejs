@@ -24,151 +24,151 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <div class="form-group">
-      <form id="lecture_slot_form" action="lecture_slot" role="form" method="post">
-        <div class="form-group">
-          <label for="module">Module</label>
-          <select class="form-control" id="module" name="module" required="required">
-            <option value="" disabled="disabled" selected="selected">Select Module</option>
-            <% modules.forEach(module => { %>
-              <option value="<%= module.mod_code %>">
-                <%= module.mod_code %> <%= module.mod_name%>
-              </option>
-            <% }); %>
+  <h1><%= title %></h1>
+  <div class="form-group">
+    <form id="lecture_slot_form" action="lecture_slot" role="form" method="post">
+      <div class="form-group">
+        <label for="module">Module</label>
+        <select class="form-control" id="module" name="module" required="required">
+          <option value="" disabled="disabled" selected="selected">Select Module</option>
+          <% modules.forEach(module => { %>
+            <option value="<%= module.mod_code %>">
+              <%= module.mod_code %> <%= module.mod_name%>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label style="font-weight:bold;font-size:larger;">Lecture Slot Info</label>
+        <div class="form-group" id="div-sem">
+          <label for="sem">Semester</label>
+          <select class="form-control" id="sem" name="sem" required="required">
+            <option value="" disabled="disabled" selected="selected">Select Semester</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
           </select>
         </div>
         <div class="form-group">
-          <label style="font-weight:bold;font-size:larger;">Lecture Slot Info</label>
-          <div class="form-group" id="div-sem">
-            <label for="sem">Semester</label>
-            <select class="form-control" id="sem" name="sem" required="required">
-              <option value="" disabled="disabled" selected="selected">Select Semester</option>
-              <option value="1">Semester 1</option>
-              <option value="2">Semester 2</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="day">Lecture Day</label>
-            <select class="form-control" id="day" name="day" required="required">
-              <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="start_time">Lecture Start Time</label>
-            <input type="time" class="form-control" id="start_time"
-                   name="start_time" required="required">
-          </div>
-          <div class="form-group">
-            <label for="end_time">Lecture End Time</label>
-            <input type="time" class="form-control" id="end_time"
-                   name="end_time" required="required">
-          </div>
-          <div class="form-group">
-            <label for="quota">Lecture Quota</label>
-            <input type="number" class="form-control" id="quota" name="quota"
-                   placeholder="Enter Lecture Quota" required="required">
-          </div>
+          <label for="day">Lecture Day</label>
+          <select class="form-control" id="day" name="day" required="required">
+            <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+          </select>
         </div>
-        <div>
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <div class="form-group">
+          <label for="start_time">Lecture Start Time</label>
+          <input type="time" class="form-control" id="start_time"
+                 name="start_time" required="required">
         </div>
-      </form>
-    </div>
-    <div class="form-group" id="div-lectures">
-      <table class="table" id="table-lectures">
-        <caption style="text-align: center;">Lecture Slots</caption>
-        <thead>
+        <div class="form-group">
+          <label for="end_time">Lecture End Time</label>
+          <input type="time" class="form-control" id="end_time"
+                 name="end_time" required="required">
+        </div>
+        <div class="form-group">
+          <label for="quota">Lecture Quota</label>
+          <input type="number" class="form-control" id="quota" name="quota"
+                 placeholder="Enter Lecture Quota" required="required">
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      </div>
+    </form>
+  </div>
+  <div class="form-group" id="div-lectures">
+    <table class="table" id="table-lectures">
+      <caption style="text-align: center;">Lecture Slots</caption>
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Module Code</th>
+        <th scope="col">Semester</th>
+        <th scope="col">Day</th>
+        <th scope="col">Start Time</th>
+        <th scope="col">End Time</th>
+        <th scope="col">Quota</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let j = 1; %>
+      <% lectures.forEach(lecture => { %>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Module Code</th>
-          <th scope="col">Semester</th>
-          <th scope="col">Day</th>
-          <th scope="col">Start Time</th>
-          <th scope="col">End Time</th>
-          <th scope="col">Quota</th>
-          <th scope="col">Action</th>
+          <td><%= j %></td>
+          <td><%= lecture.mod_code %></td>
+          <td><%= lecture.sem %></td>
+          <td><%= lecture.day %></td>
+          <td><%= lecture.s_time_lect %></td>
+          <td><%= lecture.e_time_lect %></td>
+          <td><%= lecture.quota %></td>
+          <td>
+            <!-- TODO: Add functionality for the DELETE button to delete the row -->
+            <input type="button" id="btn-delete-lecture" value="Delete"/>
+          </td>
         </tr>
-        </thead>
-        <tbody>
-        <% let j = 1; %>
-        <% lectures.forEach(lecture => { %>
-          <tr>
-            <td><%= j %></td>
-            <td><%= lecture.mod_code %></td>
-            <td><%= lecture.sem %></td>
-            <td><%= lecture.day %></td>
-            <td><%= lecture.s_time_lect %></td>
-            <td><%= lecture.e_time_lect %></td>
-            <td><%= lecture.quota %></td>
-            <td>
-              <!-- TODO: Add functionality for the DELETE button to delete the row -->
-              <input type="button" id="btn-delete-lecture" value="Delete"/>
-            </td>
-          </tr>
-          <% j++; %>
-        <% }); %>
-        </tbody>
-      </table>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='dashboard_admin'">Back to Home</button>
-    </div>
-    <div class="form-group">
-      <form action="logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
-    <script>
-      $("#table-lectures").on('click','#btn-delete-lecture',function() {
-        const currentRow = $(this).closest("tr"); // get the current row
-        const mod_code = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
-        const sem = currentRow.find("td:eq(2)").text();
-        const day = currentRow.find("td:eq(3)").text();
-        const s_time_lect = currentRow.find("td:eq(4)").text();
-        const e_time_lect = currentRow.find("td:eq(5)").text();
-        window.location.href='lecture_slot/delete_lecture_slot?' +
-                'module=' + mod_code +
-                '&sem=' + sem +
-                '&day=' + day +
-                '&s_time_lect=' + s_time_lect +
-                '&e_time_lect=' + e_time_lect;
-      });
-    </script>
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          <% if (lectures.length === 0) { %>
-          document.getElementById('table-lectures').style.display = "none";
-          <% } %>
-        });
-      })();
-    </script>
-    <script>
-      window.onmousedown = function (event) {
-        var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() === 'option' &&
-          eventTarget.parentNode.hasAttribute('multiple')) {
-          event.preventDefault();
-
-          // toggle selection
-          if (eventTarget.hasAttribute('selected')) {
-            eventTarget.removeAttribute('selected');
-          } else {
-            eventTarget.setAttribute('selected', '');
-          }
-
-          // hack to correct buggy behavior
-          var select = eventTarget.parentNode.cloneNode(true);
-          eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
-        }
-      }
-    </script>
+        <% j++; %>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='dashboard_admin'">Back to Home</button>
+  </div>
+  <div class="form-group">
+    <form action="logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
   </body>
+  <script>
+    $("#table-lectures").on('click','#btn-delete-lecture',function() {
+      const currentRow = $(this).closest("tr"); // get the current row
+      const mod_code = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+      const sem = currentRow.find("td:eq(2)").text();
+      const day = currentRow.find("td:eq(3)").text();
+      const s_time_lect = currentRow.find("td:eq(4)").text();
+      const e_time_lect = currentRow.find("td:eq(5)").text();
+      window.location.href='lecture_slot/delete_lecture_slot?' +
+              'module=' + mod_code +
+              '&sem=' + sem +
+              '&day=' + day +
+              '&s_time_lect=' + s_time_lect +
+              '&e_time_lect=' + e_time_lect;
+    });
+  </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (lectures.length === 0) { %>
+        document.getElementById('table-lectures').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
+  <script>
+    window.onmousedown = function (event) {
+      var eventTarget = event.target;
+      if (eventTarget.tagName.toLowerCase() === 'option' &&
+              eventTarget.parentNode.hasAttribute('multiple')) {
+        event.preventDefault();
+
+        // toggle selection
+        if (eventTarget.hasAttribute('selected')) {
+          eventTarget.removeAttribute('selected');
+        } else {
+          eventTarget.setAttribute('selected', '');
+        }
+
+        // hack to correct buggy behavior
+        var select = eventTarget.parentNode.cloneNode(true);
+        eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+      }
+    }
+  </script>
 </html>
