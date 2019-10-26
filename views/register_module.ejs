@@ -25,62 +25,92 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <form id="register_module_form" action="register_module" role="form" method="post">
-      <div class="form-group" id="div-program">
-        <label for="program">Program</label>
-        <select class="form-control" id="program" name="program" required="required" onchange="onChangeRole()">
-          <option value="" disabled="disabled" selected="selected">Select Program</option>
-          <% for(var i=1; i<data.length; i++) { %>
-            <option value="<%= data[i].prog_name%>"><%= data[i].prog_name%></option>
-          <% } %>
-          <!-- <option value="Program 1">Program 1</option>
-          <option value="Program 2">Program 2</option>
-          <option value="Program 3">Program 3</option> -->
-        </select> 
-      </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Module Code</th>
+            <th scope="col">Day of the Week</th>
+            <th scope="col">Lecture Start Time</th>
+            <th scope="col">Lecture End Time</th>
+            <th scope="col">Register Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for(var i=0; i<register_list.length; i++) { %>
+            <tr>
+                <td>
+                    <select class="form-control" style="width: 50%;height: 80%" id="rank" name="rank" required="required" >
+                        <option value="<%= register_list[i].rank_pref%>" disabled="disabled" selected="selected"><%= register_list[i].rank_pref%></option>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                    </select>
+                </td>
+                <td value="<%= register_list[i].mod_code%>"><%= register_list[i].mod_code%></td>
+                <td value="<%= register_list[i].day%>"><%= register_list[i].day%></td>
+                <td value="<%= register_list[i].s_time_lect%>"><%= register_list[i].s_time_lect%></td>
+                <td value="<%= register_list[i].e_time_lect%>"><%= register_list[i].e_time_lect%></td>
+                <td value="<%= register_list[i].reg_status%>"><%= register_list[i].reg_status%></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+    <form id="register_module_form" action="register_module" style="width: 20%; margin-bottom: 50px" role="form" method="post">
       <div class="form-group" id="div-module" style="display:block;">
-        <label for="Module">Module</label>
-        <select class="form-control" id="module" name="module" required="required">
-          <option value="" disabled="disabled" selected="selected">Select Module</option>
-          <!-- <option value="Module 1">Module 1</option>
-          <option value="Module 2">Module 2</option>
-          <option value="Module 3">Module 3</option> -->
-        </select> 
+        <label for="module">Module</label>
+        <select class="form-control" id="module" name="module" required="required" onchange="onChangeModule()" >
+          <option value="<%= selected_mod_code%>" disabled="disabled" selected="selected"><%= selected_mod_code%></option>
+          <% for(var i=0; i<modules.length; i++) { %>
+                <option value="<%= modules[i].mod_code%>"><%= modules[i].mod_code%> <%= modules[i].mod_name%></option>
+          <% } %>
+        </select>
       </div>
-      <div class="form-group" id="div-lecture" style="display:block;">
-        <label for="Lecture">Lecture Slot</label>
-        <select class="form-control" id="lecture" name="lecture" required="required">
-          <option value="" disabled="disabled" selected="selected">Select Lecture Slot</option>
-          <!-- <option value="Lecture 1">Lecture 1</option>
-          <option value="Lecture 2">Lecture 2</option>
-          <option value="Lecture 3">Lecture 3</option> -->
-        </select> 
-      </div>
-      <div class="form-group" id="div-modules-taken" style="display:none;">
-        <label for="Modules">Modules Taken</label>
-        <select multiple="multiple" class="form-control" id="modules_taken" name="modules_taken">
-          <!-- <option value="" disabled="disabled" selected="selected">Select Modules Taken</option> -->
-          <option value="CS1010">CS1010</option>
-          <option value="CS1010J">CS1010J</option>
-          <option value="ACC1701">ACC1701</option>
-          <option value="CS2102">CS2102</option>
-        </select> 
-      </div>
-      <div class="form-group" id="div-modules-set" style="display:none;">
-        <label for="Modules">Modules Set</label>
-        <select multiple="multiple" class="form-control" id="modules_set" name="modules_set">
-          <!-- <option value="" disabled="disabled" selected="selected">Select Modules Set</option> -->
-          <option value="CS1010">CS1010</option>
-          <option value="CS1010J">CS1010J</option>
-          <option value="ACC1701">ACC1701</option>
-          <option value="CS2102">CS2102</option>
-        </select> 
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-      </div>
+        <div>
+            <button id="btn-add" class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add</button>
+        </div>
+
+        <form action="/save" method="post">
+            <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Lecture Slot</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="lecture_slots">Lecture Slots</label>
+                                <select class="form-control" id="lecture_slots" name="lecture_slots" required="required" >
+                                    <option value="" disabled="disabled" selected="selected">Select Lecture Slot</option>
+                                    <% for(var i=0; i<lecture_slots.length; i++) { %>
+                                        <option value="<%= lecture_slots[i].s_time_lect%>"><%= lecture_slots[i].day%> <%= lecture_slots[i].s_time_lect%> <%= lecture_slots[i].e_time_lect%></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
     </form>
-    <div class="form-group"></div>
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary"
               onclick="window.location.href='dashboard_student'">Back to Home</button>
@@ -90,32 +120,50 @@
         <button type="submit" class="btn btn-primary">Logout</button>
       </form>
     </div>
+<!--     <script> -->
+<!--       function onChangeRole() { -->
+<!--         if (document.getElementById('role').value === 'Student' || document.getElementById('role').value === '') { -->
+<!--           // Hide -->
+<!--           document.getElementById('div-modules-set').style.display = "none"; -->
+
+<!--           // Display -->
+<!--           document.getElementById('div-seniority').style.display = "block"; -->
+<!--           document.getElementById('div-modules-taken').style.display = "block"; -->
+
+<!--           // Compulsory to be Filled -->
+<!--           document.getElementById('seniority').required = "required"; -->
+<!--         }  -->
+<!--         else if (document.getElementById('role').value === 'Admin') { -->
+<!--           // Hide -->
+<!--           document.getElementById('div-seniority').style.display = "none"; -->
+<!--           document.getElementById('div-modules-taken').style.display = "none"; -->
+
+<!--           // Display -->
+<!--           document.getElementById('div-modules-set').style.display = "block"; -->
+
+<!--           // Not compulsory to be Filled -->
+<!--           document.getElementById('seniority').required = ""; -->
+<!--         } -->
+<!--       } -->
+<!--     </script> -->
+
     <script>
-      function onChangeRole() {
-        if (document.getElementById('role').value === 'Student' || document.getElementById('role').value === '') {
-          // Hide
-          document.getElementById('div-modules-set').style.display = "none";
-
-          // Display
-          document.getElementById('div-seniority').style.display = "block";
-          document.getElementById('div-modules-taken').style.display = "block";
-
-          // Compulsory to be Filled
-          document.getElementById('seniority').required = "required";
-        } 
-        else if (document.getElementById('role').value === 'Admin') {
-          // Hide
-          document.getElementById('div-seniority').style.display = "none";
-          document.getElementById('div-modules-taken').style.display = "none";
-
-          // Display
-          document.getElementById('div-modules-set').style.display = "block";
-
-          // Not compulsory to be Filled
-          document.getElementById('seniority').required = "";
+        function onChangeModule() {
+            const mod_code = document.getElementById('module').value;
+            console.log(mod_code);
+            window.location.href='register_module/add_module?' +
+                'module=' + mod_code;
         }
-      }
     </script>
+<!--    <script>-->
+<!--        $("#register_module_form").on('click','#btn-add',function() {-->
+<!--            const mod_code = document.getElementById('module').value;-->
+<!--            console.log(mod_code);-->
+<!--            window.location.href='register_module/add_module?' +-->
+<!--                'module=' + mod_code;-->
+<!--        });-->
+<!--    </script>-->
+    <script src="/public/javascripts/bootstrap.js"></script>
     <script>
       (function() {
         window.addEventListener('load', function() {
@@ -126,5 +174,7 @@
         });
       })();
     </script>
+
+
   </body>
 </html>
