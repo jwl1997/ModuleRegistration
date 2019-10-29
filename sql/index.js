@@ -5,6 +5,7 @@ sql.query = {
   auth_user: 'SELECT EXISTS (SELECT * FROM Users WHERE username = $1)',
   auth_student: 'SELECT EXISTS (SELECT s_username FROM Students WHERE s_username = $1)',
   auth_admin: 'SELECT EXISTS (SELECT a_username FROM Admins WHERE a_username = $1)',
+  get_round_time: 'SELECT * FROM Rounds WHERE (s_time_round < now() AND e_time_round > now()) ORDER BY s_time_round LIMIT 1',
 
   add_user: 'INSERT INTO Users (username, password) VALUES ($1, $2)',
   add_student: 'INSERT INTO Students (s_username, seniority) VALUES ($1, $2)',

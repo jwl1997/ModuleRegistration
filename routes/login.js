@@ -91,8 +91,16 @@ router.post('/', function(req, res, next) {
       } else {
         req.session.username = username;
         req.session.role = role;
-        console.info(req.session);
-        return res.redirect('/dashboard_student');
+        pool.query(sql.query.get_round_time, (err, data) => {
+          if (err) {
+            unknownError(err, res);
+          } else {
+            req.session.s_time_round = data.rows[0].s_time_round;
+            req.session.e_time_round = data.rows[0].e_time_round;
+            console.info(req.session);
+            return res.redirect('/dashboard_student');
+          }
+        });
       }
     });
   }
@@ -104,8 +112,16 @@ router.post('/', function(req, res, next) {
       } else {
         req.session.username = username;
         req.session.role = role;
-        console.info(req.session);
-        return res.redirect('/dashboard_admin');
+        pool.query(sql.query.get_round_time, (err, data) => {
+          if (err) {
+            unknownError(err, res);
+          } else {
+            req.session.s_time_round = data.rows[0].s_time_round;
+            req.session.e_time_round = data.rows[0].e_time_round;
+            console.info(req.session);
+            return res.redirect('/dashboard_admin');
+          }
+        });
       }
     });
   }
