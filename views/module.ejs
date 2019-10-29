@@ -24,213 +24,213 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <div class="form-group">
-      <form id="module_form" action="module" role="form" method="post">
-        <div class="form-group">
-          <label style="font-weight:bold;font-size:larger;">Module Info</label>
-          <div class="form-group" id="div-mod-code">
-            <label for="mod_code">Module Code</label>
-            <input type="text" class="form-control" id="mod_code" name="mod_code"
-                   placeholder="Enter Module Code" required="required">
-          </div>
-          <div class="form-group" id="div-mod-name">
-            <label for="mod_name">Module Name</label>
-            <input type="text" class="form-control" id="mod_name" name="mod_name"
-                   placeholder="Enter Module Name" required="required">
-          </div>
+  <h1><%= title %></h1>
+  <div class="form-group">
+    <form id="module_form" action="module" role="form" method="post">
+      <div class="form-group">
+        <label style="font-weight:bold;font-size:larger;">Module Info</label>
+        <div class="form-group" id="div-mod-code">
+          <label for="mod_code">Module Code</label>
+          <input type="text" class="form-control" id="mod_code" name="mod_code"
+                 placeholder="Enter Module Code" required="required">
+        </div>
+        <div class="form-group" id="div-mod-name">
+          <label for="mod_name">Module Name</label>
+          <input type="text" class="form-control" id="mod_name" name="mod_name"
+                 placeholder="Enter Module Name" required="required">
+        </div>
+      </div>
+      <div class="form-group">
+        <label style="font-weight:bold;font-size:larger;">Lecture Slot Info</label>
+        <div class="form-group" id="div-sem">
+          <label for="sem">Semester</label>
+          <select class="form-control" id="sem" name="sem" required="required">
+            <option value="" disabled="disabled" selected="selected">Select Semester</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+          </select>
         </div>
         <div class="form-group">
-          <label style="font-weight:bold;font-size:larger;">Lecture Slot Info</label>
-          <div class="form-group" id="div-sem">
-            <label for="sem">Semester</label>
-            <select class="form-control" id="sem" name="sem" required="required">
-              <option value="" disabled="disabled" selected="selected">Select Semester</option>
-              <option value="1">Semester 1</option>
-              <option value="2">Semester 2</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="day">Lecture Day</label>
-            <select class="form-control" id="day" name="day" required="required">
-              <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="start_time">Lecture Start Time</label>
-            <input type="time" class="form-control" id="start_time"
-                   name="start_time" required="required">
-          </div>
-          <div class="form-group">
-            <label for="end_time">Lecture End Time</label>
-            <input type="time" class="form-control" id="end_time"
-                   name="end_time" required="required">
-          </div>
-          <div class="form-group">
-            <label for="quota">Lecture Quota</label>
-            <input type="number" class="form-control" id="quota" name="quota"
-                   placeholder="Enter Lecture Quota" required="required">
-          </div>
+          <label for="day">Lecture Day</label>
+          <select class="form-control" id="day" name="day" required="required">
+            <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+          </select>
         </div>
-        <div id="btn-submit">
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <div class="form-group">
+          <label for="start_time">Lecture Start Time</label>
+          <input type="time" class="form-control" id="start_time"
+                 name="start_time" required="required">
         </div>
-      </form>
-    </div>
-    <div class="form-group">
-      <table class="table" id="table-modules">
-        <caption style="text-align: center;">Modules</caption>
-        <thead>
+        <div class="form-group">
+          <label for="end_time">Lecture End Time</label>
+          <input type="time" class="form-control" id="end_time"
+                 name="end_time" required="required">
+        </div>
+        <div class="form-group">
+          <label for="quota">Lecture Quota</label>
+          <input type="number" class="form-control" id="quota" name="quota"
+                 placeholder="Enter Lecture Quota" required="required">
+        </div>
+      </div>
+      <div id="btn-submit">
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      </div>
+    </form>
+  </div>
+  <div class="form-group">
+    <table class="table" id="table-modules">
+      <caption style="text-align: center;">Modules</caption>
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Module Code</th>
+        <th scope="col">Module Name</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let i = 1; %>
+      <% modules.forEach(module => { %>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Module Code</th>
-          <th scope="col">Module Name</th>
-          <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% let i = 1; %>
-        <% modules.forEach(module => { %>
-          <tr>
-            <td><%= i %></td>
-            <td><%= module.mod_code %></td>
-            <td><%= module.mod_name %></td>
-            <td>
-              <!-- TODO: Module is linked to other entities (Require and Prereq). Do we really want to delete modules? -->
-              <input type="button" id="btn-delete-module" value="Delete"/>
+          <td><%= i %></td>
+          <td><%= module.mod_code %></td>
+          <td><%= module.mod_name %></td>
+          <td>
+            <!-- TODO: Module is linked to other entities (Require and Prereq). Do we really want to delete modules? -->
+            <input type="button" id="btn-delete-module" value="Delete"/>
 
-              <!-- TODO: When LECTURES button is clicked, show all lecture slots for that row's module code -->
-              <input type="button" id="btn-lectures" value="Lectures"/>
-            </td>
-          </tr>
-          <% i++; %>
-        <% }); %>
-        </tbody>
-      </table>
-    </div>
-    <div class="form-group" id="div-lectures">
-      <table class="table" id="table-lectures">
-        <caption style="text-align: center;">Lecture Slots</caption>
-        <thead>
+            <!-- TODO: When LECTURES button is clicked, show all lecture slots for that row's module code -->
+            <input type="button" id="btn-lectures" value="Lectures"/>
+          </td>
+        </tr>
+        <% i++; %>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group" id="div-lectures">
+    <table class="table" id="table-lectures">
+      <caption style="text-align: center;">Lecture Slots</caption>
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Module Code</th>
+        <th scope="col">Semester</th>
+        <th scope="col">Day</th>
+        <th scope="col">Start Time</th>
+        <th scope="col">End Time</th>
+        <th scope="col">Quota</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let j = 1; %>
+      <% lectures.forEach(lecture => { %>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Module Code</th>
-          <th scope="col">Semester</th>
-          <th scope="col">Day</th>
-          <th scope="col">Start Time</th>
-          <th scope="col">End Time</th>
-          <th scope="col">Quota</th>
-          <th scope="col">Action</th>
+          <td><%= j %></td>
+          <td><%= lecture.mod_code %></td>
+          <td><%= lecture.sem %></td>
+          <td><%= lecture.day %></td>
+          <td><%= lecture.s_time_lect %></td>
+          <td><%= lecture.e_time_lect %></td>
+          <td><%= lecture.quota %></td>
+          <td>
+            <!-- TODO: Add functionality for the DELETE button to delete the row -->
+            <input type="button" id="btn-delete-lecture" value="Delete"/>
+          </td>
         </tr>
-        </thead>
-        <tbody>
-        <% let j = 1; %>
-        <% lectures.forEach(lecture => { %>
-          <tr>
-            <td><%= j %></td>
-            <td><%= lecture.mod_code %></td>
-            <td><%= lecture.sem %></td>
-            <td><%= lecture.day %></td>
-            <td><%= lecture.s_time_lect %></td>
-            <td><%= lecture.e_time_lect %></td>
-            <td><%= lecture.quota %></td>
-            <td>
-              <!-- TODO: Add functionality for the DELETE button to delete the row -->
-              <input type="button" id="btn-delete-lecture" value="Delete"/>
-            </td>
-          </tr>
-          <% j++; %>
-        <% }); %>
-        </tbody>
-      </table>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='dashboard_admin'">Back to Home</button>
-    </div>
-    <div class="form-group">
-      <form action="logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
-<!--    To delete modules. Modules ae linked to many entities. Have to reconsider -->
-<!--    <script> -->
-<!--      $("#table-modules").on('click','#btn-delete-module',function() {-->
-<!--        const currentRow = $(this).closest("tr"); // get the current row-->
-<!--        const mod_code = currentRow.find("td:eq(1)").text(); // get current row 2nd TD-->
-<!--        window.location.href='module/delete_module?module=' + mod_code;-->
-<!--      });-->
-<!--    </script>-->
-    <script>
-      $(document).ready(function() {
-        // code to read selected table row cell data (values).
-        $("#table-modules").on('click','#btn-lectures',function() {
-          const currentRow = $(this).closest("tr"); // get the current row
-          const mod_code = currentRow.find("td:eq(1)").text(); // get current row 3rd TD
-
-          // var content = '<table>' +
-          //         '<thead>' +
-          //         '<tr>' +
-          //         '<th>Day</th>' +
-          //         '<th>Start Time</th>' +
-          //         '<th>End Time</th>' +
-          //         '<th>Quota</th>' +
-          //         '<th>Module Code</th>' +
-          //         '<th>Action</th>' +
-          //         '</tr>' +
-          //         '</thead>' +
-          //         '<tbody>';
-          //
-          // content += '</tbody></table>';
-          // $('#div-lecture-slots').append(content);
-        });
-      });
-    </script>
-<!--    To display a nested lecture table-->
-<!--    <script>-->
-<!--      $(document).delegate('#btn-lectures','click',function() {-->
-<!--        $('[colspan="5"]').parent('tr').remove();-->
-<!--        $(this).parents('tr').after('<tr/>').next().append('<td colspan="5"/>')-->
-<!--                .children('td').append('<div/>').children()-->
-<!--                .css('background','#fcfcfc').html($('#div-lecture-slots').html());-->
-<!--      });-->
-<!--    </script>-->
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          <% if (lectures.length === 0) { %>
-            document.getElementById('table-lectures').style.display = "none";
-          <% } %>
-          <% if (modules.length === 0) { %>
-            document.getElementById('table-modules').style.display = "none";
-          <% } %>
-        });
-      })();
-    </script>
-    <script>
-      window.onmousedown = function (event) {
-        var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() === 'option' &&
-                eventTarget.parentNode.hasAttribute('multiple')) {
-          event.preventDefault();
-
-          // toggle selection
-          if (eventTarget.hasAttribute('selected')) {
-            eventTarget.removeAttribute('selected');
-          } else {
-            eventTarget.setAttribute('selected', '');
-          }
-
-          // hack to correct buggy behavior
-          var select = eventTarget.parentNode.cloneNode(true);
-          eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
-        }
-      }
-    </script>
+        <% j++; %>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='dashboard_admin'">Back to Home</button>
+  </div>
+  <div class="form-group">
+    <form action="logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
   </body>
+  <!--    To delete modules. Modules ae linked to many entities. Have to reconsider -->
+  <!--    <script> -->
+  <!--      $("#table-modules").on('click','#btn-delete-module',function() {-->
+  <!--        const currentRow = $(this).closest("tr"); // get the current row-->
+  <!--        const mod_code = currentRow.find("td:eq(1)").text(); // get current row 2nd TD-->
+  <!--        window.location.href='module/delete_module?module=' + mod_code;-->
+  <!--      });-->
+  <!--    </script>-->
+  <script>
+    $(document).ready(function() {
+      // code to read selected table row cell data (values).
+      $("#table-modules").on('click','#btn-lectures',function() {
+        const currentRow = $(this).closest("tr"); // get the current row
+        const mod_code = currentRow.find("td:eq(1)").text(); // get current row 3rd TD
+
+        // var content = '<table>' +
+        //         '<thead>' +
+        //         '<tr>' +
+        //         '<th>Day</th>' +
+        //         '<th>Start Time</th>' +
+        //         '<th>End Time</th>' +
+        //         '<th>Quota</th>' +
+        //         '<th>Module Code</th>' +
+        //         '<th>Action</th>' +
+        //         '</tr>' +
+        //         '</thead>' +
+        //         '<tbody>';
+        //
+        // content += '</tbody></table>';
+        // $('#div-lecture-slots').append(content);
+      });
+    });
+  </script>
+  <!--    To display a nested lecture table-->
+  <!--    <script>-->
+  <!--      $(document).delegate('#btn-lectures','click',function() {-->
+  <!--        $('[colspan="5"]').parent('tr').remove();-->
+  <!--        $(this).parents('tr').after('<tr/>').next().append('<td colspan="5"/>')-->
+  <!--                .children('td').append('<div/>').children()-->
+  <!--                .css('background','#fcfcfc').html($('#div-lecture-slots').html());-->
+  <!--      });-->
+  <!--    </script>-->
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (lectures.length === 0) { %>
+        document.getElementById('table-lectures').style.display = "none";
+        <% } %>
+        <% if (modules.length === 0) { %>
+        document.getElementById('table-modules').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
+  <script>
+    window.onmousedown = function (event) {
+      var eventTarget = event.target;
+      if (eventTarget.tagName.toLowerCase() === 'option' &&
+              eventTarget.parentNode.hasAttribute('multiple')) {
+        event.preventDefault();
+
+        // toggle selection
+        if (eventTarget.hasAttribute('selected')) {
+          eventTarget.removeAttribute('selected');
+        } else {
+          eventTarget.setAttribute('selected', '');
+        }
+
+        // hack to correct buggy behavior
+        var select = eventTarget.parentNode.cloneNode(true);
+        eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+      }
+    }
+  </script>
 </html>

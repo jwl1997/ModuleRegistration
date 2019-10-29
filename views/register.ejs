@@ -27,95 +27,95 @@
     <script src="javascripts/registerScript.js"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <form id="register_form" action="register" role="form" method="post">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username"
-               placeholder="Enter your NUSNET username" required="required">
-      </div>
-      <div>
-        <label id="username_invalid" name="username_invalid"
-               style="display:none;color:red;font-style:italic;">Invalid username! Use your NUSNET username.</label>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password"
-               placeholder="Enter your password" required="required">
-      </div>
-      <div>
-        <label id="password_invalid" name="password_invalid" style="display:none;color:red;font-style:italic;">
-          Invalid password! Password must have at least 10 characters.</label>
-      </div>
-      <div class="form-group">
-        <label for="Role">Role</label>
-        <select class="form-control" id="role" name="role" required="required"
-                onchange="onChangeRole()">
-          <option value="" disabled="disabled" selected="selected">Select Role</option>
-          <option value="Student">Student</option>
-          <option value="Admin">Admin</option>
-        </select> 
-      </div>
-      <div class="form-group" id="div-seniority" name="div-seniority" style="display:none;">
-        <label for="Year">Year of Study</label>
-        <select class="form-control" id="seniority" name="seniority" required="required">
-          <option value="" disabled="disabled" selected="selected">Select Year of Study</option>
-          <option value="1">Year 1</option>
-          <option value="2">Year 2</option>
-          <option value="3">Year 3</option>
-          <option value="4">Year 4</option>
-          <option value="5">Year 5</option>
-        </select> 
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-      </div>
-    </form>
-    <script>
-      function onChangeRole() {
-        if (document.getElementById('role').value === 'Student') {
-          // Display
-          document.getElementById('div-seniority').style.display = "block";
-          // Compulsory to be Filled
-          document.getElementById('seniority').required = "required";
-        } 
-        else if (document.getElementById('role').value === 'Admin') {
-          // Hide
-          document.getElementById('div-seniority').style.display = "none";
-          // Not compulsory to be Filled
-          document.getElementById('seniority').required = "";
-        }
-      }
-    </script>
-    <script>
-      window.onmousedown = function (event) {
-        var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() === 'option' &&
-          eventTarget.parentNode.hasAttribute('multiple')) {
-          event.preventDefault();
-
-          // toggle selection
-          if (eventTarget.hasAttribute('selected')) {
-            eventTarget.removeAttribute('selected');
-          } else {
-            eventTarget.setAttribute('selected', '');
-          }
-
-          // hack to correct buggy behavior
-          var select = eventTarget.parentNode.cloneNode(true);
-          eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
-        }
-      }
-    </script>
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          var forms = [document.getElementById('register_form')];
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', check, false);
-          })
-        });
-      })();
-    </script>
+  <h1><%= title %></h1>
+  <form id="register_form" action="register" role="form" method="post">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" id="username" name="username"
+             placeholder="Enter your NUSNET username" required="required">
+    </div>
+    <div>
+      <label id="username_invalid" name="username_invalid"
+             style="display:none;color:red;font-style:italic;">Invalid username! Use your NUSNET username.</label>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" name="password"
+             placeholder="Enter your password" required="required">
+    </div>
+    <div>
+      <label id="password_invalid" name="password_invalid" style="display:none;color:red;font-style:italic;">
+        Invalid password! Password must have at least 10 characters.</label>
+    </div>
+    <div class="form-group">
+      <label for="Role">Role</label>
+      <select class="form-control" id="role" name="role" required="required"
+              onchange="onChangeRole()">
+        <option value="" disabled="disabled" selected="selected">Select Role</option>
+        <option value="Student">Student</option>
+        <option value="Admin">Admin</option>
+      </select>
+    </div>
+    <div class="form-group" id="div-seniority" name="div-seniority" style="display:none;">
+      <label for="Year">Year of Study</label>
+      <select class="form-control" id="seniority" name="seniority" required="required">
+        <option value="" disabled="disabled" selected="selected">Select Year of Study</option>
+        <option value="1">Year 1</option>
+        <option value="2">Year 2</option>
+        <option value="3">Year 3</option>
+        <option value="4">Year 4</option>
+        <option value="5">Year 5</option>
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    </div>
+  </form>
   </body>
+  <script>
+    function onChangeRole() {
+      if (document.getElementById('role').value === 'Student') {
+        // Display
+        document.getElementById('div-seniority').style.display = "block";
+        // Compulsory to be Filled
+        document.getElementById('seniority').required = "required";
+      }
+      else if (document.getElementById('role').value === 'Admin') {
+        // Hide
+        document.getElementById('div-seniority').style.display = "none";
+        // Not compulsory to be Filled
+        document.getElementById('seniority').required = "";
+      }
+    }
+  </script>
+  <script>
+    window.onmousedown = function (event) {
+      var eventTarget = event.target;
+      if (eventTarget.tagName.toLowerCase() === 'option' &&
+              eventTarget.parentNode.hasAttribute('multiple')) {
+        event.preventDefault();
+
+        // toggle selection
+        if (eventTarget.hasAttribute('selected')) {
+          eventTarget.removeAttribute('selected');
+        } else {
+          eventTarget.setAttribute('selected', '');
+        }
+
+        // hack to correct buggy behavior
+        var select = eventTarget.parentNode.cloneNode(true);
+        eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+      }
+    }
+  </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        var forms = [document.getElementById('register_form')];
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', check, false);
+        })
+      });
+    })();
+  </script>
 </html>
