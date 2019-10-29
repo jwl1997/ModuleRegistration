@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <!-- CSS for Styling -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <!-- JavaScript for Interactivity -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+  </head>
+  <body>
+  <h1><%= title %></h1>
+  <div class="form-group" id="div-no-appeals">
+    <h5>There are currently no appeals for any modules.</h5>
+  </div>
+  <div class="form-group" id="div-appeals">
+    <table class="table" id="table-appeals">
+      <caption style="text-align: center;">Appeals</caption>
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Module Code</th>
+        <th scope="col">Semester</th>
+        <th scope="col">Day</th>
+        <th scope="col">Start Lecture</th>
+        <th scope="col">End Lecture</th>
+        <th scope="col">Student</th>
+        <th scope="col">Appeal Status</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let i = 1; %>
+      <% appeals.forEach(appeal => { %>
+        <tr>
+          <td><%= i %></td>
+          <td><%= appeal.mod_code %></td>
+          <td><%= appeal.sem %></td>
+          <td><%= appeal.day %></td>
+          <td><%= appeal.s_time_lect %></td>
+          <td><%= appeal.e_time_lect %></td>
+          <td><%= appeal.s_username %></td>
+          <td><%= appeal.status %></td>
+          <td class="dropdown">
+            <% if (appeal.status === 'Appeal Pending') { %>
+            <select class="form-control" id="outcome" name="outcome" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Outcome</option>
+              <option value="Success">Success</option>
+              <option value="Fail">Fail</option>
+            <% } else { %>
+              No action required
+            <% } %>
+          </td>
+        </tr>
+        <% i++; %>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='dashboard_admin'">Back to Home</button>
+  </div>
+  <div class="form-group">
+    <form action="logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
+  </body>
+  <script>
+    $("#table-appeals").on('change','#outcome',function() {
+      const currentRow = $(this).closest("tr"); // get the current row
+      const mod_code = currentRow.find("td:eq(1)").text();
+      const sem = currentRow.find("td:eq(2)").text();
+      const day = currentRow.find("td:eq(3)").text();
+      const s_time_lect = currentRow.find("td:eq(4)").text();
+      const e_time_lect = currentRow.find("td:eq(5)").text();
+      const s_username = currentRow.find("td:eq(6)").text();
+      const status = currentRow.find("td:eq(8)").find("option:selected").text();
+      window.location.href='appeal/modify_appeal?' +
+              'mod_code=' + mod_code +
+              '&sem=' + sem +
+              '&day=' + day +
+              '&s_time_lect=' + s_time_lect +
+              '&e_time_lect=' + e_time_lect +
+              '&s_username=' + s_username +
+              '&status=' + status;
+    });
+  </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (appeals.length === 0) { %>
+        document.getElementById('div-appeals').style.display = "none";
+        document.getElementById('div-no-appeals').style.display = "block";
+        <% } else { %>
+        document.getElementById('div-appeals').style.display = "block";
+        document.getElementById('div-no-appeals').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
+</html>

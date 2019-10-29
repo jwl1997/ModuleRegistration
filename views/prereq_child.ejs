@@ -24,80 +24,80 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <div class="form-group">
-      <form id="prereq_form" role="form" method="post">
-        <h5 id="h5-no-prereqs">This module has no prerequisites.</h5>
-        <div class="form-group" id="div-prereqs">
-          <label for="children">Prerequisites</label>
-          <select multiple="multiple" class="form-control" id="children"
-                  name="children" size="<%= 1 + (children.length * 0.5) %>">
-            <% children.forEach(child => { %>
-              <option value="<%= child.mod_code %>">
-                <%= child.mod_code %> <%= child.mod_name %>
-              </option>
-            <% }); %>
-          </select>
-        </div>
-        <div>
-          <button type="submit" class="btn btn-primary btn-block"
-                  id="btn-prereqs" onclick="submitChildForm()">Submit</button>
-        </div>
-      </form>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='../prereq'">Previous</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='../dashboard_admin'">Back to Home</button>
-    </div>
-    <div class="form-group">
-      <form action="../logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
-    <script>
-      function submitChildForm() {
-        const parent = "<%= parent %>";
-        window.location.href='../prereq_child/select_child?' + 'parent=' + parent;
-      }
-    </script>
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          <% if (children.length === 0) { %>
-            document.getElementById('div-prereqs').style.display = "none";
-            document.getElementById('btn-prereqs').style.display = "none";
-            document.getElementById('h5-no-prereqs').style.display = "block";
-          <% } else { %>
-          document.getElementById('div-prereqs').style.display = "block";
-          document.getElementById('btn-prereqs').style.display = "block";
-          document.getElementById('h5-no-prereqs').style.display = "none";
-          <% } %>
-        });
-      })();
-    </script>
-    <script>
-      window.onmousedown = function (event) {
-        var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() === 'option' &&
-          eventTarget.parentNode.hasAttribute('multiple')) {
-          event.preventDefault();
-
-          // toggle selection
-          if (eventTarget.hasAttribute('selected')) {
-            eventTarget.removeAttribute('selected');
-          } else {
-            eventTarget.setAttribute('selected', '');
-          }
-
-          // hack to correct buggy behavior
-          var select = eventTarget.parentNode.cloneNode(true);
-          eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
-        }
-      }
-    </script>
+  <h1><%= title %></h1>
+  <div class="form-group">
+    <form id="prereq_form" role="form" method="post">
+      <h5 id="h5-no-prereqs">This module has no prerequisites.</h5>
+      <div class="form-group" id="div-prereqs">
+        <label for="children">Prerequisites</label>
+        <select multiple="multiple" class="form-control" id="children"
+                name="children" size="<%= 1 + (children.length * 0.5) %>">
+          <% children.forEach(child => { %>
+            <option value="<%= child.mod_code %>">
+              <%= child.mod_code %> <%= child.mod_name %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary btn-block"
+                id="btn-prereqs" onclick="submitChildForm()">Submit</button>
+      </div>
+    </form>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='../prereq'">Previous</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='../dashboard_admin'">Back to Home</button>
+  </div>
+  <div class="form-group">
+    <form action="../logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
   </body>
+  <script>
+    function submitChildForm() {
+      const parent = "<%= parent %>";
+      window.location.href='../prereq_child/select_child?' + 'parent=' + parent;
+    }
+  </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (children.length === 0) { %>
+        document.getElementById('div-prereqs').style.display = "none";
+        document.getElementById('btn-prereqs').style.display = "none";
+        document.getElementById('h5-no-prereqs').style.display = "block";
+        <% } else { %>
+        document.getElementById('div-prereqs').style.display = "block";
+        document.getElementById('btn-prereqs').style.display = "block";
+        document.getElementById('h5-no-prereqs').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
+  <script>
+    window.onmousedown = function (event) {
+      var eventTarget = event.target;
+      if (eventTarget.tagName.toLowerCase() === 'option' &&
+              eventTarget.parentNode.hasAttribute('multiple')) {
+        event.preventDefault();
+
+        // toggle selection
+        if (eventTarget.hasAttribute('selected')) {
+          eventTarget.removeAttribute('selected');
+        } else {
+          eventTarget.setAttribute('selected', '');
+        }
+
+        // hack to correct buggy behavior
+        var select = eventTarget.parentNode.cloneNode(true);
+        eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+      }
+    }
+  </script>
 </html>
