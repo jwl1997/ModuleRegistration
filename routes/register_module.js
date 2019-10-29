@@ -19,6 +19,7 @@ var err_msg = "";
 var is_ranking_action = false;
 
 router.get('/',function (req, res, next) {
+	console.log(req.session.username);
 	if(is_ranking_action){
 		is_ranking_action = false;
 		next();
