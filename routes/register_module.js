@@ -173,10 +173,13 @@ router.get('/update_rankings', function (req, res) {
 				} else {
 					console.log("update");
 					console.log(data);
+					if(index==register_list.length-1){
+						return res.redirect('/register_module');
+					}
 				}
 			});
 		}
-		return res.redirect('/register_module');
+		//return res.redirect('/register_module');
 	} else {
 		is_ranking_action = true;
 		err_msg = "Invalid rankings. Please reset the rankings.";
