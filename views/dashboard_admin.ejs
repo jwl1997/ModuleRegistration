@@ -27,58 +27,58 @@
     <h1><%= title %> (<%= username %>)</h1>
     <table class="table">
       <thead>
-        <tr>
-		  <th scope="col">Module Code</th>
-          <th scope="col">Module Name</th>
-          <th scope="col">Sem</th>
-          <th scope="col">Day</th>
-          <th scope="col">Lecture Start</th>
-          <th scope="col">Lecture End</th>
-          <th scope="col">Quota</th>
-          <th scope="col">Registration Start</th>
-          <th scope="col">Registration End</th>
-          <!-- <th scope="col">Registering Students</th>
-          <th scope="col">Successful Registrants</th>
-          <th scope="col">Unsuccessful Registrants</th> -->
-          <th scope="col">Action</th>
-        </tr>
+      <tr>
+        <th scope="col">Module Code</th>
+        <th scope="col">Module Name</th>
+        <th scope="col">Sem</th>
+        <th scope="col">Day</th>
+        <th scope="col">Lecture Start</th>
+        <th scope="col">Lecture End</th>
+        <th scope="col">Quota</th>
+        <th scope="col">Registration Start</th>
+        <th scope="col">Registration End</th>
+        <!-- <th scope="col">Registering Students</th>
+        <th scope="col">Successful Registrants</th>
+        <th scope="col">Unsuccessful Registrants</th> -->
+        <th scope="col">Action</th>
+      </tr>
       </thead>
       <tbody>
+      <tr>
+        <td>CS2102</td>
+        <td>Database Systems</td>
+        <td>1</td>
+        <td>Wednesday</td>
+        <td>10:00 am</td>
+        <td>12:00 pm</td>
+        <td>260</td>
+        <td>15-Oct-2019 10:00 am</td>
+        <td>15-Oct-2019 05:00 pm</td>
+        <td>
+          <input type="button" id="btn-edit" value="Edit"/>
+          <input type="button" id="btn-delete" value="Delete"/>
+          <input type="button" id="btn-allocate" value="Allocate"/>
+        </td>
+      </tr>
+      <% values.forEach(value => { %>
         <tr>
-          <td>CS2102</td>
-          <td>Database Systems</td>
-          <td>1</td>
-          <td>Wednesday</td>
-          <td>10:00 am</td>
-          <td>12:00 pm</td>
-          <td>260</td>
-          <td>15-Oct-2019 10:00 am</td>
-          <td>15-Oct-2019 05:00 pm</td>
+          <td><%= value.mod_code %></td>
+          <td><%= value.mod_name %></td>
+          <td><%= value.sem %></td>
+          <td><%= value.day %></td>
+          <td><%= value.s_time_lect %></td>
+          <td><%= value.e_time_lect %></td>
+          <td><%= value.quota %></td>
+          <td></td>
+          <td></td>
           <td>
+            <!-- TODO: Add functionality for the DELETE, EDIT and ALLOCATE buttons -->
             <input type="button" id="btn-edit" value="Edit"/>
             <input type="button" id="btn-delete" value="Delete"/>
             <input type="button" id="btn-allocate" value="Allocate"/>
           </td>
         </tr>
-        <% values.forEach(value => { %>
-          <tr>
-            <td><%= value.mod_code %></td>
-            <td><%= value.mod_name %></td>
-            <td><%= value.sem %></td>
-            <td><%= value.day %></td>
-            <td><%= value.s_time_lect %></td>
-            <td><%= value.e_time_lect %></td>
-            <td><%= value.quota %></td>
-            <td></td>
-            <td></td>
-            <td>
-              <!-- TODO: Add functionality for the DELETE, EDIT and ALLOCATE buttons -->
-              <input type="button" id="btn-edit" value="Edit"/>
-              <input type="button" id="btn-delete" value="Delete"/>
-              <input type="button" id="btn-allocate" value="Allocate"/>
-            </td>
-          </tr>
-        <% }); %>
+      <% }); %>
       </tbody>
     </table>
     <div class="form-group">
@@ -100,6 +100,10 @@
     <div class="form-group">
       <button type="submit" class="btn btn-primary"
               onclick="window.location.href='round'">Round</button>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"
+              onclick="window.location.href='appeal'">Appeal</button>
     </div>
     <div class="form-group">
       <form action="logout" role="form" method="post">

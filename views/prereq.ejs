@@ -24,84 +24,84 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <div class="form-group">
-      <label for="parent">Module</label>
-      <select class="form-control" id="parent" name="parent" required="required">
-        <option value="" disabled="disabled" selected="selected">Select Module</option>
-        <% parents.forEach(parent => { %>
-          <option value="<%= parent.mod_code %>">
-            <%= parent.mod_code %> <%= parent.mod_name%>
-          </option>
-        <% }); %>
-      </select>
-    </div>
-    <div>
-      <button type="submit" class="btn btn-primary btn-block"
-              onclick="submitParentForm()">Submit</button>
-    </div>
-    <div class="form-group" id="div-prereqs">
-      <table class="table" id="table-prereqs">
-        <caption style="text-align: center;">Prerequisites</caption>
-        <thead>
+  <h1><%= title %></h1>
+  <div class="form-group">
+    <label for="parent">Module</label>
+    <select class="form-control" id="parent" name="parent" required="required">
+      <option value="" disabled="disabled" selected="selected">Select Module</option>
+      <% parents.forEach(parent => { %>
+        <option value="<%= parent.mod_code %>">
+          <%= parent.mod_code %> <%= parent.mod_name%>
+        </option>
+      <% }); %>
+    </select>
+  </div>
+  <div>
+    <button type="submit" class="btn btn-primary btn-block"
+            onclick="submitParentForm()">Submit</button>
+  </div>
+  <div class="form-group" id="div-prereqs">
+    <table class="table" id="table-prereqs">
+      <caption style="text-align: center;">Prerequisites</caption>
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Module</th>
+        <th scope="col">Prerequisite</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let j = 1; %>
+      <% prereqs.forEach(prereq => { %>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Module</th>
-          <th scope="col">Prerequisite</th>
-          <th scope="col">Action</th>
+          <td><%= j %></td>
+          <td><%= prereq.parent %></td>
+          <td><%= prereq.child %></td>
+          <td>
+            <input type="button" id="btn-delete-prereq" value="Delete"/>
+          </td>
         </tr>
-        </thead>
-        <tbody>
-        <% let j = 1; %>
-        <% prereqs.forEach(prereq => { %>
-          <tr>
-            <td><%= j %></td>
-            <td><%= prereq.parent %></td>
-            <td><%= prereq.child %></td>
-            <td>
-              <input type="button" id="btn-delete-prereq" value="Delete"/>
-            </td>
-          </tr>
-          <% j++; %>
-        <% }); %>
-        </tbody>
-      </table>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='dashboard_admin'">Back to Home</button>
-    </div>
-    <div class="form-group">
-      <form action="logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
-    <script>
-      function submitParentForm() {
-        const parent = document.getElementById('parent').value;
-        // Returns false for null, undefined, 0, 000, "", false
-        // Returns true for string "0" and whitespace " "
-        if (Boolean(parent)) {
-          window.location.href='prereq/select_parent?' + 'parent=' + parent;
-        }
-      }
-    </script>
-    <script>
-      $("#table-prereqs").on('click','#btn-delete-prereq',function() {
-        const currentRow = $(this).closest("tr"); // get the current row
-        const parent = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
-        const child = currentRow.find("td:eq(2)").text();
-        window.location.href='prereq/delete_prereq?' + 'parent=' + parent + '&child=' + child;
-      });
-    </script>
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          <% if (prereqs.length === 0) { %>
-          document.getElementById('table-prereqs').style.display = "none";
-          <% } %>
-        });
-      })();
-    </script>
+        <% j++; %>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='dashboard_admin'">Back to Home</button>
+  </div>
+  <div class="form-group">
+    <form action="logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
   </body>
+  <script>
+    function submitParentForm() {
+      const parent = document.getElementById('parent').value;
+      // Returns false for null, undefined, 0, 000, "", false
+      // Returns true for string "0" and whitespace " "
+      if (Boolean(parent)) {
+        window.location.href='prereq/select_parent?' + 'parent=' + parent;
+      }
+    }
+  </script>
+  <script>
+    $("#table-prereqs").on('click','#btn-delete-prereq',function() {
+      const currentRow = $(this).closest("tr"); // get the current row
+      const parent = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+      const child = currentRow.find("td:eq(2)").text();
+      window.location.href='prereq/delete_prereq?' + 'parent=' + parent + '&child=' + child;
+    });
+  </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (prereqs.length === 0) { %>
+        document.getElementById('table-prereqs').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
 </html>

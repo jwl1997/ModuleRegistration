@@ -24,33 +24,33 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <form id="login_form" action="login" role="form" method="post">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your NUSNET username" required="required">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
-      </div>
-      <div class="form-group">
-        <label for="Role">Role</label>
-        <select class="form-control" id="role" name="role" required="required">
-          <option value="" disabled="disabled" selected="selected">Select Role</option>
-          <option value="Student">Student</option>
-          <option value="Admin">Admin</option>
-        </select>
-      </div>
-      <div>
-        <label id="login_failed" name="login_failed" style="display:none;">Login unsuccessful</label>
-      </div>
-      <div class="form-group text-center">
-        <a class="d-block small mt-3" href="/register">Register an account</a>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-      </div>
-    </form>
+  <h1><%= title %></h1>
+  <form id="login_form" action="login" role="form" method="post">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="Enter your NUSNET username" required="required">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required="required">
+    </div>
+    <div class="form-group">
+      <label for="Role">Role</label>
+      <select class="form-control" id="role" name="role" required="required">
+        <option value="" disabled="disabled" selected="selected">Select Role</option>
+        <option value="Student">Student</option>
+        <option value="Admin">Admin</option>
+      </select>
+    </div>
+    <div>
+      <label id="login_failed" name="login_failed" style="display:none;">Login unsuccessful</label>
+    </div>
+    <div class="form-group text-center">
+      <a class="d-block small mt-3" href="/register">Register an account</a>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    </div>
+  </form>
   </body>
 </html>

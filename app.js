@@ -109,8 +109,11 @@ app.use('/prereq', require('./routes/prereq'));
 /* Prereq Child Page */
 app.use('/prereq_child', require('./routes/prereq_child'));
 
-/* Rounds Page */
+/* Round Page */
 app.use('/round', require('./routes/round'));
+
+/* Appeal Page */
+app.use('/appeal', require('./routes/appeal'));
 
 /* Logout */
 app.post('/logout', (req, res) => {

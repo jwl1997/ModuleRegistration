@@ -24,101 +24,101 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <div class="form-group">
-      <form id="program_form" action="program" role="form" method="post">
-        <div class="form-group">
-          <label for="program">Program</label>
-          <input type="text" class="form-control" id="program" name="program"
-                 placeholder="Enter Program" required="required">
-        </div>
-        <div class="form-group">
-          <label for="modules">Required Modules</label>
-          <select multiple="multiple" class="form-control" id="modules" name="modules"
-                  required="required" size="<%= 1 + (modules.length * 0.5) %>">
-            <% modules.forEach(module => { %>
-              <option value="<%= module.mod_code %>">
-                <%= module.mod_code %> <%= module.mod_name%>
-              </option>
-            <% }); %>
-          </select>
-        </div>
-        <div>
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
-        </div>
-      </form>
-    </div>
-    <div class="form-group">
-      <table class="table" id="table-programs">
-        <caption style="text-align: center;">Programs</caption>
-        <thead>
-        <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Programs</th>
-          <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% let i = 1; %>
-        <% programs.forEach(program => { %>
-          <% if (program.prog_name !== 'Unspecified') { %>
-            <tr>
-              <td><%= i %></td>
-              <td><%= program.prog_name %></td>
-              <td>
-                <input type="button" id="btn-delete" value="Delete"/>
-              </td>
-            </tr>
-            <% i++; %>
-          <% } %>
-        <% }); %>
-        </tbody>
-      </table>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='dashboard_admin'">Back to Home</button>
-    </div>
-    <div class="form-group">
-      <form action="logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
-    <script>
-      $("#table-programs").on('click','#btn-delete',function() {
-        const currentRow = $(this).closest("tr"); // get the current row
-        const prog_name = currentRow.find("td:eq(1)").text(); // get current row 3rd TD
-        window.location.href='program/delete_program?program=' + prog_name;
-      });
-    </script>
-    <script>
-      (function() {
-        window.addEventListener('load', function() {
-          <% if (programs.length === 0) { %>
-          document.getElementById('table-programs').style.display = "none";
-          <% } %>
-        });
-      })();
-    </script>
-    <script>
-      window.onmousedown = function (event) {
-        var eventTarget = event.target;
-        if (eventTarget.tagName.toLowerCase() === 'option' &&
-          eventTarget.parentNode.hasAttribute('multiple')) {
-          event.preventDefault();
-
-          // toggle selection
-          if (eventTarget.hasAttribute('selected')) {
-            eventTarget.removeAttribute('selected');
-          } else {
-            eventTarget.setAttribute('selected', '');
-          }
-
-          // hack to correct buggy behavior
-          var select = eventTarget.parentNode.cloneNode(true);
-          eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
-        }
-      }
-    </script>
+  <h1><%= title %></h1>
+  <div class="form-group">
+    <form id="program_form" action="program" role="form" method="post">
+      <div class="form-group">
+        <label for="program">Program</label>
+        <input type="text" class="form-control" id="program" name="program"
+               placeholder="Enter Program" required="required">
+      </div>
+      <div class="form-group">
+        <label for="modules">Required Modules</label>
+        <select multiple="multiple" class="form-control" id="modules" name="modules"
+                required="required" size="<%= 1 + (modules.length * 0.5) %>">
+          <% modules.forEach(module => { %>
+            <option value="<%= module.mod_code %>">
+              <%= module.mod_code %> <%= module.mod_name%>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      </div>
+    </form>
+  </div>
+  <div class="form-group">
+    <table class="table" id="table-programs">
+      <caption style="text-align: center;">Programs</caption>
+      <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Programs</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% let i = 1; %>
+      <% programs.forEach(program => { %>
+        <% if (program.prog_name !== 'Unspecified') { %>
+          <tr>
+            <td><%= i %></td>
+            <td><%= program.prog_name %></td>
+            <td>
+              <input type="button" id="btn-delete" value="Delete"/>
+            </td>
+          </tr>
+          <% i++; %>
+        <% } %>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='dashboard_admin'">Back to Home</button>
+  </div>
+  <div class="form-group">
+    <form action="logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
   </body>
+  <script>
+    $("#table-programs").on('click','#btn-delete',function() {
+      const currentRow = $(this).closest("tr"); // get the current row
+      const prog_name = currentRow.find("td:eq(1)").text(); // get current row 3rd TD
+      window.location.href='program/delete_program?program=' + prog_name;
+    });
+  </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (programs.length === 0) { %>
+        document.getElementById('table-programs').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
+  <script>
+    window.onmousedown = function (event) {
+      var eventTarget = event.target;
+      if (eventTarget.tagName.toLowerCase() === 'option' &&
+              eventTarget.parentNode.hasAttribute('multiple')) {
+        event.preventDefault();
+
+        // toggle selection
+        if (eventTarget.hasAttribute('selected')) {
+          eventTarget.removeAttribute('selected');
+        } else {
+          eventTarget.setAttribute('selected', '');
+        }
+
+        // hack to correct buggy behavior
+        var select = eventTarget.parentNode.cloneNode(true);
+        eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+      }
+    }
+  </script>
 </html>
