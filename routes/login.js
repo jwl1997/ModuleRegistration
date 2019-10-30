@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('../sql');
-// DO NOT DELETE: Hashed Password Implementation
 const bcrypt = require('bcryptjs');
+
+let fs = require('fs');
+const sqlInit = fs.readFileSync('sql/init.sql').toString();
 
 const { Pool } = require('pg');
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
+});
+
+pool.query(sqlInit, function(err, data) {
+  if (err) {
+    console.log('Error initializing schema: ', err);
+    process.exit(1);
+  }
 });
 
 /* GET Login Page*/
@@ -29,30 +38,6 @@ router.post('/', function(req, res, next) {
   });
 });
 
-// Non-hashed Password Implementation
-// router.post('/', function(req, res, next) {
-//   const username = req.body.username;
-//   const password = req.body.password;
-//
-//   // Authenticate password
-//   pool.query(sql.query.get_hash, [username], (err, data) => {
-//     if (err) {
-//       unknownError(err, res);
-//     } else if (data === undefined) {
-//       dataUndefinedError(res);
-//     } else {
-//       const postgresPassword = data.rows[0].password;
-//       if (postgresPassword !== password) {
-//         passwordMismatchError(res);
-//       } else {
-//         req.session.password = password;
-//         next();
-//       }
-//     }
-//   })
-// });
-
-// DO NOT DELETE: Hashed Password Implementation
 router.post('/', function(req, res, next) {
   const username = req.body.username;
   const password = req.body.password;
