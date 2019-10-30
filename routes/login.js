@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const sql = require('../sql');
 // DO NOT DELETE: Hashed Password Implementation
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 const { Pool } = require('pg');
 const pool = new Pool({
@@ -30,54 +30,54 @@ router.post('/', function(req, res, next) {
 });
 
 // Non-hashed Password Implementation
-router.post('/', function(req, res, next) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  // Authenticate password
-  pool.query(sql.query.get_hash, [username], (err, data) => {
-    if (err) {
-      unknownError(err, res);
-    } else if (data === undefined) {
-      dataUndefinedError(res);
-    } else {
-      const postgresPassword = data.rows[0].password;
-      if (postgresPassword !== password) {
-        passwordMismatchError(res);
-      } else {
-        req.session.password = password;
-        next();
-      }
-    }
-  })
-});
-
-// DO NOT DELETE: Hashed Password Implementation
 // router.post('/', function(req, res, next) {
 //   const username = req.body.username;
 //   const password = req.body.password;
 //
-//   // Authenticate password by comparing with hash
+//   // Authenticate password
 //   pool.query(sql.query.get_hash, [username], (err, data) => {
 //     if (err) {
 //       unknownError(err, res);
 //     } else if (data === undefined) {
 //       dataUndefinedError(res);
 //     } else {
-//       const hashedPassword = data.rows[0].password;
-//       bcrypt.compare(password, hashedPassword, function(err, isMatch) {
-//         if (err) {
-//           unknownError(err, res);
-//         } else if (!isMatch) {
-//           passwordMismatchError(res);
-//         } else {
-//           req.session.password = hashedPassword;
-//           next();
-//         }
-//       });
+//       const postgresPassword = data.rows[0].password;
+//       if (postgresPassword !== password) {
+//         passwordMismatchError(res);
+//       } else {
+//         req.session.password = password;
+//         next();
+//       }
 //     }
-//   });
+//   })
 // });
+
+// DO NOT DELETE: Hashed Password Implementation
+router.post('/', function(req, res, next) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  // Authenticate password by comparing with hash
+  pool.query(sql.query.get_hash, [username], (err, data) => {
+    if (err) {
+      unknownError(err, res);
+    } else if (data === undefined) {
+      dataUndefinedError(res);
+    } else {
+      const hashedPassword = data.rows[0].password;
+      bcrypt.compare(password, hashedPassword, function(err, isMatch) {
+        if (err) {
+          unknownError(err, res);
+        } else if (!isMatch) {
+          passwordMismatchError(res);
+        } else {
+          req.session.password = hashedPassword;
+          next();
+        }
+      });
+    }
+  });
+});
 
 router.post('/', function(req, res, next) {
   const username = req.body.username;

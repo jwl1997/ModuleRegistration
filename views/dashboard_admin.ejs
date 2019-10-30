@@ -37,10 +37,6 @@
         <th scope="col">Quota</th>
         <th scope="col">Registration Start</th>
         <th scope="col">Registration End</th>
-        <!-- <th scope="col">Registering Students</th>
-        <th scope="col">Successful Registrants</th>
-        <th scope="col">Unsuccessful Registrants</th> -->
-        <th scope="col">Action</th>
       </tr>
       </thead>
       <tbody>
@@ -54,11 +50,6 @@
         <td>260</td>
         <td>15-Oct-2019 10:00 am</td>
         <td>15-Oct-2019 05:00 pm</td>
-        <td>
-          <input type="button" id="btn-edit" value="Edit"/>
-          <input type="button" id="btn-delete" value="Delete"/>
-          <input type="button" id="btn-allocate" value="Allocate"/>
-        </td>
       </tr>
       <% values.forEach(value => { %>
         <tr>
@@ -69,14 +60,8 @@
           <td><%= value.s_time_lect %></td>
           <td><%= value.e_time_lect %></td>
           <td><%= value.quota %></td>
+          <td><%= value.quota %></td>
           <td></td>
-          <td></td>
-          <td>
-            <!-- TODO: Add functionality for the DELETE, EDIT and ALLOCATE buttons -->
-            <input type="button" id="btn-edit" value="Edit"/>
-            <input type="button" id="btn-delete" value="Delete"/>
-            <input type="button" id="btn-allocate" value="Allocate"/>
-          </td>
         </tr>
       <% }); %>
       </tbody>
