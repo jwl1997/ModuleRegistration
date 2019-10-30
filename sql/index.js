@@ -11,7 +11,9 @@ sql.query = {
   add_student: 'INSERT INTO Students (s_username, seniority) VALUES ($1, $2)',
   add_admin: 'INSERT INTO Admins (a_username) VALUES ($1)',
 
-  load_admin_dashboard: 'SELECT M.mod_code, M.mod_name, S.sem, S.day, S.s_time_lect, S.e_time_lect, S.quota FROM Modules M, LectureSlots S WHERE M.mod_code = S.mod_code AND M.a_username = $1',
+  load_admin_dashboard: 'SELECT M.mod_code, M.mod_name, L.sem, L.day, L.s_time_lect, L.e_time_lect, L.quota,' +
+    ' R.s_time_round, R.e_time_round FROM Modules M NATURAL JOIN LectureSlots L NATURAL JOIN Register R WHERE now()' +
+    ' > R.s_time_round AND now() < e_time_round AND M.a_username = $1',
 
   load_programs: 'SELECT prog_name FROM Programs',
   add_program: 'INSERT INTO Programs (prog_name) VALUES ($1)',
