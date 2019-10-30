@@ -31,7 +31,8 @@ sql.query = {
   load_rounds: 'SELECT s_time_round, e_time_round FROM Rounds ORDER BY s_time_round, e_time_round ASC',
   add_round: 'INSERT INTO Rounds (s_time_round, e_time_round) VALUES ($1, $2)',
 
-  load_prereqs: 'SELECT parent, child FROM Prereq ORDER BY (parent, child) ASC',
+  auth_prereq: 'SELECT EXISTS (SELECT * FROM Prereq WHERE parent = $1 AND child = $2)',
+  load_prereqs: 'SELECT child, parent FROM Prereq ORDER BY (child, parent) ASC',
   add_prereq: 'INSERT INTO Prereq (parent, child) VALUES ($1, $2)',
   delete_prereq: 'DELETE FROM Prereq WHERE parent = $1 AND child = $2',
 
