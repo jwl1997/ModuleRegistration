@@ -25,23 +25,34 @@
   </head>
   <body>
   <h1><%= title %></h1>
-  <div class="form-group">
+  <div class="form-group" id="div-no-prereqs">
+    <h5 id="h5-no-prereqs">This module has no prerequisites.</h5>
+  </div>
+  <div class="form-group" id="div-prereqs">
     <form id="prereq_form" role="form" method="post">
-      <h5 id="h5-no-prereqs">This module has no prerequisites.</h5>
-      <div class="form-group" id="div-prereqs">
+      <div class="form-group">
         <label for="children">Prerequisites</label>
-        <select multiple="multiple" class="form-control" id="children"
-                name="children" size="<%= 1 + (children.length * 0.5) %>">
+        <select multiple="multiple" class="form-control" id="children" name="children"
+                required="required" size="<%= 1 + (children.length * 0.5) %>">
           <% children.forEach(child => { %>
-            <option value="<%= child.mod_code %>">
-              <%= child.mod_code %> <%= child.mod_name %>
-            </option>
+            <% let childDigits = ""; %>
+            <% for (let i = 0; i < child.mod_code.length; i++) { %>
+              <% const char = child.mod_code.charAt(i) %>
+              <% if (char >= '0' && char <= '9') { %>
+                <% childDigits += char; %>
+              <% } %>
+            <% } %>
+            <% if (childDigits < parentDigits) { %>
+              <option value="<%= child.mod_code %>">
+                <%= child.mod_code %> <%= child.mod_name %>
+              </option>
+            <% } %>
           <% }); %>
         </select>
       </div>
       <div>
         <button type="submit" class="btn btn-primary btn-block"
-                id="btn-prereqs" onclick="submitChildForm()">Submit</button>
+                id="btn-prereqs">Submit</button>
       </div>
     </form>
   </div>
@@ -60,22 +71,14 @@
   </div>
   </body>
   <script>
-    function submitChildForm() {
-      const parent = "<%= parent %>";
-      window.location.href='../prereq_child/select_child?' + 'parent=' + parent;
-    }
-  </script>
-  <script>
     (function() {
       window.addEventListener('load', function() {
         <% if (children.length === 0) { %>
         document.getElementById('div-prereqs').style.display = "none";
-        document.getElementById('btn-prereqs').style.display = "none";
-        document.getElementById('h5-no-prereqs').style.display = "block";
+        document.getElementById('div-no-prereqs').style.display = "block";
         <% } else { %>
         document.getElementById('div-prereqs').style.display = "block";
-        document.getElementById('btn-prereqs').style.display = "block";
-        document.getElementById('h5-no-prereqs').style.display = "none";
+        document.getElementById('div-no-prereqs').style.display = "none";
         <% } %>
       });
     })();

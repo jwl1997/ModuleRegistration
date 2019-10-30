@@ -29,7 +29,6 @@ router.get('/', function(req, res, next) {
       res.render('prereq', {
         title: 'Prerequisite',
         parents: modules.rows,
-        children: modules.rows,
         prereqs: p.rows
       });
     }
@@ -42,45 +41,61 @@ router.get('/', function(req, res, next) {
 
 // Get all Prereq entries from the database
 let parent;
-router.post('/select_parent', function(req, res, next) {
-  parent = req.query.parent;
-  pool.query(sql.query.load_prereqs, (err, data) => {
-    if (err) {
-      unknownError(err, res);
-    } else {
-      dbPrereqs = data.rows;
-      next();
-    }
-  });
-});
+// router.post('/select_parent', function(req, res, next) {
+//   parent = req.query.parent;
+//   pool.query(sql.query.load_prereqs, (err, data) => {
+//     if (err) {
+//       unknownError(err, res);
+//     } else {
+//       dbPrereqs = data.rows;
+//       next();
+//     }
+//   });
+// });
 
 router.post('/select_parent', function(req, res, next) {
+  let parent = req.query.parent;
   const clientChildren = req.body.children;
-  let resultPrereqs = [];
+  // let resultPrereqs = [];
+  console.log("clientChildren is " + clientChildren);
+  console.log("length is " + clientChildren.length);
 
-  // Filter away the duplicate entries by users
+  // // Filter away the duplicate entries by users
+  // for (let i = 0; i < clientChildren.length; i++) {
+  //   let isDuplicate = false;
+  //   for (let j = 0; j < dbPrereqs.length; j++) {
+  //     if (parent === dbPrereqs[j].parent && clientChildren[i] === dbPrereqs[j].child) {
+  //       isDuplicate = true;
+  //     }
+  //   }
+  //   // Also check that parent's mod_code is larger than child's mod_code
+  //   if (!isDuplicate && parent > clientChildren[i]) {
+  //     resultPrereqs.push({'parent': parent, 'child': clientChildren[i]});
+  //   }
+  // }
+  //
+  // // Insert the remaining unique entries into database
+  // for (let i = 0; i < resultPrereqs.length; i++) {
+  //   pool.query(sql.query.add_prereq, [resultPrereqs[i].parent, resultPrereqs[i].child], (err, data) => {
+  //     if (err) {
+  //       insertError('Prerequisite', err, res);
+  //     }
+  //   });
+  // }
+  // res.redirect('/prereq');
+
   for (let i = 0; i < clientChildren.length; i++) {
-    let isDuplicate = false;
-    for (let j = 0; j < dbPrereqs.length; j++) {
-      if (parent === dbPrereqs[j].parent && clientChildren[i] === dbPrereqs[j].child) {
-        isDuplicate = true;
-      }
-    }
-    // Also check that parent's mod_code is larger than child's mod_code
-    if (!isDuplicate && parent > clientChildren[i]) {
-      resultPrereqs.push({'parent': parent, 'child': clientChildren[i]});
-    }
-  }
-
-  // Insert the remaining unique entries into database
-  for (let i = 0; i < resultPrereqs.length; i++) {
-    pool.query(sql.query.add_prereq, [resultPrereqs[i].parent, resultPrereqs[i].child], (err, data) => {
+    pool.query(sql.query.add_prereq, [parent, clientChildren[i]], (err, data) => {
       if (err) {
         insertError('Prerequisite', err, res);
       }
+
+      if (i === clientChildren.length - 1) {
+        return res.redirect('/prereq');
+      }
     });
   }
-  res.redirect('/prereq');
+  // res.redirect('/prereq');
 });
 
 router.get('/delete_prereq', function(req, res, next) {
@@ -98,19 +113,31 @@ router.get('/delete_prereq', function(req, res, next) {
 
 router.get('/select_parent', function(req, res, next) {
   const parent = req.query.parent;
-
-  pool.query(sql.query.get_filtered_modules, [parent], (err, children) => {
+  const parentDigits = getDigitsInString(parent);
+  pool.query(sql.query.load_modules, (err, children) => {
     if (err) {
       getError('Modules', err, res);
     } else {
       res.render('prereq_child', {
         title: 'Prerequisite',
         parent: parent,
+        parentDigits: parentDigits,
         children: children.rows,
       });
     }
   });
 });
+
+function getDigitsInString(word) {
+  let digits = "";
+  for (let i = 0; i < word.length; i++) {
+    const char = word.charAt(i);
+    if (char >= '0' && char <= '9') {
+      digits += char;
+    }
+  }
+  return digits;
+}
 
 function getError(database, err, res) {
   console.error('Unable to get from ' + database, err);

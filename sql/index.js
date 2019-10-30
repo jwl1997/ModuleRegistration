@@ -18,7 +18,7 @@ sql.query = {
   add_program: 'INSERT INTO Programs (prog_name) VALUES ($1)',
   delete_program: 'DELETE FROM Programs WHERE prog_name = $1',
 
-  load_modules: 'SELECT mod_code FROM Modules ORDER BY mod_code ASC',
+  load_modules: 'SELECT mod_code, mod_name, a_username FROM Modules ORDER BY mod_code ASC',
   add_module: 'INSERT INTO Modules (mod_code, mod_name, a_username) VALUES ($1, $2, $3)',
   delete_module: 'DELETE FROM Modules WHERE mod_code = $1',
   get_filtered_modules: 'SELECT mod_code, mod_name FROM Modules WHERE mod_code < $1 ORDER BY mod_code',
