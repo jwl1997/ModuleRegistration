@@ -10,6 +10,9 @@ const pool = new Pool({
 let enrolledLectures;
 
 router.get('/', function(req, res, next) {
+	console.log("time")
+	console.log(new Date(req.session.s_time_round));
+	console.log(req.session.s_time_round);
 	pool.query(sql.query.load_current_takes, [req.session.username], (err, data) => {
 		if (err) {
 			unknownError(err, res);
