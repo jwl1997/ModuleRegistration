@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const sql = require('../sql');
 // DO NOT DELETE: Hashed Password Implementation
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 const { Pool } = require('pg');
 const pool = new Pool({
@@ -30,51 +30,51 @@ router.post('/', function(req, res, next) {
 });
 
 // Non-hashed Password Implementation
-router.post('/', function(req, res, next) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  pool.query(sql.query.add_user, [username, password], (err, data) => {
-    if (err) {
-      insertError('Users', err, res);
-    } else if (data === undefined) {
-      dataUndefinedError(res);
-    } else {
-      next();
-    }
-  });
-});
-
-// DO NOT DELETE: Hashed Password Implementation
-// const saltRounds = 10;
 // router.post('/', function(req, res, next) {
 //   const username = req.body.username;
 //   const password = req.body.password;
 //
-//   // Generate hash
-//   bcrypt.genSalt(saltRounds, function (err, salt) {
+//   pool.query(sql.query.add_user, [username, password], (err, data) => {
 //     if (err) {
-//       hashFailedError(err, res);
+//       insertError('Users', err, res);
+//     } else if (data === undefined) {
+//       dataUndefinedError(res);
+//     } else {
+//       next();
 //     }
-//     bcrypt.hash(password, salt, function(err, hash) {
-//       if (err) {
-//         hashFailedError(err, res);
-//       }
-//       // Insert user to Users
-//       else {
-//         pool.query(sql.query.add_user, [username, hash], (err, data) => {
-//           if (err) {
-//             insertError('Users', err, res);
-//           } else if (data === undefined) {
-//             dataUndefinedError(res);
-//           } else {
-//             next();
-//           }
-//         });
-//       }
-//     })
 //   });
 // });
+
+// DO NOT DELETE: Hashed Password Implementation
+const saltRounds = 10;
+router.post('/', function(req, res, next) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  // Generate hash
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    if (err) {
+      hashFailedError(err, res);
+    }
+    bcrypt.hash(password, salt, function(err, hash) {
+      if (err) {
+        hashFailedError(err, res);
+      }
+      // Insert user to Users
+      else {
+        pool.query(sql.query.add_user, [username, hash], (err, data) => {
+          if (err) {
+            insertError('Users', err, res);
+          } else if (data === undefined) {
+            dataUndefinedError(res);
+          } else {
+            next();
+          }
+        });
+      }
+    })
+  });
+});
 
 router.post('/', function(req, res, next) {
   const username = req.body.username;
