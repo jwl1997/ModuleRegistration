@@ -97,6 +97,9 @@ router.post('/', function(req, res, next) {
           } else {
             req.session.s_time_round = data.rows[0].s_time_round;
             req.session.e_time_round = data.rows[0].e_time_round;
+            if(data.rows[0] === undefined){
+              return res.redirect('/login');
+            }
             console.info(req.session);
             return res.redirect('/dashboard_student');
           }

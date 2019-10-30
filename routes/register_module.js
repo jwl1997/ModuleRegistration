@@ -17,17 +17,24 @@ var selected_mod_name = '';
 var current_user = 'e0191334';
 var err_msg = "";
 var is_ranking_action = false;
+var current_round_start_time;
+var current_round_end_time;
 
 router.get('/',function (req, res, next) {
 	console.log(req.session.username);
+	console.log(req.session.s_time_round);
+	console.log(req.session.e_time_round);
+	current_user = req.session.username;
+	current_round_start_time = new Date(req.session.s_time_round);
+	current_round_end_time = new Date(req.session.e_time_round);
 	if(is_ranking_action){
 		is_ranking_action = false;
 		next();
 	}
 	else{
 		err_msg = "";
-		const query = "SELECT mod_code, day, s_time_lect, e_time_lect, rank_pref, reg_status, s_time_round, e_time_round, sem  FROM Register R WHERE R.s_username = $1";
-		pool.query(query, [current_user], (err, data) => {
+		const query = "SELECT mod_code, day, s_time_lect, e_time_lect, rank_pref, status, s_time_round, e_time_round, sem  FROM Register R WHERE R.s_username = $1 AND R.s_time_round = $2 AND R.e_time_round = $3";
+		pool.query(query, [current_user, current_round_start_time, current_round_end_time], (err, data) => {
 			if (err) {
 
 			} else {
@@ -39,7 +46,7 @@ router.get('/',function (req, res, next) {
 })
 
 router.get('/',function (req, res, next) {
-	const query = "SELECT mod_code, mod_name FROM Modules M WHERE NOT EXISTS (SELECT 1 FROM Takes T WHERE T.s_username = $1 AND T.mod_code = M.mod_code AND T.has_completed = true) AND NOT EXISTS (SELECT 1 FROM Register R WHERE R.s_username = $1  AND R.mod_code = M.mod_code AND R.reg_status = 'success') AND (SELECT COUNT(*) FROM Prereq P WHERE P.child = M.mod_code) = (SELECT COUNT(*) FROM Prereq P JOIN Takes T ON P.parent = T.mod_code WHERE P.child = mod_code AND T.s_username = $1 )";
+	const query = "SELECT mod_code, mod_name FROM Modules M WHERE NOT EXISTS (SELECT 1 FROM Takes T WHERE T.s_username = $1 AND T.mod_code = M.mod_code AND T.has_completed = true) AND NOT EXISTS (SELECT 1 FROM Register R WHERE R.s_username = $1  AND R.mod_code = M.mod_code AND R.status = 'Success') AND (SELECT COUNT(*) FROM Prereq P WHERE P.child = M.mod_code) = (SELECT COUNT(*) FROM Prereq P JOIN Takes T ON P.parent = T.mod_code WHERE P.child = mod_code AND T.s_username = $1 )";
 	pool.query(query, [current_user], (err, data) => {
 		modules = data.rows;
 		next();
@@ -70,6 +77,8 @@ router.get('/add_module',function (req, res) {
 				console.log(data)
 				lecture_slots = data.rows;
 				selected_mod_code = mod_code;
+				console.log("modules")
+				console.log(modules)
 				for (let i = 0; i < modules.length; i++) {
 					if (modules[i].mod_code == selected_mod_code) {
 						selected_mod_name = modules[i].mod_name;
@@ -88,8 +97,8 @@ router.get('/save', function (req, res){
 	let lecture_slot = lecture_slots[req.query.index];
 	console.log(lecture_slot);
 	let sem = 1;
-	const query = "INSERT INTO Register VALUES(0,1,'pending',$1,$2,$3,$4,$5,$6,$7,$8)";
-	pool.query(query, [current_user,'2019-10-10','2019-10-15',lecture_slot.day,lecture_slot.s_time_lect,lecture_slot.e_time_lect,sem,selected_mod_code], (err, data) => {
+	const query = "INSERT INTO Register VALUES(0,1,'Result Pending',$1,$2,$3,$4,$5,$6,$7,$8)";
+	pool.query(query, [current_user,current_round_start_time,current_round_end_time,lecture_slot.day,lecture_slot.s_time_lect,lecture_slot.e_time_lect,sem,selected_mod_code], (err, data) => {
 		if (err) {
 			console.log(err);
 			selected_mod_code = 'Select Module';
