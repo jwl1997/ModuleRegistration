@@ -175,8 +175,28 @@ INSERT INTO Students VALUES ('e0191339', 'Statistics', 4, now());
 
 INSERT INTO Modules VALUES ('CS1010', 'Programming Methodology', 'e0134110');
 INSERT INTO Modules VALUES ('CS2102', 'Database Systems', 'e0134110');
-INSERT INTO Modules VALUES ('CS2030', 'Programming Methodology I', 'e0134110');
-INSERT INTO Modules VALUES ('CS2040', 'Programming Methodology II', 'e0191330');
+INSERT INTO Modules VALUES ('CS2030', 'Programming Methodology II', 'e0134110');
+INSERT INTO Modules VALUES ('CS2040', 'Data Structures and Algorithms', 'e0191330');
+INSERT INTO Modules VALUES ('CS2103T', 'Software Engineering', 'e0191330');
+INSERT INTO Modules VALUES ('CS1231', 'Discrete Structures', 'e0191330');
+INSERT INTO Modules VALUES ('CS2106', 'Operating Systems', 'e0191330');
+INSERT INTO Modules VALUES ('CS2105', 'Computer Networks', 'e0191330');
+INSERT INTO Modules VALUES ('CS2100', 'Computer Organization', 'e0191330');
+INSERT INTO Modules VALUES ('CS3219', 'Software Engineering Principles and Patterns', 'e0191330');
+INSERT INTO Modules VALUES ('CS4218', 'Software Testing', 'e0191330');
+INSERT INTO Modules VALUES ('IS2103', 'Enterprise Systems Server-side Design and Development', 'e0191330');
+INSERT INTO Modules VALUES ('ACC1002', 'Financial Accounting', 'e0191330');
+INSERT INTO Modules VALUES ('ACC3604', 'Corporate and Securities Law', 'e0191330');
+
+INSERT INTO Prereq VALUES ('CS1010', 'CS2030');
+INSERT INTO Prereq VALUES ('CS1010', 'CS2040');
+INSERT INTO Prereq VALUES ('CS2030', 'CS2102');
+INSERT INTO Prereq VALUES ('CS2040', 'CS2102');
+INSERT INTO Prereq VALUES ('CS1231', 'CS2102');
+INSERT INTO Prereq VALUES ('CS2030', 'CS2103T');
+INSERT INTO Prereq VALUES ('CS2040', 'CS2103T');
+INSERT INTO Prereq VALUES ('CS2100', 'CS2106');
+INSERT INTO Prereq VALUES ('CS1010', 'CS2100');
 
 INSERT INTO Require VALUES ('Computer Science', 'CS1010');
 INSERT INTO Require VALUES ('Computer Science', 'CS2102');

@@ -31,22 +31,13 @@
   <div class="form-group" id="div-prereqs">
     <form id="prereq_form" role="form" method="post">
       <div class="form-group">
-        <label for="children">Prerequisites</label>
-        <select multiple="multiple" class="form-control" id="children" name="children"
-                required="required" size="<%= 1 + (children.length * 0.5) %>">
-          <% children.forEach(child => { %>
-            <% let childDigits = ""; %>
-            <% for (let i = 0; i < child.mod_code.length; i++) { %>
-              <% const char = child.mod_code.charAt(i) %>
-              <% if (char >= '0' && char <= '9') { %>
-                <% childDigits += char; %>
-              <% } %>
-            <% } %>
-            <% if (childDigits < parentDigits) { %>
-              <option value="<%= child.mod_code %>">
-                <%= child.mod_code %> <%= child.mod_name %>
+        <label for="parents">Prerequisites</label>
+        <select multiple="multiple" class="form-control" id="parents" name="parents"
+                required="required" size="<%= 1 + (parents.length * 0.5) %>">
+          <% parents.forEach(parent => { %>
+              <option value="<%= parent.mod_code %>">
+                <%= parent.mod_code %> <%= parent.mod_name %>
               </option>
-            <% } %>
           <% }); %>
         </select>
       </div>
@@ -73,7 +64,7 @@
   <script>
     (function() {
       window.addEventListener('load', function() {
-        <% if (children.length === 0) { %>
+        <% if (parents.length === 0) { %>
         document.getElementById('div-prereqs').style.display = "none";
         document.getElementById('div-no-prereqs').style.display = "block";
         <% } else { %>
