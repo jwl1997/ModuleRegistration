@@ -21,9 +21,6 @@ var current_round_start_time;
 var current_round_end_time;
 
 router.get('/',function (req, res, next) {
-	console.log(req.session.username);
-	console.log(req.session.s_time_round);
-	console.log(req.session.e_time_round);
 	current_user = req.session.username;
 	current_round_start_time = new Date(req.session.s_time_round);
 	current_round_end_time = new Date(req.session.e_time_round);
@@ -186,7 +183,7 @@ router.get('/update_rankings', function (req, res) {
 					if(index==register_list.length-1){
 						return res.redirect('/register_module');
 					}
-				}
+				}7
 			});
 		}
 		//return res.redirect('/register_module');
