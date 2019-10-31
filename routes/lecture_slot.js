@@ -8,6 +8,7 @@ const pool = new Pool({
 });
 
 let modules;
+let lectureSlots;
 
 router.get('/', function(req, res, next) {
 	pool.query(sql.query.load_modules, (err, m) => {
@@ -25,6 +26,7 @@ router.get('/', function(req, res, next) {
     if (err) {
       unknownError(err, res);
     } else {
+      lectureSlots = lectures.rows;
       res.render('lecture_slot', {
         title: 'Lecture Slot',
         modules: modules.rows,
@@ -42,6 +44,32 @@ router.post('/', function(req, res, next) {
     req.body.sem,
     req.body.quota,
     req.body.module
+  ], (err, data) => {
+    if (err) {
+      insertError('LectureSlots', err, res);
+    } else {
+      res.redirect('/lecture_slot');
+    }
+  });
+});
+
+router.post('/update', function(req, res) {
+  const index = req.body.index - 1;
+  const mod_code = req.body.mod_code;
+  const sem = req.body.sem;
+  const day = req.body.day;
+  const s_time_lect = req.body.s_time_lect;
+  const e_time_lect = req.body.e_time_lect;
+  const quota = req.body.quota;
+
+  let oldSlot = lectureSlots[index];
+  let old_day = oldSlot.day;
+  let old_s_time_lect = oldSlot.s_time_lect;
+  let old_e_time_lect = oldSlot.e_time_lect;
+
+  const query = 'UPDATE LectureSlots SET day = $1, s_time_lect = $2, e_time_lect = $3, quota = $4 WHERE mod_code = $5 AND sem = $6 AND day = $7 AND s_time_lect = $8 AND e_time_lect = $9';
+  pool.query(query, [
+    day,s_time_lect,e_time_lect,quota,mod_code,sem,old_day,old_s_time_lect,old_e_time_lect
   ], (err, data) => {
     if (err) {
       insertError('LectureSlots', err, res);
