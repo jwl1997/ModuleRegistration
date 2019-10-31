@@ -53,67 +53,80 @@ app.use(session({
   }
 }));
 
-const redirectLogin = (req, res, next) => {
-  console.log(req.session.username);
-  if (!req.session.username) {
+const authenticateAdmin = (req, res, next) => {
+  if (req.session.username === undefined && req.session.role === undefined) {
     res.redirect('/login');
   } else {
-    next()
+    if (req.session.role !== 'Admin') {
+      res.redirect('/dashboard_student');
+    } else {
+      next()
+    }
   }
 };
 
-const redirectHome = (req, res, next) => {
-  console.log(req.session.username);
-  if (req.session.username) {
-    if (req.session.role === 'Student') {
-      res.redirect('/dashboard_student')
+const authenticateStudent = (req, res, next) => {
+  if (req.session.username === undefined && req.session.role === undefined) {
+    res.redirect('/login');
+  } else {
+    if (req.session.role !== 'Student') {
+      res.redirect('/dashboard_admin');
     } else {
-      res.redirect('/dashboard_admin')
+      next()
+    }
+  }
+};
+
+const authenticateUser = (req, res, next) => {
+  if (req.session.role !== undefined) {
+    if (req.session.role === 'Admin') {
+      res.redirect('/dashboard_admin');
+    } else {
+      res.redirect('/dashboard_student');
     }
   } else {
     next()
   }
 };
 
-// TODO: Have middleware to ensure all unauthenticated users be rerouted to login page
-
-app.use('/', require('./routes/index'));
+/* Index Page (Unused) */
+app.use('/', require('./routes/login'));
 
 /* Login Page */
-app.use('/login', require('./routes/login'));
+app.use('/login', authenticateUser, require('./routes/login'));
 
 /* Register Page */
-app.use('/register', require('./routes/register'));
+app.use('/register', authenticateUser, require('./routes/register'));
 
 /* Student Dashboard Page */
-app.use('/dashboard_student', require('./routes/dashboard_student'));
+app.use('/dashboard_student', authenticateStudent, require('./routes/dashboard_student'));
 
 /* Admin Dashboard Page */
-app.use('/dashboard_admin', require('./routes/dashboard_admin'));
+app.use('/dashboard_admin', authenticateAdmin, require('./routes/dashboard_admin'));
 
 /* Register Module Page */
-app.use('/register_module', require('./routes/register_module'));
+app.use('/register_module', authenticateStudent, require('./routes/register_module'));
 
 /* Program Page */
-app.use('/program', require('./routes/program'));
+app.use('/program', authenticateAdmin, require('./routes/program'));
 
 /* Module Page */
-app.use('/module', require('./routes/module'));
+app.use('/module', authenticateAdmin, require('./routes/module'));
 
 /* Lecture Slot Page */
-app.use('/lecture_slot', require('./routes/lecture_slot'));
+app.use('/lecture_slot', authenticateAdmin, require('./routes/lecture_slot'));
 
 /* Prereq Parent Page */
-app.use('/prereq', require('./routes/prereq'));
+app.use('/prereq', authenticateAdmin, require('./routes/prereq'));
 
 /* Prereq Child Page */
-app.use('/prereq_child', require('./routes/prereq_child'));
+app.use('/prereq_child', authenticateAdmin, require('./routes/prereq_child'));
 
 /* Round Page */
-app.use('/round', require('./routes/round'));
+app.use('/round', authenticateAdmin, require('./routes/round'));
 
 /* Appeal Page */
-app.use('/appeal', require('./routes/appeal'));
+app.use('/appeal', authenticateAdmin, require('./routes/appeal'));
 
 /* Logout */
 app.post('/logout', (req, res) => {
