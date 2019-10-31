@@ -26,7 +26,9 @@ router.get('/', function(req, res, next) {
     if (err) {
       unknownError(err, res);
     } else {
-      lectureSlots = lectures.rows;
+      lectureSlots = lectures.rows
+      console.log("lecture slots")
+      console.log(lectureSlots)
       res.render('lecture_slot', {
         title: 'Lecture Slot',
         modules: modules.rows,
@@ -54,18 +56,18 @@ router.post('/', function(req, res, next) {
 });
 
 router.post('/update', function(req, res) {
-  const index = req.body.index - 1;
-  const mod_code = req.body.mod_code;
-  const sem = req.body.sem;
+  const index = req.body.index-1;
+  const sem = parseInt(req.body.sem,10);
   const day = req.body.day;
   const s_time_lect = req.body.s_time_lect;
   const e_time_lect = req.body.e_time_lect;
-  const quota = req.body.quota;
+  const quota = parseInt(req.body.quota,10);
 
   let oldSlot = lectureSlots[index];
   let old_day = oldSlot.day;
   let old_s_time_lect = oldSlot.s_time_lect;
   let old_e_time_lect = oldSlot.e_time_lect;
+  let mod_code = oldSlot.mod_code;
 
   const query = 'UPDATE LectureSlots SET day = $1, s_time_lect = $2, e_time_lect = $3, quota = $4 WHERE mod_code = $5 AND sem = $6 AND day = $7 AND s_time_lect = $8 AND e_time_lect = $9';
   pool.query(query, [
@@ -74,6 +76,7 @@ router.post('/update', function(req, res) {
     if (err) {
       insertError('LectureSlots', err, res);
     } else {
+      console.log(data)
       res.redirect('/lecture_slot');
     }
   });

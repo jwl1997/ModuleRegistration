@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('../sql');
-// DO NOT DELETE: Hashed Password Implementation
 const bcrypt = require('bcryptjs');
 
 const { Pool } = require('pg');
@@ -29,23 +28,6 @@ router.post('/', function(req, res, next) {
   });
 });
 
-// Non-hashed Password Implementation
-// router.post('/', function(req, res, next) {
-//   const username = req.body.username;
-//   const password = req.body.password;
-//
-//   pool.query(sql.query.add_user, [username, password], (err, data) => {
-//     if (err) {
-//       insertError('Users', err, res);
-//     } else if (data === undefined) {
-//       dataUndefinedError(res);
-//     } else {
-//       next();
-//     }
-//   });
-// });
-
-// DO NOT DELETE: Hashed Password Implementation
 const saltRounds = 10;
 router.post('/', function(req, res, next) {
   const username = req.body.username;

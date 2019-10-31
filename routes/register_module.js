@@ -16,9 +16,11 @@ var selected_mod_code = 'Select Module';
 var selected_mod_name = '';
 var current_user = 'e0191334';
 var err_msg = "";
+var err_add = "";
 var is_ranking_action = false;
 var current_round_start_time;
 var current_round_end_time;
+var current_sem = 1;
 
 router.get('/',function (req, res, next) {
 	current_user = req.session.username;
@@ -30,8 +32,8 @@ router.get('/',function (req, res, next) {
 	}
 	else{
 		err_msg = "";
-		const query = "SELECT mod_code, day, s_time_lect, e_time_lect, rank_pref, status, s_time_round, e_time_round, sem  FROM Register R WHERE R.s_username = $1 AND R.s_time_round = $2 AND R.e_time_round = $3";
-		pool.query(query, [current_user, current_round_start_time, current_round_end_time], (err, data) => {
+		const query = "SELECT mod_code, day, s_time_lect, e_time_lect, rank_pref, status, s_time_round, e_time_round, sem  FROM Register R WHERE R.s_username = $1 AND R.s_time_round = $2 AND R.e_time_round = $3 AND R.sem = $4";
+		pool.query(query, [current_user, current_round_start_time, current_round_end_time, current_sem], (err, data) => {
 			if (err) {
 
 			} else {
@@ -54,7 +56,7 @@ router.get('/',function (req, res) {
 	if(lecture_slots == undefined){
 		lecture_slots = [];
 	}
-	res.render('register_module', { title: 'Register Module', modules: modules, register_list: register_list, lecture_slots: lecture_slots, selected_mod_code: selected_mod_code, selected_mod_name:selected_mod_name, err_msg:err_msg });
+	res.render('register_module', { title: 'Register Module', modules: modules, register_list: register_list, lecture_slots: lecture_slots, selected_mod_code: selected_mod_code, selected_mod_name:selected_mod_name, err_msg:err_msg, err_add:err_add });
 })
 
 router.get('/add_module',function (req, res) {
@@ -65,9 +67,8 @@ router.get('/add_module',function (req, res) {
 	}
 	else {
 		mod_code = req.query.module;
-		let sem = 1;
 		const query = "SELECT day, s_time_lect, e_time_lect FROM LectureSlots L WHERE L.mod_code = $1 AND L.sem = $2";
-		pool.query(query, [mod_code, sem], (err, data) => {
+		pool.query(query, [mod_code, current_sem], (err, data) => {
 			if (err) {
 				console.log(err)
 			} else {
@@ -82,6 +83,7 @@ router.get('/add_module',function (req, res) {
 						break;
 					}
 				}
+				err_add = "";
 				return res.redirect('/register_module');
 			}
 		});
@@ -93,9 +95,8 @@ router.get('/save', function (req, res){
 	console.log(lecture_slots)
 	let lecture_slot = lecture_slots[req.query.index];
 	console.log(lecture_slot);
-	let sem = 1;
 	const query = "INSERT INTO Register VALUES(0,1,'Result Pending',$1,$2,$3,$4,$5,$6,$7,$8)";
-	pool.query(query, [current_user,current_round_start_time,current_round_end_time,lecture_slot.day,lecture_slot.s_time_lect,lecture_slot.e_time_lect,sem,selected_mod_code], (err, data) => {
+	pool.query(query, [current_user,current_round_start_time,current_round_end_time,lecture_slot.day,lecture_slot.s_time_lect,lecture_slot.e_time_lect,current_sem,selected_mod_code], (err, data) => {
 		if (err) {
 			console.log(err);
 			selected_mod_code = 'Select Module';
@@ -104,6 +105,9 @@ router.get('/save', function (req, res){
 		} else {
 			console.log("insert register");
 			console.log(data);
+			if(data.rowCount == 0){
+				err_add = "Fail to register the module. The lecture slot may be full, or you may already have registered another lecture slot for this module."
+			}
 			selected_mod_code = 'Select Module';
 			selected_mod_name = '';
 			res.redirect('/register_module');
@@ -113,7 +117,7 @@ router.get('/save', function (req, res){
 
 router.get('/delete', function(req, res) {
 	let mod_code = req.query.module;
-	let sem = 1;
+	let sem = current_sem;
 	let day;
 	let s_time_lect;
 	let e_time_lect;

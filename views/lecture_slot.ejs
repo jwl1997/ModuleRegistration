@@ -118,7 +118,7 @@
     </table>
   </div>
 
-  <form action="/update" method="post">
+  <form action="lecture_slot/update" method="post">
     <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -131,32 +131,32 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="mod_code">Module</label>
-              <input type="text" disabled="true" id="mod_code" class="form-control" placeholder="Module Code" >
+              <input type="text" disabled="true" id="mod_code" class="form-control mod_code" placeholder="Module Code" >
             </div>
 
             <div class="form-group">
               <label for="day">Day</label>
-              <input type="text" name="day" class="form-control" placeholder="Day" required>
+              <input type="text" name="day" class="form-control day" placeholder="Day" >
             </div>
 
             <div class="form-group">
               <label for="s_time_lect">Start Time</label>
-              <input type="text" name="s_time_lect" class="form-control" placeholder="Start Time" required>
+              <input type="text" name="s_time_lect" class="form-control s_time_lect" placeholder="Start Time" >
             </div>
 
             <div class="form-group">
               <label for="e_time_lect">End Time</label>
-              <input type="text" name="e_time_lect" class="form-control" placeholder="End Time" required>
+              <input type="text" name="e_time_lect" class="form-control e_time_lect" placeholder="End Time" >
             </div>
 
             <div class="form-group">
               <label for="quota">Quota</label>
-              <input type="text" name="quota" class="form-control" placeholder="Quota" required>
+              <input type="text" name="quota" class="form-control quota" placeholder="Quota" >
             </div>
           </div>
           <div class="modal-footer">
-            <input type="hidden" name="sem">
-            <input type="hidden" name="index">
+            <input type="hidden" class="form-control sem" name="sem">
+            <input type="hidden" class="form-control index" name="index">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Update</button>
           </div>

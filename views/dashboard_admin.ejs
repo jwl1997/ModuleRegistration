@@ -24,7 +24,14 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
+  <div class="form-group">
     <h1><%= title %> (<%= username %>)</h1>
+  </div>
+  <div class="form-group" id="div-no-lects-in-current-round">
+    <h5>There are currently no lecture slots to register in the current round</h5>
+  </div>
+  <div class="form-group" id="div-lects-in-current-round">
+    <h5>Lecture Slots to Register in the Current Round</h5>
     <table class="table">
       <thead>
       <tr>
@@ -35,22 +42,11 @@
         <th scope="col">Lecture Start</th>
         <th scope="col">Lecture End</th>
         <th scope="col">Quota</th>
-        <th scope="col">Registration Start</th>
-        <th scope="col">Registration End</th>
+        <th scope="col">Register Start</th>
+        <th scope="col">Register End</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>CS2102</td>
-        <td>Database Systems</td>
-        <td>1</td>
-        <td>Wednesday</td>
-        <td>10:00 am</td>
-        <td>12:00 pm</td>
-        <td>260</td>
-        <td>15-Oct-2019 10:00 am</td>
-        <td>15-Oct-2019 05:00 pm</td>
-      </tr>
       <% values.forEach(value => { %>
         <tr>
           <td><%= value.mod_code %></td>
@@ -60,44 +56,59 @@
           <td><%= value.s_time_lect %></td>
           <td><%= value.e_time_lect %></td>
           <td><%= value.quota %></td>
-          <td><%= value.quota %></td>
+          <td><%= value.s_time_round %></td>
+          <td><%= value.e_time_round %></td>
           <td></td>
         </tr>
       <% }); %>
       </tbody>
     </table>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='dashboard_admin/allocate'">Allocate</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='program'">Program</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='module'">Module</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='lecture_slot'">Lecture Slot</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='prereq'">Prerequisite</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='round'">Round</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='appeal'">Appeal</button>
-    </div>
-    <div class="form-group">
-      <form action="logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='dashboard_admin/allocate'">Allocate</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='program'">Program</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='module'">Module</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='lecture_slot'">Lecture Slot</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='prereq'">Prerequisite</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='round'">Round</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary"
+            onclick="window.location.href='appeal'">Appeal</button>
+  </div>
+  <div class="form-group">
+    <form action="logout" role="form" method="post">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
   </body>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (values.length === 0) { %>
+        document.getElementById('div-lects-in-current-round').style.display = "none";
+        document.getElementById('div-no-lects-in-current-round').style.display = "block";
+        <% } else { %>
+        document.getElementById('div-lects-in-current-round').style.display = "block";
+        document.getElementById('div-no-lects-in-current-round').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
 </html>

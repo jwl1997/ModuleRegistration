@@ -27,18 +27,18 @@
   <h1><%= title %></h1>
   <div class="form-group">
     <label for="parent">Module</label>
-    <select class="form-control" id="parent" name="parent" required="required">
+    <select class="form-control" id="child" name="child" required="required">
       <option value="" disabled="disabled" selected="selected">Select Module</option>
-      <% parents.forEach(parent => { %>
-        <option value="<%= parent.mod_code %>">
-          <%= parent.mod_code %> <%= parent.mod_name%>
+      <% children.forEach(child => { %>
+        <option value="<%= child.mod_code %>">
+          <%= child.mod_code %> <%= child.mod_name%>
         </option>
       <% }); %>
     </select>
   </div>
   <div>
     <button type="submit" class="btn btn-primary btn-block"
-            onclick="submitParentForm()">Submit</button>
+            onclick="submitChildForm()">Submit</button>
   </div>
   <div class="form-group" id="div-prereqs">
     <table class="table" id="table-prereqs">
@@ -56,8 +56,8 @@
       <% prereqs.forEach(prereq => { %>
         <tr>
           <td><%= j %></td>
-          <td><%= prereq.parent %></td>
           <td><%= prereq.child %></td>
+          <td><%= prereq.parent %></td>
           <td>
             <input type="button" id="btn-delete-prereq" value="Delete"/>
           </td>
@@ -78,20 +78,20 @@
   </div>
   </body>
   <script>
-    function submitParentForm() {
-      const parent = document.getElementById('parent').value;
+    function submitChildForm() {
+      const child = document.getElementById('child').value;
       // Returns false for null, undefined, 0, 000, "", false
       // Returns true for string "0" and whitespace " "
-      if (Boolean(parent)) {
-        window.location.href='prereq/select_parent?' + 'parent=' + parent;
+      if (Boolean(child)) {
+        window.location.href='prereq/select_child?' + 'child=' + child;
       }
     }
   </script>
   <script>
     $("#table-prereqs").on('click','#btn-delete-prereq',function() {
       const currentRow = $(this).closest("tr"); // get the current row
-      const parent = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
-      const child = currentRow.find("td:eq(2)").text();
+      const child = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+      const parent = currentRow.find("td:eq(2)").text();
       window.location.href='prereq/delete_prereq?' + 'parent=' + parent + '&child=' + child;
     });
   </script>

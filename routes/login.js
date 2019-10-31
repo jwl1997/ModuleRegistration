@@ -1,17 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('../sql');
-// DO NOT DELETE: Hashed Password Implementation
 const bcrypt = require('bcryptjs');
+
+let fs = require('fs');
+const sqlInit = fs.readFileSync('sql/init.sql').toString();
 
 const { Pool } = require('pg');
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
+pool.query(sqlInit, function(err, data) {
+  if (err) {
+    console.log('Error initializing schema: ', err);
+    process.exit(1);
+  }
+});
+
+let round_time_err = "";
+
 /* GET Login Page*/
 router.get('/', function(req, res, next) {
-  res.render('login', { title: 'Module Registration System' });
+  res.render('login', { title: 'Module Registration System',round_time_err:round_time_err });
 });
 
 router.post('/', function(req, res, next) {
@@ -29,30 +40,6 @@ router.post('/', function(req, res, next) {
   });
 });
 
-// Non-hashed Password Implementation
-// router.post('/', function(req, res, next) {
-//   const username = req.body.username;
-//   const password = req.body.password;
-//
-//   // Authenticate password
-//   pool.query(sql.query.get_hash, [username], (err, data) => {
-//     if (err) {
-//       unknownError(err, res);
-//     } else if (data === undefined) {
-//       dataUndefinedError(res);
-//     } else {
-//       const postgresPassword = data.rows[0].password;
-//       if (postgresPassword !== password) {
-//         passwordMismatchError(res);
-//       } else {
-//         req.session.password = password;
-//         next();
-//       }
-//     }
-//   })
-// });
-
-// DO NOT DELETE: Hashed Password Implementation
 router.post('/', function(req, res, next) {
   const username = req.body.username;
   const password = req.body.password;
@@ -95,12 +82,13 @@ router.post('/', function(req, res, next) {
           if (err) {
             unknownError(err, res);
           } else {
-            req.session.s_time_round = data.rows[0].s_time_round;
-            req.session.e_time_round = data.rows[0].e_time_round;
+            console.info(req.session);
             if(data.rows[0] === undefined){
+              round_time_err = "You can not log in to this module registration system at this time. Please wait until the next registration round starts."
               return res.redirect('/login');
             }
-            console.info(req.session);
+            req.session.s_time_round = data.rows[0].s_time_round;
+            req.session.e_time_round = data.rows[0].e_time_round;
             return res.redirect('/dashboard_student');
           }
         });
@@ -119,9 +107,14 @@ router.post('/', function(req, res, next) {
           if (err) {
             unknownError(err, res);
           } else {
-            req.session.s_time_round = data.rows[0].s_time_round;
-            req.session.e_time_round = data.rows[0].e_time_round;
             console.info(req.session);
+            if(data.rows[0] === undefined){
+              req.session.s_time_round = '';
+              req.session.e_time_round = '';
+            } else {
+              req.session.s_time_round = data.rows[0].s_time_round;
+              req.session.e_time_round = data.rows[0].e_time_round;
+            }
             return res.redirect('/dashboard_admin');
           }
         });
