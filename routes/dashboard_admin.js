@@ -7,10 +7,11 @@ const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 var admin;
-var current_s_time_round;
-var current_e_time_round;
+var last_s_time_round;
+var last_e_time_round;
 var sem;
 var round_start = false;
+var err_msg = "";
 
 /* GET Admin Dashboard Page */
 router.get('/', function(req, res, next) {
@@ -31,18 +32,21 @@ router.get('/', function(req, res, next) {
 			username: req.session.username,
 			password: req.session.password,
 			role: req.session.role,
-			round_start: round_start
+			err_msg: err_msg
 		});
 	});
 });
 
 router.get('/allocate', function (req, res) {
+	if(round_start){
+		err_msg = "Current registration round is still open. Please wait till: "+ req.session.e_time_round + " .";
+		return res.redirect('/dashboard_admin');
+	}
 	console.log(req.session.username);
 	admin = req.session.username;
-	current_s_time_round = new Date(req.session.s_time_round);
-	current_e_time_round = new Date(req.session.e_time_round);
-	const query10 = 'DROP VIEW IF EXISTS X';
-	const query1 = "CREATE VIEW X AS SELECT r1.*, s.seniority, CASE WHEN r1.mod_code IN (SELECT re.mod_code FROM Require re WHERE re.prog_name = s.prog_name) THEN 10 ELSE 1 END AS prog_req FROM Register r1 join Students s on r1.s_username = s.s_username WHERE r1.s_time_round = '"+current_s_time_round+"' AND r1.e_time_round = '"+current_e_time_round+"' AND r1.sem = "+sem+" AND r1.mod_code IN (SELECT m.mod_code FROM Modules m WHERE m.a_username = '" + admin + "')";
+	last_s_time_round = new Date(req.session.last_s_time_round);
+	last_e_time_round = new Date(req.session.last_e_time_round);
+	const query1 = "CREATE VIEW X AS SELECT r1.*, s.seniority, CASE WHEN r1.mod_code IN (SELECT re.mod_code FROM Require re WHERE re.prog_name = s.prog_name) THEN 10 ELSE 1 END AS prog_req FROM Register r1 join Students s on r1.s_username = s.s_username WHERE r1.s_time_round = '"+last_s_time_round+"' AND r1.e_time_round = '"+last_e_time_round+"' AND r1.sem = "+sem+" AND r1.mod_code IN (SELECT m.mod_code FROM Modules m WHERE m.a_username = '" + admin + "')";
 	const query2 = 'UPDATE Register \n' +
 		'SET priority_score = (10 - X.rank_pref) * X.seniority * X.prog_req\n' +
 		'FROM X\n' +
@@ -54,7 +58,6 @@ router.get('/allocate', function (req, res) {
 		'      Register.s_time_lect = X.s_time_lect AND\n' +
 		'      Register.e_time_lect = X.e_time_lect AND\n' +
 		'      Register.sem = X.sem';
-	const query9 = 'DROP VIEW IF EXISTS Y';
 	const query3 = 'CREATE VIEW Y AS \n' +
 		'SELECT ranked_score.* \n' +
 		'FROM (SELECT X.*, rank() OVER (PARTITION BY X.mod_code, X.day, X.s_time_lect, X.e_time_lect, X.sem ORDER BY priority_score DESC) FROM X) ranked_score\n' +
@@ -67,6 +70,17 @@ router.get('/allocate', function (req, res) {
 		'\t      l.s_time_lect = ranked_score.s_time_lect AND\n' +
 		'\t      l.e_time_lect = ranked_score.e_time_lect)';
 	const query4 = 'UPDATE Register \n' +
+		'SET status = \'Success\'\n' +
+		'FROM Y\n' +
+		'WHERE Register.s_username = Y.s_username AND \n' +
+		'      Register.mod_code = Y.mod_code AND\n' +
+		'      Register.s_time_round = Y.s_time_round AND\n' +
+		'      Register.e_time_round = Y.e_time_round AND\n' +
+		'      Register.day = Y.day AND\n' +
+		'      Register.s_time_lect = Y.s_time_lect AND\n' +
+		'      Register.e_time_lect = Y.e_time_lect AND\n' +
+		'      Register.sem = Y.sem';
+	const query5 = 'UPDATE Register \n' +
 		'SET status = \'Fail\'\n' +
 		'FROM X\n' +
 		'WHERE Register.s_username = X.s_username AND \n' +
@@ -78,9 +92,8 @@ router.get('/allocate', function (req, res) {
 		'      Register.e_time_lect = X.e_time_lect AND\n' +
 		'      Register.sem = X.sem AND\n' +
 		'      Register.status <> \'Success\'';
-	const query5 = "INSERT INTO Takes (grade, has_completed, s_username, mod_code) SELECT DISTINCT 'IP', FALSE, s_username, mod_code FROM Y";
-	const query8 = 'DROP VIEW IF EXISTS Z';
-	const query6 = 'CREATE VIEW Z AS \n' +
+	const query6 = "INSERT INTO Takes (grade, has_completed, s_username, mod_code) SELECT DISTINCT 'IP', FALSE, s_username, mod_code FROM Y";
+	const query7 = 'CREATE VIEW Z AS \n' +
 		'WITH A AS ( SELECT l.*, (SELECT count(*) FROM Y WHERE Y.mod_code = l.mod_code AND\n' +
 		'\t              Y.sem = l.sem AND\n' +
 		'\t              Y.day = l.day AND\n' +
@@ -88,7 +101,7 @@ router.get('/allocate', function (req, res) {
 		'\t              Y.e_time_lect = l.e_time_lect) AS allocated\n' +
 		'            FROM LectureSlots l)\n' +
 		'SELECT * FROM A WHERE allocated > 0';
-	const query7 = 'UPDATE LectureSlots\n' +
+	const query8 = 'UPDATE LectureSlots\n' +
 		'SET quota = Z.quota - Z.allocated\n' +
 		'FROM Z\n' +
 		'WHERE LectureSlots.mod_code = Z.mod_code AND\n' +
@@ -96,6 +109,9 @@ router.get('/allocate', function (req, res) {
 		'\t  LectureSlots.day = Z.day AND\n' +
 		'\t  LectureSlots.s_time_lect = Z.s_time_lect AND\n' +
 		'\t  LectureSlots.e_time_lect = Z.e_time_lect';
+	const query9 = 'DROP VIEW IF EXISTS Z';
+	const query10 = 'DROP VIEW IF EXISTS Y';
+	const query11 = 'DROP VIEW IF EXISTS X';
 	pool.query(query1, (err, data) => {
 		console.log(data)
 		pool.query(query2, (err, data) => {
@@ -116,7 +132,10 @@ router.get('/allocate', function (req, res) {
 										console.log(data)
 										pool.query(query10, (err, data) => {
 											console.log(data)
-											return res.redirect('/dashboard_admin');
+											pool.query(query11, (err,data) => {
+												console.log(data)
+												return res.redirect('/dashboard_admin');
+											})
 										});
 									});
 								});

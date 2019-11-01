@@ -103,19 +103,31 @@ router.post('/', function(req, res, next) {
       } else {
         req.session.username = username;
         req.session.role = role;
-        pool.query(sql.query.get_round_time, (err, data) => {
+        //retrieve last round
+        const query = 'SELECT * FROM Rounds ORDER BY s_time_round DESC LIMIT 1';
+        pool.query(query,(err,rounds) => {
           if (err) {
             unknownError(err, res);
           } else {
-            console.info(req.session);
-            if(data.rows[0] === undefined){
-              req.session.s_time_round = '';
-              req.session.e_time_round = '';
-            } else {
-              req.session.s_time_round = data.rows[0].s_time_round;
-              req.session.e_time_round = data.rows[0].e_time_round;
-            }
-            return res.redirect('/dashboard_admin');
+            req.session.last_s_time_round = rounds.rows[0].s_time_round;
+            req.session.last_e_time_round = rounds.rows[0].e_time_round;
+
+            pool.query(sql.query.get_round_time, (err, data) => {
+              if (err) {
+                unknownError(err, res);
+              } else {
+                console.info(req.session);
+                if(data.rows[0] === undefined){
+                  req.session.s_time_round = '';
+                  req.session.e_time_round = '';
+                } else {
+                  req.session.s_time_round = data.rows[0].s_time_round;
+                  req.session.e_time_round = data.rows[0].e_time_round;
+                }
+                return res.redirect('/dashboard_admin');
+              }
+            });
+
           }
         });
       }
