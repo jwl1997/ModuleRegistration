@@ -85,6 +85,7 @@ router.post('/', function(req, res, next) {
             console.info(req.session);
             if(data.rows[0] === undefined){
               round_time_err = "You can not log in to this module registration system at this time. Please wait until the next registration round starts."
+              console.log(round_time_err)
               return res.redirect('/login');
             }
             req.session.s_time_round = data.rows[0].s_time_round;
