@@ -18,9 +18,11 @@ pool.query(sqlInit, function(err, data) {
   }
 });
 
+let round_time_err = "";
+
 /* GET Login Page*/
 router.get('/', function(req, res, next) {
-  res.render('login', { title: 'Module Registration System' });
+  res.render('login', { title: 'Module Registration System',round_time_err:round_time_err });
 });
 
 router.post('/', function(req, res, next) {
@@ -80,12 +82,14 @@ router.post('/', function(req, res, next) {
           if (err) {
             unknownError(err, res);
           } else {
-            req.session.s_time_round = data.rows[0].s_time_round;
-            req.session.e_time_round = data.rows[0].e_time_round;
+            console.info(req.session);
             if(data.rows[0] === undefined){
+              round_time_err = "You can not log in to this module registration system at this time. Please wait until the next registration round starts."
+              console.log(round_time_err)
               return res.redirect('/login');
             }
-            console.info(req.session);
+            req.session.s_time_round = data.rows[0].s_time_round;
+            req.session.e_time_round = data.rows[0].e_time_round;
             return res.redirect('/dashboard_student');
           }
         });
@@ -100,14 +104,31 @@ router.post('/', function(req, res, next) {
       } else {
         req.session.username = username;
         req.session.role = role;
-        pool.query(sql.query.get_round_time, (err, data) => {
+        //retrieve last round
+        const query = 'SELECT * FROM Rounds ORDER BY s_time_round DESC LIMIT 1';
+        pool.query(query,(err,rounds) => {
           if (err) {
             unknownError(err, res);
           } else {
-            req.session.s_time_round = data.rows[0].s_time_round;
-            req.session.e_time_round = data.rows[0].e_time_round;
-            console.info(req.session);
-            return res.redirect('/dashboard_admin');
+            req.session.last_s_time_round = rounds.rows[0].s_time_round;
+            req.session.last_e_time_round = rounds.rows[0].e_time_round;
+
+            pool.query(sql.query.get_round_time, (err, data) => {
+              if (err) {
+                unknownError(err, res);
+              } else {
+                console.info(req.session);
+                if(data.rows[0] === undefined){
+                  req.session.s_time_round = '';
+                  req.session.e_time_round = '';
+                } else {
+                  req.session.s_time_round = data.rows[0].s_time_round;
+                  req.session.e_time_round = data.rows[0].e_time_round;
+                }
+                return res.redirect('/dashboard_admin');
+              }
+            });
+
           }
         });
       }
