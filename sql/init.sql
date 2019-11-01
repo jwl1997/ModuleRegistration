@@ -211,7 +211,7 @@ INSERT INTO Require VALUES ('Business Analytics', 'CS2040');
 INSERT INTO Rounds VALUES ('2016-06-22 19:10:25', '2016-06-23 19:10:25');
 INSERT INTO Rounds VALUES ('2016-06-24 19:10:25', '2016-06-25 19:10:25');
 INSERT INTO Rounds VALUES ('2016-06-27 19:10:25', '2016-06-28 19:10:25');
--- INSERT INTO Rounds VALUES ('2019-10-30 09:00:00', '2019-11-05 17:00:00');
+INSERT INTO Rounds VALUES ('2019-10-30 09:00:00', '2019-11-05 17:00:00');
 
 INSERT INTO LectureSlots VALUES ('Monday', '10:00:00', '13:00:00', 1, 'CS1010', 5);--4 people bidding, n1, quota left 1
 INSERT INTO LectureSlots VALUES ('Tuesday', '11:00:00', '14:00:00', 1, 'CS1010', 4);--4 people bidding, n2, quota left 0
@@ -285,7 +285,7 @@ INSERT INTO Register VALUES (9, 1, 'Result Pending', 'e0191339', '2016-06-22 19:
 INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191331', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Wednesday', '17:00:00', '20:00:00', 2, 'CS2040');
 --n10, not regulate by this admin
 INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191332', '2016-06-22 19:10:25', '2016-06-23 19:10:25','Thursday', '18:00:00', '21:00:00', 1, 'CS2040');
--- INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191333', '2019-10-30 09:00:00', '2019-11-05 17:00:00', 'Thursday', '18:00:00', '21:00:00', 1, 'CS2040');
+INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191333', '2019-10-30 09:00:00', '2019-11-05 17:00:00', 'Thursday', '18:00:00', '21:00:00', 1, 'CS2040');
 
 -- check if student has alr bid the module and insert register
 CREATE OR REPLACE FUNCTION not_register()

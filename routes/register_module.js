@@ -24,8 +24,10 @@ var current_sem = 1;
 
 router.get('/',function (req, res, next) {
 	current_user = req.session.username;
-	current_round_start_time = new Date(req.session.s_time_round);
-	current_round_end_time = new Date(req.session.e_time_round);
+	current_round_start_time = new Date(req.session.s_time_round).toLocaleString();
+	current_round_end_time = new Date(req.session.e_time_round).toLocaleString();
+	console.log("current round")
+	console.log(current_round_start_time)
 	if(is_ranking_action){
 		is_ranking_action = false;
 		next();
