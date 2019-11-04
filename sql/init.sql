@@ -295,6 +295,7 @@ BEGIN
    SELECT COUNT(*) INTO count FROM Register R
    WHERE R.s_username = NEW.s_username AND R.sem = NEW.sem AND R.mod_code = NEW.mod_code;
    IF count > 0 THEN
+       RAISE EXCEPTION 'You have already registered this module.' USING ERRCODE='20808';
        RETURN NULL;
    ELSE
        RETURN NEW;
@@ -314,6 +315,7 @@ BEGIN
    SELECT quota INTO number FROM LectureSlots L
    WHERE L.mod_code = NEW.mod_code AND L.sem = NEW.sem AND L.s_time_lect = NEW.s_time_lect AND L.e_time_lect = NEW.e_time_lect AND L.day = NEW.day;
    IF number <= 0 THEN
+       RAISE EXCEPTION 'This lecture slot is full.' USING ERRCODE='20808';
        RETURN NULL;
    ELSE
        RETURN NEW;
