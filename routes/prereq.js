@@ -93,12 +93,13 @@ router.post('/select_child', function(req, res, next) {
       pool.query(sql.query.auth_prereq, [parents[i], child], (err, data) => {
         if (err) {
           getError('Prereq', err, res);
-        }  else if (i === parents.length - 1) {
-          return res.redirect('/prereq');
         } else if (!data.rows[0].exists) {
           pool.query(sql.query.add_prereq, [parents[i], child], (err, data) => {
             if (err) {
               insertError('Prereq', err, res);
+            }
+            if (i === parents.length - 1) {
+              return res.redirect('/prereq');
             }
           });
         }

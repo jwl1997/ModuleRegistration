@@ -10,7 +10,16 @@ const pool = new Pool({
 
 /* GET Register Page */
 router.get('/', function(req, res, next) {
-  res.render('register', { title: 'Register' });
+  pool.query(sql.query.load_programs, (err, data) => {
+    if (err) {
+      unknownError(err, res);
+    } else {
+      res.render('register', {
+        title: 'Register',
+        programs: data.rows,
+      });
+    }
+  });
 });
 
 router.post('/', function(req, res, next) {
@@ -62,10 +71,11 @@ router.post('/', function(req, res, next) {
   const username = req.body.username;
   const role = req.body.role;
   const seniority = req.body.seniority;
+  const program = req.body.program;
 
   // If user is a Student, insert to Students
   if (role === 'Student') {
-    pool.query(sql.query.add_student, [username, seniority], (err, data) => {
+    pool.query(sql.query.add_student, [username, seniority, program], (err, data) => {
       if (err) {
         insertError('Students', err, res);
       } else if (data === undefined) {
