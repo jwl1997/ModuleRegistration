@@ -36,64 +36,68 @@
 <div id="wrapper">
 
   <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion align-items-center"  id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center">
       <div class="sidebar-brand-icon">
         <img src="/img/regis_icon_1.png" width="50px" height="50px" class="img-responsive">
       </div>
-      <div class="sidebar-brand-text mx-3">ModRekt</div>
+      <div class="sidebar-brand-text mx-3" style="color: white;">ModRekt</div>
     </a>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Appeal -->
     <li class="nav-item">
-      <a class="nav-link" href="appeal">
-        <span>Appeal</span></a>
-      <!-- <button type="submit" class="btn btn-primary" onclick="window.location.href='appeal'">Appeal</button> -->
+      <h4 style="color: white;"><%= username %></h4>
     </li>
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
       <a class="nav-link" href="dashboard_admin">
-        <span>Dashboard</span></a>
+        <span style="font-size: 1.0em;">Dashboard</span></a>
     </li>
 
-    <!-- Nav Item - Lecture Slot -->
-    <li class="nav-item">
-      <a class="nav-link" href="lecture_slot">
-        <span>Lecture Slot</span></a>
+    <!-- Nav Item - Programmes -->
+    <li class="nav-item nav-admin">
+      <a class="nav-link" href="program">
+        <span style="font-size: 1.0em;">Programmes</span></a>
     </li>
+
 
     <!-- Nav Item - Modules -->
     <li class="nav-item">
       <a class="nav-link" href="module">
-        <span>Modules</span></a>
+        <span style="font-size: 1.0em;">Modules</span></a>
+    </li>
+
+    <!-- Nav Item - Lecture Slot -->
+    <li class="nav-item nav-admin">
+      <a class="nav-link" href="lecture_slot">
+        <span style="font-size: 1.0em;">Lecture Slot</span></a>
     </li>
 
     <!-- Nav Item - Prerequisites -->
-    <li class="nav-item">
+    <li class="nav-item nav-admin">
       <a class="nav-link" href="prereq">
-        <span>Prerequisites</span></a>
-    </li>
-
-    <!-- Nav Item - Programmes -->
-    <li class="nav-item">
-      <a class="nav-link" href="program">
-        <span>Programmes</span></a>
+        <span style="font-size: 1.0em;">Prerequisites</span></a>
     </li>
 
     <!-- Nav Item - Round -->
-    <li class="nav-item">
+    <li class="nav-item nav-admin">
       <a class="nav-link" href="round">
-        <span>Round</span></a>
+        <span style="font-size: 1.0em;">Round</span></a>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+    <!-- Nav Item - Appeal -->
+    <li class="nav-item nav-admin" >
+      <a class="nav-link" href="appeal">
+        <span style="font-size: 1.0em;">Appeal</span></a>
+    </li>
+
+    <!-- Nav Item - register_module -->
+    <li class="nav-item" >
+      <a class="nav-link" href="register_module">
+        <span style="font-size: 1.0em;">Register Module</span></a>
+    </li>
 
     <li class="nav-item">
       <div class="form-group">
@@ -102,15 +106,6 @@
         </form>
       </div>
     </li>
-
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <!--    <div class="text-center d-none d-md-inline">-->
-    <!--      <button class="rounded-circle border-0" id="sidebarToggle"></button>-->
-    <!--    </div>-->
 
   </ul>
   <!-- End of Sidebar -->
