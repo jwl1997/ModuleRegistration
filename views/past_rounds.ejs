@@ -146,32 +146,66 @@
   <div class="form-group" id="div-no-past-round">
     <h5>There are currently no past rounds</h5>
   </div>
+
   <div class="form-group" id="div-past-round">
     <div class="form-group">
       <label for="parent">Past Round</label>
-      <select class="form-control" id="past_round" name="past_round" required="required">
-        <option value="" disabled="disabled" selected="selected">Select Past Round</option>
-        <% past_rounds.forEach(round => { %>
-          <option value="<%= round.s_time_round %>,<%= round.e_time_round %>">
-            <%= round.s_time_round %> - <%= round.e_time_round %>
-          </option>
-        <% }); %>
+      <select class="form-control" id="past_round" name="past_round" onchange="submitPastRoundForm()">
+        <option value="" disabled="disabled" selected="selected"><%= selected_round%></option>
+        <% for(var i=0; i<past_rounds.length; i++) { %>
+          <option value="<%= i%>"><%= past_rounds[i].s_time_round %>-<%= past_rounds[i].e_time_round %></option>
+        <% } %>
       </select>
     </div>
-    <div>
-      <button type="submit" class="btn btn-primary btn-block"
-              onclick="submitPastRoundForm()">Submit</button>
-    </div>
   </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary"
-            onclick="window.location.href='dashboard_admin'">Back to Home</button>
-  </div>
-  <div class="form-group">
-    <form action="logout" role="form" method="post">
-      <button type="submit" class="btn btn-primary">Logout</button>
-    </form>
-  </div>
+
+        <div class="form-group" id="div-registrations">
+          <table class="table">
+            <thead class="bg-gradient-primary">
+            <tr style="color: white;">
+              <th scope="col">Module Code</th>
+              <th scope="col">Module Name</th>
+              <th scope="col">Sem</th>
+              <th scope="col">Day</th>
+              <th scope="col">Lecture Start</th>
+              <th scope="col">Lecture End</th>
+              <th scope="col">Quota</th>
+              <th scope="col">Register Start</th>
+              <th scope="col">Register End</th>
+              <th scope="col">Student Username</th>
+              <th scope="col">Status</th>
+              <th scope="col">Priority Score</th>
+              <th scope="col">Rank Preference</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% values.forEach(value => { %>
+              <tr>
+                <td><%= value.mod_code %></td>
+                <td><%= value.mod_name %></td>
+                <td><%= value.sem %></td>
+                <td><%= value.day %></td>
+                <td><%= value.s_time_lect %></td>
+                <td><%= value.e_time_lect %></td>
+                <td><%= value.quota %></td>
+                <td><%= value.s_time_round %></td>
+                <td><%= value.e_time_round %></td>
+                <td><%= value.s_username %></td>
+                <td><%= value.status %></td>
+                <td><%= value.priority_score %></td>
+                <td><%= value.rank_pref %></td>
+                <td></td>
+              </tr>
+            <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-group" id="btn-allocate">
+          <button type="submit" class="btn btn-primary"
+                  onclick="window.location.href='past_rounds/allocate'">Allocate</button>
+        </div>
+
 
 
         <!-- /.container-fluid -->
@@ -218,17 +252,9 @@
 
 <script>
     function submitPastRoundForm() {
-      const time = document.getElementById('past_round').value;
-      const t = time.split(",");
-      const s_time_round = t[0];
-      const e_time_round = t[1];
-      // Returns false for null, undefined, 0, 000, "", false
-      // Returns true for string "0" and whitespace " "
-      if (Boolean(s_time_round)) {
-        window.location.href='past_rounds/select_round?' +
-                's_time_round=' + s_time_round +
-                '&e_time_round=' + e_time_round;
-      }
+      const index = document.getElementById('past_round').value;
+      window.location.href='past_rounds/select_round?' +
+                'index=' + index;
     }
   </script>
   <script>

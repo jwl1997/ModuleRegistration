@@ -62,8 +62,9 @@ sql.query = {
   load_selected_register: 'SELECT R.mod_code, M.mod_name, R.sem, R.day, R.s_time_lect, R.e_time_lect, ' +
     'L.quota, R.s_time_round, R.e_time_round, R.s_username, R.status, R.priority_score, R.rank_pref ' +
     'FROM Modules M NATURAL JOIN LectureSlots L NATURAL JOIN Register R ' +
-    'WHERE s_time_round = $1 AND e_time_round = $2 ' +
+    'WHERE s_time_round = $1 AND e_time_round = $2 AND M.a_username = $3 ' +
     'ORDER BY mod_code, sem, day, s_time_lect, e_time_lect, s_username',
+
 
   load_prev_takes: 'SELECT * FROM Takes WHERE grade <> "IP" AND s_username = $1 ORDER BY mod_code ASC',
   load_current_takes: 'SELECT * FROM Takes WHERE has_completed = FALSE AND s_username = $1 ORDER BY mod_code ASC',
