@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+<!--    <link rel='stylesheet' href='/stylesheets/style.css' />-->
 
     <!-- CSS for Styling -->
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-          crossorigin="anonymous">
+<!--    <link rel="stylesheet"-->
+<!--          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"-->
+<!--          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"-->
+<!--          crossorigin="anonymous">-->
+
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="/stylesheets/modrekt.min.css" >
+
+
+    <!-- Custom fonts for this template-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/all.min.css" >
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- JavaScript for Interactivity -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -24,91 +38,341 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %> (<%= username %>)</h1>
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col">Module Code</th>
-        <th scope="col">Module Name</th>
-        <th scope="col">Sem</th>
-        <th scope="col">Day</th>
-        <th scope="col">Lecture Start</th>
-        <th scope="col">Lecture End</th>
-        <th scope="col">Quota</th>
-        <th scope="col">Registration Start</th>
-        <th scope="col">Registration End</th>
-        <!-- <th scope="col">Registering Students</th>
-        <th scope="col">Successful Registrants</th>
-        <th scope="col">Unsuccessful Registrants</th> -->
-        <th scope="col">Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>CS2102</td>
-        <td>Database Systems</td>
-        <td>1</td>
-        <td>Wednesday</td>
-        <td>10:00 am</td>
-        <td>12:00 pm</td>
-        <td>260</td>
-        <td>15-Oct-2019 10:00 am</td>
-        <td>15-Oct-2019 05:00 pm</td>
-        <td>
-          <input type="button" id="btn-edit" value="Edit"/>
-          <input type="button" id="btn-delete" value="Delete"/>
-          <input type="button" id="btn-allocate" value="Allocate"/>
-        </td>
-      </tr>
-      <% values.forEach(value => { %>
-        <tr>
-          <td><%= value.mod_code %></td>
-          <td><%= value.mod_name %></td>
-          <td><%= value.sem %></td>
-          <td><%= value.day %></td>
-          <td><%= value.s_time_lect %></td>
-          <td><%= value.e_time_lect %></td>
-          <td><%= value.quota %></td>
-          <td></td>
-          <td></td>
-          <td>
-            <!-- TODO: Add functionality for the DELETE, EDIT and ALLOCATE buttons -->
-            <input type="button" id="btn-edit" value="Edit"/>
-            <input type="button" id="btn-delete" value="Delete"/>
-            <input type="button" id="btn-allocate" value="Allocate"/>
-          </td>
-        </tr>
-      <% }); %>
-      </tbody>
-    </table>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='program'">Program</button>
+  <body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center">
+        <div class="sidebar-brand-icon">
+          <img src="/img/regis_icon_1.png" width="50px" height="50px" class="img-responsive">
+        </div>
+        <div class="sidebar-brand-text mx-3">ModRekt</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Appeal -->
+      <li class="nav-item">
+        <a class="nav-link" href="appeal">
+          <span>Appeal</span></a>
+        <!-- <button type="submit" class="btn btn-primary" onclick="window.location.href='appeal'">Appeal</button> -->
+      </li>
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="dashboard_admin">
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Nav Item - Lecture Slot -->
+      <li class="nav-item">
+        <a class="nav-link" href="lecture_slot">
+          <span>Lecture Slot</span></a>
+      </li>
+
+      <!-- Nav Item - Modules -->
+      <li class="nav-item">
+        <a class="nav-link" href="module">
+          <span>Modules</span></a>
+      </li>
+
+      <!-- Nav Item - Prerequisites -->
+      <li class="nav-item">
+        <a class="nav-link" href="prereq">
+          <span>Prerequisites</span></a>
+      </li>
+
+      <!-- Nav Item - Programmes -->
+      <li class="nav-item">
+        <a class="nav-link" href="program">
+          <span>Programmes</span></a>
+      </li>
+
+      <!-- Nav Item - Round -->
+      <li class="nav-item">
+        <a class="nav-link" href="round">
+          <span>Round</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Nav Item - Logout-->
+<!--      <li class="nav-item">-->
+<!--        <div class="form-group">-->
+<!--          <form action="logout" role="form" method="post">-->
+<!--              <i class="fas fa-sign-out-alt"></i>-->
+<!--              <span>Logout</span>-->
+<!--          </form>-->
+<!--        </div>-->
+
+<!--        <a class="nav-link" href="index.html">-->
+<!--          <i class="fas fa-sign-out-alt"></i>-->
+<!--          <span>Logout</span></a>-->
+<!--      </li>-->
+
+<!--      <li class="nav-item">-->
+<!--        <a class="nav-link" href="index.html">-->
+<!--          <i class="fas fa-sign-out-alt"></i>-->
+<!--          <span>Logout</span></a>-->
+<!--      </li>-->
+<!--      -->
+      <li class="nav-item">
+        <div class="form-group">
+          <form action="logout" role="form" method="post">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> <br/> Logout</button>
+          </form>
+        </div>
+      </li>
+
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+<!--      <div class="text-center d-none d-md-inline">-->
+<!--        <button class="rounded-circle border-0" id="sidebarToggle"></button>-->
+<!--      </div>-->
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <div class="form-group text-center my-auto  ">
+            <h1><%= title %> (<%= username %>)</h1>
+          </div>
+
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800"></h1>
+
+
+
+          <div class="form-group" id="div-no-lects-in-current-round">
+            <h5>There are currently no lecture slots to register in the current round</h5>
+          </div>
+          <div class="form-group" id="div-lects-in-current-round">
+            <h5>Lecture Slots to Register in the Current Round</h5>
+            <table class="table">
+              <thead class="bg-gradient-primary">
+              <tr style="color: white;">
+                <th scope="col">Module Code</th>
+                <th scope="col">Module Name</th>
+                <th scope="col">Sem</th>
+                <th scope="col">Day</th>
+                <th scope="col">Lecture Start</th>
+                <th scope="col">Lecture End</th>
+                <th scope="col">Quota</th>
+                <th scope="col">Register Start</th>
+                <th scope="col">Register End</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% values.forEach(value => { %>
+                <tr>
+                  <td><%= value.mod_code %></td>
+                  <td><%= value.mod_name %></td>
+                  <td><%= value.sem %></td>
+                  <td><%= value.day %></td>
+                  <td><%= value.s_time_lect %></td>
+                  <td><%= value.e_time_lect %></td>
+                  <td><%= value.quota %></td>
+                  <td><%= value.s_time_round %></td>
+                  <td><%= value.e_time_round %></td>
+                  <td></td>
+                </tr>
+              <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary"
+                    onclick="window.location.href='dashboard_admin/allocate'">Allocate</button>
+          </div>
+          <div class="form-group">
+            <% if(err_msg !== ""){ %>
+              <label style="color: #721c24"><%= err_msg%></label>
+            <% } else{ %>
+              <label></label>
+            <% } %>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Made with <i style="color: red;"class="fas fa-heart"></i> by Team 14</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
     </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='module'">Module</button>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='lecture_slot'">Lecture Slot</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='prereq'">Prerequisite</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='round'">Round</button>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary"
-              onclick="window.location.href='appeal'">Appeal</button>
-    </div>
-    <div class="form-group">
-      <form action="logout" role="form" method="post">
-        <button type="submit" class="btn btn-primary">Logout</button>
-      </form>
-    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="javascripts/modrekt.min.js"></script>
+
+
+<!--  <div class="form-group">-->
+<!--    <h1><%= title %> (<%= username %>)</h1>-->
+<!--  </div>-->
+<!--  <div class="form-group" id="div-no-lects-in-current-round">-->
+<!--    <h5>There are currently no lecture slots to register in the current round</h5>-->
+<!--  </div>-->
+<!--  <div class="form-group" id="div-lects-in-current-round">-->
+<!--    <h5>Lecture Slots to Register in the Current Round</h5>-->
+<!--    <table class="table">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th scope="col">Module Code</th>-->
+<!--        <th scope="col">Module Name</th>-->
+<!--        <th scope="col">Sem</th>-->
+<!--        <th scope="col">Day</th>-->
+<!--        <th scope="col">Lecture Start</th>-->
+<!--        <th scope="col">Lecture End</th>-->
+<!--        <th scope="col">Quota</th>-->
+<!--        <th scope="col">Register Start</th>-->
+<!--        <th scope="col">Register End</th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <% values.forEach(value => { %>-->
+<!--        <tr>-->
+<!--          <td><%= value.mod_code %></td>-->
+<!--          <td><%= value.mod_name %></td>-->
+<!--          <td><%= value.sem %></td>-->
+<!--          <td><%= value.day %></td>-->
+<!--          <td><%= value.s_time_lect %></td>-->
+<!--          <td><%= value.e_time_lect %></td>-->
+<!--          <td><%= value.quota %></td>-->
+<!--          <td><%= value.s_time_round %></td>-->
+<!--          <td><%= value.e_time_round %></td>-->
+<!--          <td></td>-->
+<!--        </tr>-->
+<!--      <% }); %>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <button type="submit" class="btn btn-primary"-->
+<!--            onclick="window.location.href='dashboard_admin/allocate'">Allocate</button>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <% if(err_msg !== ""){ %>-->
+<!--      <label style="color: #721c24"><%= err_msg%></label>-->
+<!--    <% } else{ %>-->
+<!--      <label></label>-->
+<!--    <% } %>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <button type="submit" class="btn btn-primary"-->
+<!--            onclick="window.location.href='program'">Program</button>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <button type="submit" class="btn btn-primary"-->
+<!--            onclick="window.location.href='module'">Module</button>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <button type="submit" class="btn btn-primary"-->
+<!--            onclick="window.location.href='lecture_slot'">Lecture Slot</button>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <button type="submit" class="btn btn-primary"-->
+<!--            onclick="window.location.href='prereq'">Prerequisite</button>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <button type="submit" class="btn btn-primary"-->
+<!--            onclick="window.location.href='round'">Round</button>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <button type="submit" class="btn btn-primary"-->
+<!--            onclick="window.location.href='appeal'">Appeal</button>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <form action="logout" role="form" method="post">-->
+<!--      <button type="submit" class="btn btn-primary">Logout</button>-->
+<!--    </form>-->
+<!--  </div>-->
   </body>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        <% if (values.length === 0) { %>
+        document.getElementById('div-lects-in-current-round').style.display = "none";
+        document.getElementById('div-no-lects-in-current-round').style.display = "block";
+        <% } else { %>
+        document.getElementById('div-lects-in-current-round').style.display = "block";
+        document.getElementById('div-no-lects-in-current-round').style.display = "none";
+        <% } %>
+      });
+    })();
+  </script>
 </html>
