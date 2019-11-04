@@ -119,14 +119,14 @@ app.use('/lecture_slot', authenticateAdmin, require('./routes/lecture_slot'));
 /* Prereq Parent Page */
 app.use('/prereq', authenticateAdmin, require('./routes/prereq'));
 
-/* Prereq Child Page */
-app.use('/prereq_child', authenticateAdmin, require('./routes/prereq_child'));
-
 /* Round Page */
 app.use('/round', authenticateAdmin, require('./routes/round'));
 
 /* Appeal Page */
 app.use('/appeal', authenticateAdmin, require('./routes/appeal'));
+
+/* Past Rounds Page */
+app.use('/past_rounds', authenticateAdmin, require('./routes/past_rounds'));
 
 /* Logout */
 app.post('/logout', (req, res) => {

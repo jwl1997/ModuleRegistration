@@ -143,31 +143,53 @@
 
 
         <!-- TODO: Add core content here -->
-  <div class="form-group" id="div-no-prereqs">
-    <h5 id="h5-no-prereqs">This module has no prerequisites.</h5>
+  <div class="form-group" id="div-no-registrations">
+    <h5 id="h5-no-registrations">This round has no registrations</h5>
   </div>
-  <div class="form-group" id="div-prereqs">
-    <form id="prereq_form" role="form" method="post">
-      <div class="form-group">
-        <label for="parents">Prerequisites</label>
-        <select multiple="multiple" class="form-control" id="parents" name="parents"
-                required="required" size="<%= 1 + (parents.length * 0.5) %>">
-          <% parents.forEach(parent => { %>
-              <option value="<%= parent.mod_code %>">
-                <%= parent.mod_code %> <%= parent.mod_name %>
-              </option>
-          <% }); %>
-        </select>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary btn-block"
-                id="btn-prereqs">Submit</button>
-      </div>
-    </form>
+  <div class="form-group" id="div-registrations">
+    <table class="table">
+      <thead class="bg-gradient-primary">
+      <tr style="color: white;">
+        <th scope="col">Module Code</th>
+        <th scope="col">Module Name</th>
+        <th scope="col">Sem</th>
+        <th scope="col">Day</th>
+        <th scope="col">Lecture Start</th>
+        <th scope="col">Lecture End</th>
+        <th scope="col">Quota</th>
+        <th scope="col">Register Start</th>
+        <th scope="col">Register End</th>
+        <th scope="col">Student Username</th>
+        <th scope="col">Status</th>
+        <th scope="col">Priority Score</th>
+        <th scope="col">Rank Preference</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% values.forEach(value => { %>
+        <tr>
+          <td><%= value.mod_code %></td>
+          <td><%= value.mod_name %></td>
+          <td><%= value.sem %></td>
+          <td><%= value.day %></td>
+          <td><%= value.s_time_lect %></td>
+          <td><%= value.e_time_lect %></td>
+          <td><%= value.quota %></td>
+          <td><%= value.s_time_round %></td>
+          <td><%= value.e_time_round %></td>
+          <td><%= value.s_username %></td>
+          <td><%= value.status %></td>
+          <td><%= value.priority_score %></td>
+          <td><%= value.rank_pref %></td>
+          <td></td>
+        </tr>
+      <% }); %>
+      </tbody>
+    </table>
   </div>
   <div class="form-group">
     <button type="submit" class="btn btn-primary"
-            onclick="window.location.href='../prereq'">Previous</button>
+            onclick="window.location.href='../past_rounds'">Previous</button>
   </div>
   <div class="form-group">
     <button type="submit" class="btn btn-primary"
@@ -224,34 +246,14 @@
   <script>
     (function() {
       window.addEventListener('load', function() {
-        <% if (parents.length === 0) { %>
-        document.getElementById('div-prereqs').style.display = "none";
-        document.getElementById('div-no-prereqs').style.display = "block";
+        <% if (values.length === 0) { %>
+        document.getElementById('div-registrations').style.display = "none";
+        document.getElementById('div-no-registrations').style.display = "block";
         <% } else { %>
-        document.getElementById('div-prereqs').style.display = "block";
-        document.getElementById('div-no-prereqs').style.display = "none";
+        document.getElementById('div-registrations').style.display = "block";
+        document.getElementById('div-no-registrations').style.display = "none";
         <% } %>
       });
     })();
-  </script>
-  <script>
-    window.onmousedown = function (event) {
-      var eventTarget = event.target;
-      if (eventTarget.tagName.toLowerCase() === 'option' &&
-              eventTarget.parentNode.hasAttribute('multiple')) {
-        event.preventDefault();
-
-        // toggle selection
-        if (eventTarget.hasAttribute('selected')) {
-          eventTarget.removeAttribute('selected');
-        } else {
-          eventTarget.setAttribute('selected', '');
-        }
-
-        // hack to correct buggy behavior
-        var select = eventTarget.parentNode.cloneNode(true);
-        eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
-      }
-    }
   </script>
 </html>

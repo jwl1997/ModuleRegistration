@@ -15,21 +15,28 @@ var err_msg = "";
 
 /* GET Admin Dashboard Page */
 router.get('/', function(req, res, next) {
-	pool.query(sql.query.load_admin_dashboard, [req.session.username], (err, values) => {
-		if (req.session.s_time_round !== ''){
-			round_start = true;
+	pool.query(sql.query.load_rounds, (err, rounds) => {
+		if (err) {
+			unknownError(err, res);
 		} else {
-			round_start = false;
+			pool.query(sql.query.load_admin_dashboard, [req.session.username], (err, values) => {
+				if (req.session.s_time_round !== ''){
+					round_start = true;
+				} else {
+					round_start = false;
+				}
+				console.log(round_start);
+				res.render('dashboard_admin', {
+					title: 'Dashboard - Admin',
+					values: values.rows,
+					username: req.session.username,
+					password: req.session.password,
+					role: req.session.role,
+					rounds: rounds.rows,
+					err_msg: err_msg
+				});
+			});
 		}
-		console.log(round_start)
-		res.render('dashboard_admin', {
-			title: 'Dashboard - Admin',
-			values: values.rows,
-			username: req.session.username,
-			password: req.session.password,
-			role: req.session.role,
-			err_msg: err_msg
-		});
 	});
 });
 
@@ -146,5 +153,10 @@ router.get('/allocate', function (req, res) {
 	});
 
 })
+
+function unknownError(err, res) {
+	console.error('Something went wrong', err);
+	return res.redirect('/dashboard_admin?load_program=fail');
+}
 
 module.exports = router;
