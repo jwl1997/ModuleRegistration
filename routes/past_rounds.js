@@ -29,8 +29,11 @@ router.get('/', function(req, res) {
                 return res.render('past_rounds', {
                     title: 'Past Rounds',
                     past_rounds: past_rounds,
+                    role: req.session.role,
+                    username: req.session.username,
                     values: values,
-                    selected_round: selected_round
+                    selected_round: selected_round,
+
                 });
             }
         });
@@ -48,7 +51,9 @@ router.get('/', function(req, res) {
             title: 'Past Rounds',
             past_rounds: past_rounds,
             values: values,
-            selected_round: selected_round
+            selected_round: selected_round,
+                role: req.session.role,
+                username: req.session.username
       });
     }
 	});

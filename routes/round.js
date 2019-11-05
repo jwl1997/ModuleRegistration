@@ -14,6 +14,8 @@ router.get('/', function(req, res, next) {
 		} else {
 			res.render('round', {
 				title: 'Round',
+				role: req.session.role,
+				username: req.session.username,
 				rounds: rounds.rows
 			});
 		}

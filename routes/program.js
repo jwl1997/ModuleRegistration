@@ -28,7 +28,10 @@ router.get('/', function(req, res, next) {
       res.render('program', {
         title: 'Program',
         programs: programs.rows,
-        modules: modules.rows
+          role: req.session.role,
+        username: req.session.username,
+        modules: modules.rows,
+
       });
     }
   });

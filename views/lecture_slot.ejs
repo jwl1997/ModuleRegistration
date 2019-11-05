@@ -48,7 +48,7 @@
     </a>
 
     <li class="nav-item">
-      <!--      TODO: Add username -->
+      <h4 style="color: white;"><%= username %></h4>
     </li>
 
     <!-- Nav Item - Dashboard -->
@@ -57,12 +57,12 @@
         <span style="font-size: 1.0em;">Dashboard</span></a>
     </li>
 
-    <!-- Nav Item - Programmes -->
-    <li class="nav-item nav-admin">
-      <a class="nav-link" href="program">
-        <span style="font-size: 1.0em;">Programmes</span></a>
-    </li>
-
+    <div class="stu-nav-hide1">
+      <!-- Nav Item - Programmes -->
+      <li class="nav-item" >
+        <a class="nav-link" href="program"><span style="font-size: 1.0em;">Programmes</span></a>
+      </li>
+    </div>
 
     <!-- Nav Item - Modules -->
     <li class="nav-item">
@@ -70,35 +70,47 @@
         <span style="font-size: 1.0em;">Modules</span></a>
     </li>
 
-    <!-- Nav Item - Lecture Slot -->
-    <li class="nav-item nav-admin">
-      <a class="nav-link" href="lecture_slot">
-        <span style="font-size: 1.0em;">Lecture Slot</span></a>
-    </li>
 
-    <!-- Nav Item - Prerequisites -->
-    <li class="nav-item nav-admin">
-      <a class="nav-link" href="prereq">
-        <span style="font-size: 1.0em;">Prerequisites</span></a>
-    </li>
+    <div class="stu-nav-hide2">
+      <!-- Nav Item - Lecture Slot -->
+      <li class="nav-item">
+        <a class="nav-link" href="lecture_slot">
+          <span style="font-size: 1.0em;">Lecture Slot</span></a>
+      </li>
 
-    <!-- Nav Item - Round -->
-    <li class="nav-item nav-admin">
-      <a class="nav-link" href="round">
-        <span style="font-size: 1.0em;">Round</span></a>
-    </li>
 
-    <!-- Nav Item - Appeal -->
-    <li class="nav-item nav-admin" >
-      <a class="nav-link" href="appeal">
-        <span style="font-size: 1.0em;">Appeal</span></a>
-    </li>
+      <!-- Nav Item - Prerequisites -->
+      <li class="nav-item">
+        <a class="nav-link" href="prereq">
+          <span style="font-size: 1.0em;">Prerequisites</span></a>
+      </li>
 
-    <!-- Nav Item - register_module -->
-    <li class="nav-item" >
-      <a class="nav-link" href="register_module">
-        <span style="font-size: 1.0em;">Register Module</span></a>
-    </li>
+      <!-- Nav Item - Round -->
+      <li class="nav-item">
+        <a class="nav-link" href="round">
+          <span style="font-size: 1.0em;">Round</span></a>
+      </li>
+
+      <!-- Nav Item - Past Rounds -->
+      <li class="nav-item" >
+        <a class="nav-link" href="past_rounds">
+          <span style="font-size: 1.0em;">Past Rounds</span></a>
+      </li>
+
+      <!-- Nav Item - Appeal -->
+      <li class="nav-item" >
+        <a class="nav-link" href="appeal">
+          <span style="font-size: 1.0em;">Appeal</span></a>
+      </li>
+    </div>
+
+    <div class="adm-nav-hide1">
+      <!-- Nav Item - register_module -->
+      <li class="nav-item" >
+        <a class="nav-link" href="register_module">
+          <span style="font-size: 1.0em;">Register Module</span></a>
+      </li>
+    </div>
 
     <li class="nav-item">
       <div class="form-group">
@@ -152,43 +164,49 @@
       </div>
       <div class="form-group">
         <label style="font-weight:bold;font-size:larger;">Lecture Slot Info</label>
-        <div class="form-group" id="div-sem">
-          <label for="sem">Semester</label>
-          <select class="form-control" id="sem" name="sem" required="required">
-            <option value="" disabled="disabled" selected="selected">Select Semester</option>
-            <option value="1">Semester 1</option>
-            <option value="2">Semester 2</option>
-          </select>
+        <div class="form-row">
+          <div class="form-group col" id="div-sem">
+            <label for="sem">Semester</label>
+            <select class="form-control" id="sem" name="sem" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Semester</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+            </select>
+          </div>
+          <div class="form-group col">
+            <label for="day">Lecture Day</label>
+            <select class="form-control" id="day" name="day" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+            </select>
+          </div>
+          <div class="form-group col">
+            <label for="quota">Lecture Quota</label>
+            <input type="number" class="form-control" id="quota" name="quota"
+                   placeholder="Enter Lecture Quota" required="required">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="day">Lecture Day</label>
-          <select class="form-control" id="day" name="day" required="required">
-            <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-          </select>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="start_time">Lecture Start Time</label>
+            <input type="time" class="form-control" id="start_time"
+                   name="start_time" required="required">
+          </div>
+          <div class="form-group col">
+            <label for="end_time">Lecture End Time</label>
+            <input type="time" class="form-control" id="end_time"
+                   name="end_time" required="required">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="start_time">Lecture Start Time</label>
-          <input type="time" class="form-control" id="start_time"
-                 name="start_time" required="required">
-        </div>
-        <div class="form-group">
-          <label for="end_time">Lecture End Time</label>
-          <input type="time" class="form-control" id="end_time"
-                 name="end_time" required="required">
-        </div>
-        <div class="form-group">
-          <label for="quota">Lecture Quota</label>
-          <input type="number" class="form-control" id="quota" name="quota"
-                 placeholder="Enter Lecture Quota" required="required">
-        </div>
+
       </div>
       <div>
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <button type="submit" class="btn btn-info">Submit</button>
       </div>
     </form>
   </div>
@@ -219,8 +237,8 @@
           <td><%= lecture.quota %></td>
           <td>
             <!-- TODO: Add functionality for the DELETE button to delete the row -->
-            <input type="button" id="btn-delete-lecture" value="Delete"/>
-            <input type="button" id="btn-update-lecture" value="Update"/>
+            <input class="btn btn-danger" type="button" id="btn-delete-lecture" value="Delete"/>
+            <input class="btn btn-success" type="button" id="btn-update-lecture" value="Update"/>
           </td>
         </tr>
         <% j++; %>
@@ -404,4 +422,21 @@
       }
     }
   </script>
+
+
+<script>
+  (function() {
+    window.addEventListener('load', function() {
+      var roleType = "<%= role %>";
+      if (roleType === 'Student') {
+        document.getElementsByClassName('stu-nav-hide1')[0].remove();
+        document.getElementsByClassName('stu-nav-hide2')[0].remove();
+      }
+
+      if (roleType === 'Admin') {
+        document.getElementsByClassName('adm-nav-hide1')[0].remove();
+      }
+    });
+  })();
+</script>
 </html>
