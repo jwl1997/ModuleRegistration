@@ -15,6 +15,8 @@ router.get('/', function(req, res, next) {
 			res.render('module', {
 				title: 'Module',
 				modules: modules.rows,
+				role: req.session.role,
+				username: req.session.username
 			});
 		}
 	});

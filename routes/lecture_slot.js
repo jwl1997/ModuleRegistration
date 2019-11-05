@@ -32,7 +32,9 @@ router.get('/', function(req, res, next) {
       res.render('lecture_slot', {
         title: 'Lecture Slot',
         modules: modules.rows,
-        lectures: lectures.rows
+        lectures: lectures.rows,
+        role: req.session.role,
+        username: req.session.username
       });
     }
   });
