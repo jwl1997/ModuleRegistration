@@ -76,21 +76,51 @@
                     <label id="login_failed" name="login_failed" style="display:none;">Login unsuccessful</label>
                   </div>
 
-                  <div class="text-center">
+                  <div class="form-group text-center">
                     <a class="small" href="register">Create an Account!</a>
                   </div>
-                  <div>
+                  <div class="form-group text-center">
                     <button type="submit" class="btn btn-primary btn-user btn-block">Login <i class="fas fa-sign-in-alt"></i></button>
                   </div>
-
-                  <div class="form-group">
-                    <% if(round_time_err !== ""){ %>
-                      <label style="color: #721c24"><%= round_time_err%></label>
-                    <% } else{ %>
-                      <label></label>
-                    <% } %>
-                  </div>
                 </form>
+
+                <div class="form-group text-center">
+                  <% if (Boolean(role_mismatch)) { %>
+                    <label style="color: #721c24">Login failed. Mismatched role.</label>
+                  <% } else { %>
+                    <label></label>
+                  <% } %>
+                  <% if (Boolean(data_undefined)) { %>
+                    <label style="color: #721c24">Login failed. Undefined data.</label>
+                  <% } else { %>
+                    <label></label>
+                  <% } %>
+                  <% if (Boolean(password_mismatch)) { %>
+                    <label style="color: #721c24">Login failed. Mismatched password.</label>
+                  <% } else { %>
+                    <label></label>
+                  <% } %>
+                  <% if (Boolean(user_not_exist)) { %>
+                    <label style="color: #721c24">Login failed. No such user.</label>
+                  <% } else { %>
+                    <label></label>
+                  <% } %>
+                  <% if (Boolean(unknown)) { %>
+                    <label style="color: #721c24">Login failed. Something went wrong.</label>
+                  <% } else { %>
+                    <label></label>
+                  <% } %>
+                  <% if (Boolean(no_role)) { %>
+                    <label style="color: #721c24">Login failed. No such role.</label>
+                  <% } else { %>
+                    <label></label>
+                  <% } %>
+                  <% if (round_time_err !== "") { %>
+                    <label style="color: #721c24"><%= round_time_err %></label>
+                  <% } else { %>
+                    <label></label>
+                  <% } %>
+                </div>
               </div>
             </div>
           </div>
