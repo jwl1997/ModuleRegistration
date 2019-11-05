@@ -8,12 +8,14 @@ sql.query = {
   get_round_time: 'SELECT * FROM Rounds WHERE (s_time_round < now() AND e_time_round > now()) ORDER BY s_time_round LIMIT 1',
 
   add_user: 'INSERT INTO Users (username, password) VALUES ($1, $2)',
-  add_student: 'INSERT INTO Students (s_username, seniority) VALUES ($1, $2)',
+  add_student: 'INSERT INTO Students (s_username, seniority, prog_name) VALUES ($1, $2, $3)',
   add_admin: 'INSERT INTO Admins (a_username) VALUES ($1)',
 
-  load_admin_dashboard: 'SELECT M.mod_code, M.mod_name, L.sem, L.day, L.s_time_lect, L.e_time_lect, L.quota,' +
-    ' R.s_time_round, R.e_time_round FROM Modules M NATURAL JOIN LectureSlots L NATURAL JOIN Register R WHERE now()' +
-    ' > R.s_time_round AND now() < e_time_round AND M.a_username = $1',
+  load_admin_dashboard: 'SELECT R.mod_code, M.mod_name, R.sem, R.day, R.s_time_lect, R.e_time_lect, ' +
+    'L.quota, R.s_time_round, R.e_time_round, R.s_username, R.status, R.priority_score, R.rank_pref ' +
+    'FROM Modules M NATURAL JOIN LectureSlots L NATURAL JOIN Register R ' +
+    'WHERE now() > R.s_time_round AND now() > R.e_time_round AND M.a_username = $1 ' +
+    'ORDER BY mod_code, sem, day, s_time_lect, e_time_lect, s_username',
 
   load_programs: 'SELECT prog_name FROM Programs',
   add_program: 'INSERT INTO Programs (prog_name) VALUES ($1)',
@@ -30,6 +32,8 @@ sql.query = {
 
   load_rounds: 'SELECT s_time_round, e_time_round FROM Rounds ORDER BY s_time_round, e_time_round ASC',
   add_round: 'INSERT INTO Rounds (s_time_round, e_time_round) VALUES ($1, $2)',
+  load_past_rounds: 'SELECT s_time_round, e_time_round FROM Rounds WHERE e_time_round < now() ORDER BY s_time_round,' +
+    ' e_time_round ASC',
 
   auth_prereq: 'SELECT EXISTS (SELECT * FROM Prereq WHERE parent = $1 AND child = $2)',
   load_prereqs: 'SELECT child, parent FROM Prereq ORDER BY (child, parent) ASC',
@@ -55,6 +59,12 @@ sql.query = {
     ' R.sem AND L.day = R.day AND L.s_time_lect = R.s_time_lect AND L.e_time_lect = R.e_time_lect AND s_username = $1)',
   update_register: 'UPDATE Register SET status = $1 WHERE (mod_code = $2 AND sem = $3 AND day = $4 AND' +
     ' s_time_lect = $5 AND e_time_lect = $6 AND s_username = $7)',
+  load_selected_register: 'SELECT R.mod_code, M.mod_name, R.sem, R.day, R.s_time_lect, R.e_time_lect, ' +
+    'L.quota, R.s_time_round, R.e_time_round, R.s_username, R.status, R.priority_score, R.rank_pref ' +
+    'FROM Modules M NATURAL JOIN LectureSlots L NATURAL JOIN Register R ' +
+    'WHERE s_time_round = $1 AND e_time_round = $2 AND M.a_username = $3 ' +
+    'ORDER BY mod_code, sem, day, s_time_lect, e_time_lect, s_username',
+
 
   load_prev_takes: 'SELECT * FROM Takes WHERE grade <> "IP" AND s_username = $1 ORDER BY mod_code ASC',
   load_current_takes: 'SELECT * FROM Takes WHERE has_completed = FALSE AND s_username = $1 ORDER BY mod_code ASC',

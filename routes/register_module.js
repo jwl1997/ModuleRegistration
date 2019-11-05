@@ -105,15 +105,12 @@ router.get('/save', function (req, res){
 	pool.query(query, [current_user,current_round_start_time,current_round_end_time,lecture_slot.day,lecture_slot.s_time_lect,lecture_slot.e_time_lect,current_sem,selected_mod_code], (err, data) => {
 		if (err) {
 			console.log(err);
+			err_add = "Fail to register the module. " + err;
 			selected_mod_code = 'Select Module';
 			selected_mod_name = '';
 			res.redirect('/register_module');
 		} else {
-			console.log("insert register");
 			console.log(data);
-			if(data.rowCount == 0){
-				err_add = "Fail to register the module. The lecture slot may be full, or you may already have registered another lecture slot for this module."
-			}
 			selected_mod_code = 'Select Module';
 			selected_mod_name = '';
 			res.redirect('/register_module');
