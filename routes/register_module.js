@@ -49,6 +49,7 @@ router.get('/',function (req, res, next) {
 router.get('/',function (req, res, next) {
 	const query = "SELECT mod_code, mod_name FROM Modules M WHERE NOT EXISTS (SELECT 1 FROM Takes T WHERE T.s_username = $1 AND T.mod_code = M.mod_code AND T.has_completed = true) AND NOT EXISTS (SELECT 1 FROM Register R WHERE R.s_username = $1  AND R.mod_code = M.mod_code AND R.status = 'Success') AND (SELECT COUNT(*) FROM Prereq P WHERE P.child = M.mod_code) = (SELECT COUNT(*) FROM Prereq P JOIN Takes T ON P.parent = T.mod_code WHERE P.child = mod_code AND T.s_username = $1 ) AND (SELECT COUNT(*) FROM LectureSlots L WHERE M.mod_code = L.mod_code AND L.sem = $2) > 0";
 	pool.query(query, [current_user,current_sem], (err, data) => {
+		console.log(data)
 		if(data.rowCount !== 0) {
 			modules = data.rows;
 		} else {

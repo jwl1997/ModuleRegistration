@@ -161,7 +161,6 @@
               <th scope="col">Quota</th>
               <th scope="col">Rank Preference</th>
               <th scope="col">Status</th>
-              <th scope="col">Prerequisites</th>
               <th scope="col">Action</th>
             </tr>
             </thead>
@@ -181,7 +180,6 @@
                 <td><%= lecture.quota %></td>
                 <td><%= lecture.rank_pref %></td>
                 <td><%= lecture.status %></td>
-                <td>Prereq</td>
                 <% if (lecture.status === 'Success') { %>
                   <td>No action required</td>
                 <% } else if (lecture.status === 'Fail') { %>
