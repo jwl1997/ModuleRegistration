@@ -28,7 +28,9 @@ router.get('/', function(req, res, next) {
       res.render('prereq', {
         title: 'Prerequisite',
         children: modules.rows,
-        prereqs: p.rows
+        prereqs: p.rows,
+        username: req.session.username,
+        role: req.session.role
       });
     }
   });

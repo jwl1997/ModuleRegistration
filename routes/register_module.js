@@ -63,7 +63,7 @@ router.get('/',function (req, res) {
 	if(lecture_slots == undefined){
 		lecture_slots = [];
 	}
-	res.render('register_module', { title: 'Register Module', modules: modules, register_list: register_list, lecture_slots: lecture_slots, selected_mod_code: selected_mod_code, selected_mod_name:selected_mod_name, err_msg:err_msg, err_add:err_add });
+	res.render('register_module', { title: 'Register Module', role: req.session.role, username: req.session.username,  modules: modules, register_list: register_list, lecture_slots: lecture_slots, selected_mod_code: selected_mod_code, selected_mod_name:selected_mod_name, err_msg:err_msg, err_add:err_add });
 })
 
 router.get('/add_module',function (req, res) {

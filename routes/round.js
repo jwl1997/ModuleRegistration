@@ -21,7 +21,9 @@ router.get('/', function(req, res, next) {
 			}
 			res.render('round', {
 				title: 'Round',
-				rounds: rounds
+				rounds: rounds,
+				role: req.session.role,
+				username: req.session.username
 			});
 		}
 	});

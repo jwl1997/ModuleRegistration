@@ -107,10 +107,42 @@
     <div class="form-group text-center">
       <a class="d-block small mt-3" href="/login">Return to login</a>
     </div>
-    <div>
+    <div class="form-group text-center">
       <button type="submit" class="btn btn-primary btn-block">Submit</button>
     </div>
   </form>
+  <div class="form-group text-center">
+    <% if (Boolean(data_undefined)) { %>
+      <label style="color: #721c24">Register failed. Data is undefined.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(password_hash)) { %>
+      <label style="color: #721c24">Register failed. Unable to generate hashed password.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(insert_database)) { %>
+      <label style="color: #721c24">Register failed. Unable to insert into database.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(no_role)) { %>
+      <label style="color: #721c24">Register failed. No such role.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(unknown)) { %>
+      <label style="color: #721c24">Register failed. Something went wrong.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(user_already_exist)) { %>
+      <label style="color: #721c24">Register failed. User already exists in database.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+  </div>
               </div>
             </div>
           </div>

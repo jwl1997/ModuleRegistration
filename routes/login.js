@@ -22,7 +22,16 @@ let round_time_err = "";
 
 /* GET Login Page*/
 router.get('/', function(req, res, next) {
-  res.render('login', { title: 'Module Registration System',round_time_err:round_time_err });
+  res.render('login', {
+    title: 'Module Registration System',
+    round_time_err: round_time_err,
+    role_mismatch: req.query.role_mismatch,
+    data_undefined: req.query.data_undefined,
+    password_mismatch: req.query.password_mismatch,
+    user_not_exist: req.query.user_not_exist,
+    unknown: req.query.unknown,
+    no_role: req.query.no_role
+  });
 });
 
 router.post('/', function(req, res, next) {
@@ -33,7 +42,7 @@ router.post('/', function(req, res, next) {
     if (err) {
       unknownError(err, res);
     } else if (!data.rows[0].exists) {
-      userNotExistsError(res);
+      userNotExistError(res);
     } else {
       next();
     }
@@ -85,7 +94,7 @@ router.post('/', function(req, res, next) {
             console.info(req.session);
             if(data.rows[0] === undefined){
               round_time_err = "You can not log in to this module registration system at this time. Please wait until the next registration round starts."
-              console.log(round_time_err)
+              console.log(round_time_err);
               return res.redirect('/login');
             }
             req.session.s_time_round = data.rows[0].s_time_round;
@@ -142,7 +151,7 @@ router.post('/', function(req, res, next) {
 
 function dataUndefinedError(res) {
   console.error('Data is undefined');
-  return res.redirect('/login?undefined=fail');
+  return res.redirect('/login?data_undefined=fail');
 }
 
 function roleMismatchError(comment, res) {
@@ -157,17 +166,17 @@ function passwordMismatchError(res) {
 
 function noRoleError(res) {
   console.error('Role is neither a Student nor an Admin');
-  return res.redirect('/login?role=fail');
+  return res.redirect('/login?no_role=fail');
 }
 
 function unknownError(err, res) {
   console.error('Something went wrong', err);
-  return res.redirect('/login?login=fail');
+  return res.redirect('/login?unknown=fail');
 }
 
-function userNotExistsError(res) {
+function userNotExistError(res) {
   console.info('User does not exist in database');
-  return res.redirect('/login?exists=fail');
+  return res.redirect('/login?user_not_exist=fail');
 }
 
 module.exports = router;

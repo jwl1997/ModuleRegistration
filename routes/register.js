@@ -17,6 +17,12 @@ router.get('/', function(req, res, next) {
       res.render('register', {
         title: 'Register',
         programs: data.rows,
+        data_undefined: req.query.data_undefined,
+        password_hash: req.query.password_hash,
+        insert_database: req.query.insert_database,
+        no_role: req.query.no_role,
+        unknown: req.query.unknown,
+        user_already_exist: req.query.user_already_exist
       });
     }
   });
@@ -105,22 +111,22 @@ router.post('/', function(req, res, next) {
 
 function dataUndefinedError(res) {
   console.error('Data is undefined');
-  return res.redirect('/register?undefined=fail');
+  return res.redirect('/register?data_undefined=fail');
 }
 
 function hashFailedError(err, res) {
   console.error('Hash failed');
-  return res.redirect('/register?hash=fail');
+  return res.redirect('/register?password_hash=fail');
 }
 
 function insertError(databaseName, err, res) {
   console.error('Unable to insert into ' + databaseName, err);
-  return res.redirect('/register?insert=fail');
+  return res.redirect('/register?insert_database=fail');
 }
 
 function noRoleError(res) {
   console.error('Role is neither a Student nor an Admin');
-  return res.redirect('/register?role=fail');
+  return res.redirect('/register?no_role=fail');
 }
 
 function unknownError(err, res) {
@@ -130,7 +136,7 @@ function unknownError(err, res) {
 
 function userExistsError(res) {
   console.info('User already exists in database');
-  return res.redirect('/register?exists=fail');
+  return res.redirect('/register?user_already_exist=fail');
 }
 
 module.exports = router;

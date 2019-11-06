@@ -164,7 +164,7 @@ router.get('/allocate', function (req, res) {
 
 function unknownError(err, res) {
 	console.error('Something went wrong', err);
-	return res.redirect('/dashboard_admin?load_program=fail');
+	return res.redirect('/dashboard_admin?load_rounds=fail');
 }
 
 module.exports = router;

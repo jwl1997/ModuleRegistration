@@ -25,12 +25,19 @@ router.get('/', function(req, res) {
             } else {
                 console.log(data)
                 values = data.rows;
+                for (let i=0; i<values.length; i++){
+                    values[i].s_time_round = new Date(values[i].s_time_round).toLocaleString();
+                    values[i].e_time_round = new Date(values[i].e_time_round).toLocaleString();
+                }
                 reload = false;
                 return res.render('past_rounds', {
                     title: 'Past Rounds',
                     past_rounds: past_rounds,
+                    role: req.session.role,
+                    username: req.session.username,
                     values: values,
-                    selected_round: selected_round
+                    selected_round: selected_round,
+
                 });
             }
         });
@@ -48,7 +55,9 @@ router.get('/', function(req, res) {
             title: 'Past Rounds',
             past_rounds: past_rounds,
             values: values,
-            selected_round: selected_round
+            selected_round: selected_round,
+                role: req.session.role,
+                username: req.session.username
       });
     }
 	});

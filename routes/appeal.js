@@ -15,6 +15,8 @@ router.get('/', function(req, res, next) {
       res.render('appeal', {
         title: 'Appeal',
         appeals: appeals.rows,
+        role: req.session.role,
+        username: req.session.username
       });
     }
   });
