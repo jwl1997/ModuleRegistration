@@ -99,7 +99,7 @@
         <option value="" disabled="disabled" selected="selected">Select Program</option>
         <% programs.forEach(program => { %>
           <option value="<%= program.prog_name %>">
-            <%= program.prog_name %> <%= program.prog_name %>
+            <%= program.prog_name %>
           </option>
         <% }); %>
       </select>
@@ -142,6 +142,11 @@
     <% } else { %>
       <label></label>
     <% } %>
+      <% if (success) { %>
+        <label style="color: #4e73df">Successfully registered. You can now login.</label>
+      <% } else { %>
+        <label></label>
+      <% } %>
   </div>
               </div>
             </div>
