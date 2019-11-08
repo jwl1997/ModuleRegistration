@@ -8,6 +8,7 @@ const pool = new Pool({
 });
 
 let enrolledLectures;
+let registeredLectures;
 
 router.get('/', function(req, res, next) {
 	console.log("time")
@@ -17,24 +18,33 @@ router.get('/', function(req, res, next) {
 		if (err) {
 			unknownError(err, res);
 		} else {
-			enrolledLectures = data;
+			enrolledLectures = data.rows;
+			for (let i=0; i<enrolledLectures.length; i++){
+				enrolledLectures[i].s_time_round = new Date(enrolledLectures[i].s_time_round).toLocaleString();
+				enrolledLectures[i].e_time_round = new Date(enrolledLectures[i].e_time_round).toLocaleString();
+			}
 			next();
 		}
 	});
 });
 
 router.get('/', function(req, res, next) {
-	pool.query(sql.query.load_register, [req.session.username], (err, registeredLectures) => {
+	pool.query(sql.query.load_register, [req.session.username], (err, data) => {
 		if (err) {
 			unknownError(err, res);
 		} else {
+			registeredLectures = data.rows;
+			for (let i=0; i<registeredLectures.length; i++){
+				registeredLectures[i].s_time_round = new Date(registeredLectures[i].s_time_round).toLocaleString();
+				registeredLectures[i].e_time_round = new Date(registeredLectures[i].e_time_round).toLocaleString();
+			}
 			res.render('dashboard_student', {
 				title: 'Dashboard - Student',
 				username: req.session.username,
 				password: req.session.password,
 				role: req.session.role,
-				registeredLectures: registeredLectures.rows,
-				enrolledLectures: enrolledLectures.rows
+				registeredLectures: registeredLectures,
+				enrolledLectures: enrolledLectures
 			});
 		}
 	});

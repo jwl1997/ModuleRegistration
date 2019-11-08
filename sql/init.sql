@@ -211,7 +211,7 @@ INSERT INTO Require VALUES ('Business Analytics', 'CS2040');
 INSERT INTO Rounds VALUES ('2016-06-22 19:10:25', '2016-06-23 19:10:25');
 INSERT INTO Rounds VALUES ('2016-06-24 19:10:25', '2016-06-25 19:10:25');
 INSERT INTO Rounds VALUES ('2016-06-27 19:10:25', '2016-06-28 19:10:25');
---INSERT INTO Rounds VALUES ('2019-10-30 09:00:00', '2019-11-05 17:00:00');
+INSERT INTO Rounds VALUES ('2019-10-30 09:00:00', '2019-11-07 17:00:00');
 
 INSERT INTO LectureSlots VALUES ('Monday', '10:00:00', '13:00:00', 1, 'CS1010', 5);--4 people bidding, n1, quota left 1
 INSERT INTO LectureSlots VALUES ('Tuesday', '11:00:00', '14:00:00', 1, 'CS1010', 4);--4 people bidding, n2, quota left 0
@@ -246,7 +246,7 @@ INSERT INTO Register VALUES (3, 1, 'Result Pending', 'e0191333', '2016-06-22 19:
 --score: 3*(10-2)*10 = 240, success
 INSERT INTO Register VALUES (2, 1, 'Result Pending', 'e0191337', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Tuesday', '11:00:00', '14:00:00', 1, 'CS1010');
 --score: 2*(10-4)*10 = 120, success
-INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191335', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Tuesday', '11:00:00', '14:00:00', 1, 'CS1010');
+INSERT INTO Register VALUES (4, 1, 'Fail', 'e0191335', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Tuesday', '11:00:00', '14:00:00', 1, 'CS1010');
 
 --n3
 --not the current semester, pending
@@ -260,7 +260,7 @@ INSERT INTO Register VALUES (1, 1, 'Result Pending', 'e0191334', '2016-06-22 19:
 --score 4*(10-8)*1 = 8, fail
 INSERT INTO Register VALUES (8, 1, 'Result Pending', 'e0191339', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Thursday', '13:00:00', '16:00:00', 1, 'CS2102');
 --score 2*(10-1)*10=180, success
-INSERT INTO Register VALUES (1, 1, 'Result Pending', 'e0191335', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Thursday', '13:00:00', '16:00:00', 1, 'CS2102');
+INSERT INTO Register VALUES (1, 1, 'Result Pending', 'e0191335', '2019-10-30 09:00:00', '2019-11-07 17:00:00', 'Thursday', '13:00:00', '16:00:00', 1, 'CS2102');
 --score 3*(10-1)*10=270, success
 INSERT INTO Register VALUES (1, 1, 'Result Pending', 'e0191337', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Thursday', '13:00:00', '16:00:00', 1, 'CS2102');
 --n5, no bidding
@@ -280,7 +280,6 @@ INSERT INTO Register VALUES (1, 1, 'Result Pending', 'e0191336', '2016-06-22 19:
 INSERT INTO Register VALUES (1, 1, 'Result Pending', 'e0191337', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Wednesday', '16:00:00', '19:00:00', 1, 'CS2030');
 --score 4*(10-9)*1 = 4, fail
 INSERT INTO Register VALUES (9, 1, 'Result Pending', 'e0191339', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Wednesday', '16:00:00', '19:00:00', 1, 'CS2030');
-
 --n9, not current sem, not regulated by this admin
 INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191331', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Wednesday', '17:00:00', '20:00:00', 2, 'CS2040');
 --n10, not regulate by this admin
@@ -290,16 +289,19 @@ INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191332', '2016-06-22 19:
 -- check if student has alr bid the module and insert register
 CREATE OR REPLACE FUNCTION not_register()
 RETURNS TRIGGER AS $$
-DECLARE count NUMERIC;
+DECLARE count1 NUMERIC;
+DECLARE count2 NUMERIC;
 BEGIN
-   SELECT COUNT(*) INTO count FROM Register R
-   WHERE R.s_username = NEW.s_username AND R.sem = NEW.sem AND R.mod_code = NEW.mod_code;
-   IF count > 0 THEN
-       RAISE EXCEPTION 'You have already registered this module.' USING ERRCODE='20808';
-       RETURN NULL;
-   ELSE
-       RETURN NEW;
-   END IF;
+    SELECT COUNT(*) INTO count1 FROM Register R
+    WHERE R.s_username = NEW.s_username AND R.sem = NEW.sem AND R.mod_code = NEW.mod_code AND R.s_time_round = NEW.s_time_round AND R.e_time_round = NEW.e_time_round;
+    SELECT COUNT(*) INTO count2 FROM Register R
+    WHERE R.s_username = NEW.s_username AND R.sem = NEW.sem AND R.mod_code = NEW.mod_code AND R.s_time_round < NEW.s_time_round AND R.e_time_round < NEW.e_time_round AND R.status = 'Success';
+    IF count1 + count2 > 0 THEN
+        RAISE EXCEPTION 'You have already registered for this module.' USING ERRCODE='20808';
+        RETURN NULL;
+    ELSE
+        RETURN NEW;
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
 

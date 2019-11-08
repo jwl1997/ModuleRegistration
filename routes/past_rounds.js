@@ -25,6 +25,10 @@ router.get('/', function(req, res) {
             } else {
                 console.log(data)
                 values = data.rows;
+                for (let i=0; i<values.length; i++){
+                    values[i].s_time_round = new Date(values[i].s_time_round).toLocaleString();
+                    values[i].e_time_round = new Date(values[i].e_time_round).toLocaleString();
+                }
                 reload = false;
                 return res.render('past_rounds', {
                     title: 'Past Rounds',

@@ -63,11 +63,11 @@
       </li>
     </div>
 
-    <!-- Nav Item - Modules -->
-    <li class="nav-item">
-      <a class="nav-link" href="module">
-        <span style="font-size: 1.0em;">Modules</span></a>
-    </li>
+<!--    &lt;!&ndash; Nav Item - Modules &ndash;&gt;-->
+<!--    <li class="nav-item">-->
+<!--      <a class="nav-link" href="module">-->
+<!--        <span style="font-size: 1.0em;">Modules</span></a>-->
+<!--    </li>-->
 
 
     <div class="stu-nav-hide2">
@@ -160,7 +160,6 @@
               <th scope="col">Quota</th>
               <th scope="col">Rank Preference</th>
               <th scope="col">Status</th>
-              <th scope="col">Prerequisites</th>
               <th scope="col">Action</th>
             </tr>
             </thead>
@@ -180,7 +179,6 @@
                 <td><%= lecture.quota %></td>
                 <td><%= lecture.rank_pref %></td>
                 <td><%= lecture.status %></td>
-                <td>Prereq</td>
                 <% if (lecture.status === 'Success') { %>
                   <td>No action required</td>
                 <% } else if (lecture.status === 'Fail') { %>
@@ -222,10 +220,10 @@
             </tbody>
           </table>
         </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary"
-                  onclick="window.location.href='register_module'">Register Module</button>
-        </div>
+<!--        <div class="form-group">-->
+<!--          <button type="submit" class="btn btn-primary"-->
+<!--                  onclick="window.location.href='register_module'">Register Module</button>-->
+<!--        </div>-->
         <!-- /.container-fluid -->
 
       </div>
