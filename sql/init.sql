@@ -190,7 +190,6 @@ INSERT INTO Modules VALUES ('ACC3604', 'Corporate and Securities Law', 'e0191330
 
 INSERT INTO Prereq VALUES ('CS1010', 'CS2030');
 INSERT INTO Prereq VALUES ('CS1010', 'CS2040');
-INSERT INTO Prereq VALUES ('CS2030', 'CS2102');
 INSERT INTO Prereq VALUES ('CS2040', 'CS2102');
 INSERT INTO Prereq VALUES ('CS1231', 'CS2102');
 INSERT INTO Prereq VALUES ('CS2030', 'CS2103T');
@@ -212,6 +211,7 @@ INSERT INTO Rounds VALUES ('2016-06-22 19:10:25', '2016-06-23 19:10:25');
 INSERT INTO Rounds VALUES ('2016-06-24 19:10:25', '2016-06-25 19:10:25');
 INSERT INTO Rounds VALUES ('2016-06-27 19:10:25', '2016-06-28 19:10:25');
 INSERT INTO Rounds VALUES ('2019-10-30 09:00:00', '2019-11-07 17:00:00');
+INSERT INTO Rounds VALUES ('2019-11-09 09:00:00', '2019-11-12 17:00:00');
 
 INSERT INTO LectureSlots VALUES ('Monday', '10:00:00', '13:00:00', 1, 'CS1010', 5);--4 people bidding, n1, quota left 1
 INSERT INTO LectureSlots VALUES ('Tuesday', '11:00:00', '14:00:00', 1, 'CS1010', 4);--4 people bidding, n2, quota left 0
@@ -246,7 +246,7 @@ INSERT INTO Register VALUES (3, 1, 'Result Pending', 'e0191333', '2016-06-22 19:
 --score: 3*(10-2)*10 = 240, success
 INSERT INTO Register VALUES (2, 1, 'Result Pending', 'e0191337', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Tuesday', '11:00:00', '14:00:00', 1, 'CS1010');
 --score: 2*(10-4)*10 = 120, success
-INSERT INTO Register VALUES (4, 1, 'Fail', 'e0191335', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Tuesday', '11:00:00', '14:00:00', 1, 'CS1010');
+INSERT INTO Register VALUES (4, 1, 'Result Pending', 'e0191335', '2016-06-22 19:10:25', '2016-06-23 19:10:25', 'Tuesday', '11:00:00', '14:00:00', 1, 'CS1010');
 
 --n3
 --not the current semester, pending
@@ -291,11 +291,18 @@ CREATE OR REPLACE FUNCTION not_register()
 RETURNS TRIGGER AS $$
 DECLARE count1 NUMERIC;
 DECLARE count2 NUMERIC;
+DECLARE count3 NUMERIC;
 BEGIN
     SELECT COUNT(*) INTO count1 FROM Register R
     WHERE R.s_username = NEW.s_username AND R.sem = NEW.sem AND R.mod_code = NEW.mod_code AND R.s_time_round = NEW.s_time_round AND R.e_time_round = NEW.e_time_round;
     SELECT COUNT(*) INTO count2 FROM Register R
     WHERE R.s_username = NEW.s_username AND R.sem = NEW.sem AND R.mod_code = NEW.mod_code AND R.s_time_round < NEW.s_time_round AND R.e_time_round < NEW.e_time_round AND R.status = 'Success';
+    SELECT COUNT(*) INTO count3 FROM Register R
+    WHERE R.s_username = NEW.s_username AND R.sem = NEW.sem AND R.mod_code = NEW.mod_code AND R.s_time_round < NEW.s_time_round AND R.e_time_round < NEW.e_time_round AND R.status = 'Appeal Pending';
+    IF count3 > 0 THEN
+        RAISE EXCEPTION 'You are currently appealing for this module. Please wait until your appeal result updated.' USING ERRCODE='20808';
+        RETURN NULL;
+    END IF;
     IF count1 + count2 > 0 THEN
         RAISE EXCEPTION 'You have already registered for this module.' USING ERRCODE='20808';
         RETURN NULL;
