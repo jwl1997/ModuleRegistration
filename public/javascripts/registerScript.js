@@ -13,7 +13,7 @@ function check(event) {
 		event.stopPropagation();
 		return false;
 	}
-	if (password.length < 10) {
+	if (password.length < 5) {
 		document.getElementById('password_invalid').style.display = "block";
 		event.preventDefault();
 		event.stopPropagation();

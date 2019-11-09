@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
       unknownError(err, res);
     } else {
       res.render('prereq', {
-        title: 'Prerequisite',
+        title: 'Prerequisites',
         children: modules.rows,
         prereqs: p.rows,
         username: req.session.username,
@@ -60,6 +60,7 @@ router.get('/select_child', function(req, res, next) {
           title: 'Prerequisite',
           child: child,
           parents: parents,
+          username: req.session.username
         });
       }
     }

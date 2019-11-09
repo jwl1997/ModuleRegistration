@@ -87,7 +87,7 @@
       <!-- Nav Item - Round -->
       <li class="nav-item">
         <a class="nav-link" href="round">
-          <span style="font-size: 1.0em;">Round</span></a>
+          <span style="font-size: 1.0em;">Rounds</span></a>
       </li>
 
       <!-- Nav Item - Past Rounds -->
@@ -99,7 +99,7 @@
       <!-- Nav Item - Appeal -->
       <li class="nav-item" >
         <a class="nav-link" href="appeal">
-          <span style="font-size: 1.0em;">Appeal</span></a>
+          <span style="font-size: 1.0em;">Appeals</span></a>
       </li>
 
     </div>
@@ -156,18 +156,20 @@
         <tr style="color: white;">
           <th scope="col">No.</th>
           <th scope="col">Programs</th>
+          <th scope="col">Mod Code</th>
+          <th scope="col">Mod Name</th>
         </tr>
         </thead>
         <tbody>
         <% let i = 1; %>
         <% programs.forEach(program => { %>
-          <% if (program.prog_name !== 'Unspecified') { %>
-            <tr>
-              <td><%= i %></td>
-              <td><%= program.prog_name %></td>
-            </tr>
-            <% i++; %>
-          <% } %>
+          <tr>
+            <td><%= i %></td>
+            <td><%= program.prog_name %></td>
+            <td><%= program.mod_code %></td>
+            <td><%= program.mod_name %></td>
+          </tr>
+          <% i++; %>
         <% }); %>
         </tbody>
       </table>
@@ -274,23 +276,19 @@
       }
     }
   </script>
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        var roleType = "<%= role %>";
+        if (roleType === 'Student') {
+          document.getElementsByClassName('stu-nav-hide1')[0].remove();
+          document.getElementsByClassName('stu-nav-hide2')[0].remove();
+        }
 
-
-<script>
-  (function() {
-    window.addEventListener('load', function() {
-      var roleType = "<%= role %>";
-      if (roleType === 'Student') {
-        document.getElementsByClassName('stu-nav-hide1')[0].remove();
-        document.getElementsByClassName('stu-nav-hide2')[0].remove();
-      }
-
-      if (roleType === 'Admin') {
-        document.getElementsByClassName('adm-nav-hide1')[0].remove();
-      }
-    });
-  })();
-</script>
-
-
+        if (roleType === 'Admin') {
+          document.getElementsByClassName('adm-nav-hide1')[0].remove();
+        }
+      });
+    })();
+  </script>
 </html>

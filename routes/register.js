@@ -37,8 +37,10 @@ router.post('/', function(req, res, next) {
   // Check if username exists
   pool.query(sql.query.auth_user, [username], (err, data) => {
     if (err) {
+      success = false;
       unknownError(err, res);
     } else if (data.rows[0].exists) {
+      success = false;
       userExistsError(res);
     } else {
       next();
