@@ -57,7 +57,9 @@ router.get('/allocate', function (req, res) {
 	admin = req.session.username;
 	last_s_time_round = new Date(req.session.last_s_time_round).toLocaleString();
 	last_e_time_round = new Date(req.session.last_e_time_round).toLocaleString();
-	const query1 = "CREATE VIEW X AS SELECT r1.*, s.seniority, CASE WHEN r1.mod_code IN (SELECT re.mod_code FROM Require re WHERE re.prog_name = s.prog_name) THEN 10 ELSE 1 END AS prog_req FROM Register r1 join Students s on r1.s_username = s.s_username WHERE r1.s_time_round = '" + last_s_time_round + "' AND r1.e_time_round = '" + last_e_time_round + "' AND r1.sem = "+sem+" AND r1.mod_code IN (SELECT m.mod_code FROM Modules m WHERE m.a_username = '" + admin + "')";
+	const query1 = "CREATE VIEW X AS SELECT r1.*, s.seniority, CASE WHEN r1.mod_code IN (SELECT re.mod_code FROM" +
+		" Require re WHERE re.prog_name = s.prog_name) THEN 10 ELSE 1 END AS prog_req FROM Register r1 join Students s" +
+		" on r1.s_username = s.s_username WHERE r1.s_time_round = '" + last_s_time_round + "' AND r1.e_time_round = '" + last_e_time_round + "' AND r1.sem = "+ sem +" AND r1.mod_code IN (SELECT m.mod_code FROM Modules m WHERE m.a_username = '" + admin + "')";
 	const query2 = 'UPDATE Register \n' +
 		'SET priority_score = (10 - X.rank_pref) * X.seniority * X.prog_req\n' +
 		'FROM X\n' +
@@ -123,30 +125,32 @@ router.get('/allocate', function (req, res) {
 	const query9 = 'DROP VIEW IF EXISTS Z';
 	const query10 = 'DROP VIEW IF EXISTS Y';
 	const query11 = 'DROP VIEW IF EXISTS X';
-	console.log(query1)
+	// console.log(query1)
 	pool.query(query1, (err, data) => {
-		console.log(err)
-		console.log(data)
+		// console.log(err)
+		// console.log(data)
 		pool.query(query2, (err, data) => {
-			console.log(data)
+			// console.log(data)
 			pool.query(query3, (err, data) => {
-				console.log(data)
+				// console.log(data)
 				pool.query(query4, (err, data) => {
-					console.log(data)
+					//console.log(data)
 					pool.query(query5, (err, data) => {
-						console.log(data)
+						//console.log(data)
 						pool.query(query6, (err, data) => {
+							console.log("query6\n")
+							console.log(err)
 							console.log(data)
 							pool.query(query7, (err, data) => {
-								console.log(data)
+								//console.log(data)
 								pool.query(query8, (err, data) => {
-									console.log(data)
+									//console.log(data)
 									pool.query(query9, (err, data) => {
-										console.log(data)
+										//console.log(data)
 										pool.query(query10, (err, data) => {
-											console.log(data)
+											//console.log(data)
 											pool.query(query11, (err,data) => {
-												console.log(data)
+												//console.log(data)
 												return res.redirect('/dashboard_admin');
 											})
 										});

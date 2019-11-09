@@ -17,6 +17,7 @@ sql.query = {
     'WHERE now() > R.s_time_round AND now() < R.e_time_round AND M.a_username = $1 ' +
     'ORDER BY R.mod_code, R.sem, R.day, R.s_time_lect, R.e_time_lect, R.status, R.s_username',
 
+  auth_program: 'SELECT EXISTS (SELECT prog_name FROM Programs WHERE prog_name = $1)',
   load_programs: 'SELECT prog_name FROM Programs',
   add_program: 'INSERT INTO Programs (prog_name) VALUES ($1)',
   delete_program: 'DELETE FROM Programs WHERE prog_name = $1',
@@ -40,6 +41,7 @@ sql.query = {
   add_prereq: 'INSERT INTO Prereq (parent, child) VALUES ($1, $2)',
   delete_prereq: 'DELETE FROM Prereq WHERE parent = $1 AND child = $2',
 
+  load_require: 'SELECT R.prog_name, R.mod_code, M.mod_name FROM Require R, Modules M WHERE R.mod_code = M.mod_code',
   add_require: 'INSERT INTO Require (prog_name, mod_code) VALUES ($1, $2)',
   delete_require: 'DELETE FROM Require WHERE mod_code = $1',
 
