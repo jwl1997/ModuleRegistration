@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 				rounds[i].e_time_round = new Date(rounds[i].e_time_round).toLocaleString();
 			}
 			res.render('round', {
-				title: 'Round',
+				title: 'Rounds',
 				rounds: rounds,
 				role: req.session.role,
 				username: req.session.username

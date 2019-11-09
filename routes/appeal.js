@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
       unknownError(err, res);
     } else {
       res.render('appeal', {
-        title: 'Appeal',
+        title: 'Appeals',
         appeals: appeals.rows,
         role: req.session.role,
         username: req.session.username
