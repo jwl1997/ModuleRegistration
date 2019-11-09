@@ -60,6 +60,7 @@ router.get('/select_child', function(req, res, next) {
           title: 'Prerequisite',
           child: child,
           parents: parents,
+          username: req.session.username
         });
       }
     }
