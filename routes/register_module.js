@@ -47,9 +47,14 @@ router.get('/',function (req, res, next) {
 })
 
 router.get('/',function (req, res, next) {
-	const query = "SELECT mod_code, mod_name FROM Modules M WHERE NOT EXISTS (SELECT 1 FROM Takes T WHERE T.s_username = $1 AND T.mod_code = M.mod_code AND T.has_completed = true) AND NOT EXISTS (SELECT 1 FROM Register R WHERE R.s_username = $1  AND R.mod_code = M.mod_code AND R.status = 'Success') AND (SELECT COUNT(*) FROM Prereq P WHERE P.child = M.mod_code) = (SELECT COUNT(*) FROM Prereq P JOIN Takes T ON P.parent = T.mod_code WHERE P.child = mod_code AND T.s_username = $1 )";
-	pool.query(query, [current_user], (err, data) => {
-		modules = data.rows;
+	const query = "SELECT mod_code, mod_name FROM Modules M WHERE NOT EXISTS (SELECT 1 FROM Takes T WHERE T.s_username = $1 AND T.mod_code = M.mod_code AND T.has_completed = true) AND NOT EXISTS (SELECT 1 FROM Register R WHERE R.s_username = $1  AND R.mod_code = M.mod_code AND R.status = 'Success') AND (SELECT COUNT(*) FROM Prereq P WHERE P.child = M.mod_code) = (SELECT COUNT(*) FROM Prereq P JOIN Takes T ON P.parent = T.mod_code WHERE P.child = mod_code AND T.s_username = $1 ) AND (SELECT COUNT(*) FROM LectureSlots L WHERE M.mod_code = L.mod_code AND L.sem = $2) > 0";
+	pool.query(query, [current_user,current_sem], (err, data) => {
+		console.log(data)
+		if(data.rowCount !== 0) {
+			modules = data.rows;
+		} else {
+			modules = [];
+		}
 		next();
 	});
 })
@@ -58,7 +63,7 @@ router.get('/',function (req, res) {
 	if(lecture_slots == undefined){
 		lecture_slots = [];
 	}
-	res.render('register_module', { title: 'Register Module', modules: modules, register_list: register_list, lecture_slots: lecture_slots, selected_mod_code: selected_mod_code, selected_mod_name:selected_mod_name, err_msg:err_msg, err_add:err_add });
+	res.render('register_module', { title: 'Register Module', role: req.session.role, username: req.session.username,  modules: modules, register_list: register_list, lecture_slots: lecture_slots, selected_mod_code: selected_mod_code, selected_mod_name:selected_mod_name, err_msg:err_msg, err_add:err_add });
 })
 
 router.get('/add_module',function (req, res) {
@@ -101,15 +106,12 @@ router.get('/save', function (req, res){
 	pool.query(query, [current_user,current_round_start_time,current_round_end_time,lecture_slot.day,lecture_slot.s_time_lect,lecture_slot.e_time_lect,current_sem,selected_mod_code], (err, data) => {
 		if (err) {
 			console.log(err);
+			err_add = "Fail to register the module. " + err;
 			selected_mod_code = 'Select Module';
 			selected_mod_name = '';
 			res.redirect('/register_module');
 		} else {
-			console.log("insert register");
 			console.log(data);
-			if(data.rowCount == 0){
-				err_add = "Fail to register the module. The lecture slot may be full, or you may already have registered another lecture slot for this module."
-			}
 			selected_mod_code = 'Select Module';
 			selected_mod_name = '';
 			res.redirect('/register_module');

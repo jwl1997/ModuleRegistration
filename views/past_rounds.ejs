@@ -32,37 +32,38 @@
 </head>
 <body id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
 
-  <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion align-items-center"  id="accordionSidebar">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion align-items-center"  id="accordionSidebar">
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center">
-      <div class="sidebar-brand-icon">
-        <img src="/img/regis_icon_1.png" width="50px" height="50px" class="img-responsive">
-      </div>
-      <div class="sidebar-brand-text mx-3" style="color: white;">ModRekt</div>
-    </a>
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center">
+        <div class="sidebar-brand-icon">
+          <img src="/img/regis_icon_1.png" width="50px" height="50px" class="img-responsive">
+        </div>
+        <div class="sidebar-brand-text mx-3" style="color: white;">ModRekt</div>
+      </a>
 
     <li class="nav-item">
       <h4 style="color: white;"><%= username %></h4>
+    </li>
 
-      <!-- Nav Item - Dashboard -->
+    <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-      <a class="nav-link" href="../dashboard_admin">
+      <a class="nav-link" href="dashboard_admin">
         <span style="font-size: 1.0em;">Dashboard</span></a>
     </li>
 
       <!-- Nav Item - Programmes -->
       <li class="stu-nav-hide1 nav-item" >
-        <a class="nav-link" href="../program"><span style="font-size: 1.0em;">Programmes</span></a>
+        <a class="nav-link" href="program"><span style="font-size: 1.0em;">Programmes</span></a>
       </li>
 
     <!-- Nav Item - Modules -->
     <li class="nav-item">
-      <a class="nav-link" href="../module">
+      <a class="nav-link" href="module">
         <span style="font-size: 1.0em;">Modules</span></a>
     </li>
 
@@ -70,32 +71,32 @@
     <div class="stu-nav-hide2">
       <!-- Nav Item - Lecture Slot -->
       <li class="nav-item">
-        <a class="nav-link" href="../lecture_slot">
+        <a class="nav-link" href="lecture_slot">
           <span style="font-size: 1.0em;">Lecture Slot</span></a>
       </li>
 
 
       <!-- Nav Item - Prerequisites -->
       <li class="nav-item">
-        <a class="nav-link" href="../prereq">
+        <a class="nav-link" href="prereq">
           <span style="font-size: 1.0em;">Prerequisites</span></a>
       </li>
 
       <!-- Nav Item - Round -->
       <li class="nav-item">
-        <a class="nav-link" href="../round">
+        <a class="nav-link" href="round">
           <span style="font-size: 1.0em;">Round</span></a>
       </li>
 
       <!-- Nav Item - Past Rounds -->
       <li class="nav-item" >
-        <a class="nav-link" href="../past_rounds">
+        <a class="nav-link" href="past_rounds">
           <span style="font-size: 1.0em;">Past Rounds</span></a>
       </li>
 
       <!-- Nav Item - Appeal -->
       <li class="nav-item" >
-        <a class="nav-link" href="../appeal">
+        <a class="nav-link" href="appeal">
           <span style="font-size: 1.0em;">Appeal</span></a>
       </li>
 
@@ -104,18 +105,27 @@
     <div class="adm-nav-hide1">
       <!-- Nav Item - register_module -->
       <li class="nav-item" >
-        <a class="nav-link" href="../register_module">
+        <a class="nav-link" href="register_module">
           <span style="font-size: 1.0em;">Register Module</span></a>
       </li>
     </div>
 
     <li class="nav-item">
       <div class="form-group">
-        <form action="../logout" role="form" method="post">
+        <form action="logout" role="form" method="post">
           <button type="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> <br/> Logout</button>
         </form>
       </div>
     </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <!--    <div class="text-center d-none d-md-inline">-->
+    <!--      <button class="rounded-circle border-0" id="sidebarToggle"></button>-->
+    <!--    </div>-->
 
   </ul>
   <!-- End of Sidebar -->
@@ -148,41 +158,70 @@
 
 
         <!-- TODO: Add core content here -->
-  <div class="form-group" id="div-no-prereqs">
-    <h5 id="h5-no-prereqs">This module has no prerequisites.</h5>
+  <div class="form-group" id="div-no-past-round">
+    <h5>There are currently no past rounds</h5>
   </div>
-  <div class="form-group" id="div-prereqs">
-    <form id="prereq_form" role="form" method="post">
-      <div class="form-group">
-        <label for="parents">Prerequisites</label>
-        <select multiple="multiple" class="form-control" id="parents" name="parents"
-                required="required" size="<%= 1 + (parents.length * 0.5) %>">
-          <% parents.forEach(parent => { %>
-              <option value="<%= parent.mod_code %>">
-                <%= parent.mod_code %> <%= parent.mod_name %>
-              </option>
-          <% }); %>
-        </select>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary"
-                id="btn-prereqs">Submit</button>
-      </div>
-    </form>
+
+  <div class="form-group" id="div-past-round">
+    <div class="form-group">
+      <label for="parent">Past Round</label>
+      <select class="form-control" id="past_round" name="past_round" onchange="submitPastRoundForm()">
+        <option value="" disabled="disabled" selected="selected"><%= selected_round%></option>
+        <% for(var i=0; i<past_rounds.length; i++) { %>
+          <option value="<%= i%>"><%= past_rounds[i].s_time_round %>-<%= past_rounds[i].e_time_round %></option>
+        <% } %>
+      </select>
+    </div>
   </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary"
-            onclick="window.location.href='../prereq'">Previous</button>
-  </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary"
-            onclick="window.location.href='../dashboard_admin'">Back to Home</button>
-  </div>
-  <div class="form-group">
-    <form action="../logout" role="form" method="post">
-      <button type="submit" class="btn btn-primary">Logout</button>
-    </form>
-  </div>
+
+        <div class="form-group" id="div-registrations">
+          <table class="table">
+            <thead class="bg-gradient-primary">
+            <tr style="color: white;">
+              <th scope="col">Module Code</th>
+              <th scope="col">Module Name</th>
+              <th scope="col">Sem</th>
+              <th scope="col">Day</th>
+              <th scope="col">Lecture Start</th>
+              <th scope="col">Lecture End</th>
+              <th scope="col">Quota</th>
+              <th scope="col">Register Start</th>
+              <th scope="col">Register End</th>
+              <th scope="col">Student Username</th>
+              <th scope="col">Status</th>
+              <th scope="col">Priority Score</th>
+              <th scope="col">Rank Preference</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% values.forEach(value => { %>
+              <tr>
+                <td><%= value.mod_code %></td>
+                <td><%= value.mod_name %></td>
+                <td><%= value.sem %></td>
+                <td><%= value.day %></td>
+                <td><%= value.s_time_lect %></td>
+                <td><%= value.e_time_lect %></td>
+                <td><%= value.quota %></td>
+                <td><%= value.s_time_round %></td>
+                <td><%= value.e_time_round %></td>
+                <td><%= value.s_username %></td>
+                <td><%= value.status %></td>
+                <td><%= value.priority_score %></td>
+                <td><%= value.rank_pref %></td>
+                <td></td>
+              </tr>
+            <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-group" id="btn-allocate">
+          <button type="submit" class="btn btn-info"
+                  onclick="window.location.href='past_rounds/allocate'">Allocate</button>
+        </div>
+
+
 
         <!-- /.container-fluid -->
       </div>
@@ -226,37 +265,41 @@
 
 
 
+<script>
+    function submitPastRoundForm() {
+      const index = document.getElementById('past_round').value;
+      window.location.href='past_rounds/select_round?' +
+                'index=' + index;
+    }
+  </script>
   <script>
     (function() {
       window.addEventListener('load', function() {
-        <% if (parents.length === 0) { %>
-        document.getElementById('div-prereqs').style.display = "none";
-        document.getElementById('div-no-prereqs').style.display = "block";
+        <% if (past_rounds.length === 0) { %>
+        document.getElementById('div-past-round').style.display = "none";
+        document.getElementById('div-no-past-round').style.display = "block";
         <% } else { %>
-        document.getElementById('div-prereqs').style.display = "block";
-        document.getElementById('div-no-prereqs').style.display = "none";
+        document.getElementById('div-past-round').style.display = "block";
+        document.getElementById('div-no-past-round').style.display = "none";
         <% } %>
       });
     })();
   </script>
-  <script>
-    window.onmousedown = function (event) {
-      var eventTarget = event.target;
-      if (eventTarget.tagName.toLowerCase() === 'option' &&
-              eventTarget.parentNode.hasAttribute('multiple')) {
-        event.preventDefault();
 
-        // toggle selection
-        if (eventTarget.hasAttribute('selected')) {
-          eventTarget.removeAttribute('selected');
-        } else {
-          eventTarget.setAttribute('selected', '');
-        }
 
-        // hack to correct buggy behavior
-        var select = eventTarget.parentNode.cloneNode(true);
-        eventTarget.parentNode.parentNode.replaceChild(select, eventTarget.parentNode);
+<script>
+  (function() {
+    window.addEventListener('load', function() {
+      var roleType = "<%= role %>";
+      if (roleType === 'Student') {
+        document.getElementsByClassName('stu-nav-hide1')[0].remove();
+        document.getElementsByClassName('stu-nav-hide2')[0].remove();
       }
-    }
-  </script>
+
+      if (roleType === 'Admin') {
+        document.getElementsByClassName('adm-nav-hide1')[0].remove();
+      }
+    });
+  })();
+</script>
 </html>

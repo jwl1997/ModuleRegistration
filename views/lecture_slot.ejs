@@ -37,64 +37,78 @@
 <div id="wrapper">
 
   <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion align-items-center"  id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center">
       <div class="sidebar-brand-icon">
         <img src="/img/regis_icon_1.png" width="50px" height="50px" class="img-responsive">
       </div>
-      <div class="sidebar-brand-text mx-3">ModRekt</div>
+      <div class="sidebar-brand-text mx-3" style="color: white;">ModRekt</div>
     </a>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Appeal -->
     <li class="nav-item">
-      <a class="nav-link" href="appeal">
-        <span>Appeal</span></a>
-      <!-- <button type="submit" class="btn btn-primary" onclick="window.location.href='appeal'">Appeal</button> -->
+      <h4 style="color: white;"><%= username %></h4>
     </li>
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
       <a class="nav-link" href="dashboard_admin">
-        <span>Dashboard</span></a>
+        <span style="font-size: 1.0em;">Dashboard</span></a>
     </li>
 
-    <!-- Nav Item - Lecture Slot -->
-    <li class="nav-item">
-      <a class="nav-link" href="lecture_slot">
-        <span>Lecture Slot</span></a>
-    </li>
+      <!-- Nav Item - Programmes -->
+      <li class="stu-nav-hide1 nav-item" >
+        <a class="nav-link" href="program"><span style="font-size: 1.0em;">Programmes</span></a>
+      </li>
 
     <!-- Nav Item - Modules -->
     <li class="nav-item">
       <a class="nav-link" href="module">
-        <span>Modules</span></a>
+        <span style="font-size: 1.0em;">Modules</span></a>
     </li>
 
-    <!-- Nav Item - Prerequisites -->
-    <li class="nav-item">
-      <a class="nav-link" href="prereq">
-        <span>Prerequisites</span></a>
-    </li>
 
-    <!-- Nav Item - Programmes -->
-    <li class="nav-item">
-      <a class="nav-link" href="program">
-        <span>Programmes</span></a>
-    </li>
+    <div class="stu-nav-hide2">
+      <!-- Nav Item - Lecture Slot -->
+      <li class="nav-item">
+        <a class="nav-link" href="lecture_slot">
+          <span style="font-size: 1.0em;">Lecture Slot</span></a>
+      </li>
 
-    <!-- Nav Item - Round -->
-    <li class="nav-item">
-      <a class="nav-link" href="round">
-        <span>Round</span></a>
-    </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+      <!-- Nav Item - Prerequisites -->
+      <li class="nav-item">
+        <a class="nav-link" href="prereq">
+          <span style="font-size: 1.0em;">Prerequisites</span></a>
+      </li>
+
+      <!-- Nav Item - Round -->
+      <li class="nav-item">
+        <a class="nav-link" href="round">
+          <span style="font-size: 1.0em;">Round</span></a>
+      </li>
+
+      <!-- Nav Item - Past Rounds -->
+      <li class="nav-item" >
+        <a class="nav-link" href="past_rounds">
+          <span style="font-size: 1.0em;">Past Rounds</span></a>
+      </li>
+
+      <!-- Nav Item - Appeal -->
+      <li class="nav-item" >
+        <a class="nav-link" href="appeal">
+          <span style="font-size: 1.0em;">Appeal</span></a>
+      </li>
+    </div>
+
+    <div class="adm-nav-hide1">
+      <!-- Nav Item - register_module -->
+      <li class="nav-item" >
+        <a class="nav-link" href="register_module">
+          <span style="font-size: 1.0em;">Register Module</span></a>
+      </li>
+    </div>
 
     <li class="nav-item">
       <div class="form-group">
@@ -103,15 +117,6 @@
         </form>
       </div>
     </li>
-
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-<!--    <div class="text-center d-none d-md-inline">-->
-<!--      <button class="rounded-circle border-0" id="sidebarToggle"></button>-->
-<!--    </div>-->
 
   </ul>
   <!-- End of Sidebar -->
@@ -157,49 +162,54 @@
       </div>
       <div class="form-group">
         <label style="font-weight:bold;font-size:larger;">Lecture Slot Info</label>
-        <div class="form-group" id="div-sem">
-          <label for="sem">Semester</label>
-          <select class="form-control" id="sem" name="sem" required="required">
-            <option value="" disabled="disabled" selected="selected">Select Semester</option>
-            <option value="1">Semester 1</option>
-            <option value="2">Semester 2</option>
-          </select>
+        <div class="form-row">
+          <div class="form-group col" id="div-sem">
+            <label for="sem">Semester</label>
+            <select class="form-control" id="sem" name="sem" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Semester</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+            </select>
+          </div>
+          <div class="form-group col">
+            <label for="day">Lecture Day</label>
+            <select class="form-control" id="day" name="day" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+            </select>
+          </div>
+          <div class="form-group col">
+            <label for="quota">Lecture Quota</label>
+            <input type="number" class="form-control" id="quota" name="quota"
+                   placeholder="Enter Lecture Quota" required="required">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="day">Lecture Day</label>
-          <select class="form-control" id="day" name="day" required="required">
-            <option value="" disabled="disabled" selected="selected">Select Lecture Day</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-          </select>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="start_time">Lecture Start Time</label>
+            <input type="time" class="form-control" id="start_time"
+                   name="start_time" required="required">
+          </div>
+          <div class="form-group col">
+            <label for="end_time">Lecture End Time</label>
+            <input type="time" class="form-control" id="end_time"
+                   name="end_time" required="required">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="start_time">Lecture Start Time</label>
-          <input type="time" class="form-control" id="start_time"
-                 name="start_time" required="required">
-        </div>
-        <div class="form-group">
-          <label for="end_time">Lecture End Time</label>
-          <input type="time" class="form-control" id="end_time"
-                 name="end_time" required="required">
-        </div>
-        <div class="form-group">
-          <label for="quota">Lecture Quota</label>
-          <input type="number" class="form-control" id="quota" name="quota"
-                 placeholder="Enter Lecture Quota" required="required">
-        </div>
+
       </div>
       <div>
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <button type="submit" class="btn btn-info">Submit</button>
       </div>
     </form>
   </div>
   <div class="form-group" id="div-lectures">
     <table class="table" id="table-lectures">
-      <caption style="text-align: center;">Lecture Slots</caption>
       <thead class="bg-gradient-primary">
       <tr style="color: white;">
         <th scope="col">No.</th>
@@ -225,8 +235,8 @@
           <td><%= lecture.quota %></td>
           <td>
             <!-- TODO: Add functionality for the DELETE button to delete the row -->
-            <input type="button" id="btn-delete-lecture" value="Delete"/>
-            <input type="button" id="btn-update-lecture" value="Update"/>
+            <input class="btn btn-danger" type="button" id="btn-delete-lecture" value="Delete"/>
+            <input class="btn btn-success" type="button" id="btn-update-lecture" value="Update"/>
           </td>
         </tr>
         <% j++; %>
@@ -282,10 +292,6 @@
     </div>
   </form>
 
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary"
-                  onclick="window.location.href='dashboard_admin'">Back to Home</button>
-        </div>
         <!-- /.container-fluid -->
       </div>
       <!-- End of Main Content -->
@@ -414,4 +420,21 @@
       }
     }
   </script>
+
+
+<script>
+  (function() {
+    window.addEventListener('load', function() {
+      var roleType = "<%= role %>";
+      if (roleType === 'Student') {
+        document.getElementsByClassName('stu-nav-hide1')[0].remove();
+        document.getElementsByClassName('stu-nav-hide2')[0].remove();
+      }
+
+      if (roleType === 'Admin') {
+        document.getElementsByClassName('adm-nav-hide1')[0].remove();
+      }
+    });
+  })();
+</script>
 </html>

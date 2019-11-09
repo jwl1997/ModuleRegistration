@@ -7,14 +7,23 @@ const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
+var rounds;
+
 router.get('/', function(req, res, next) {
-	pool.query(sql.query.load_rounds, (err, rounds) => {
+	pool.query(sql.query.load_rounds, (err, data) => {
 		if (err) {
 			unknownError(err, res);
 		} else {
+			rounds = data.rows;
+			for (let i=0;i<rounds.length;i++){
+				rounds[i].s_time_round = new Date(rounds[i].s_time_round).toLocaleString();
+				rounds[i].e_time_round = new Date(rounds[i].e_time_round).toLocaleString();
+			}
 			res.render('round', {
 				title: 'Round',
-				rounds: rounds.rows
+				rounds: rounds,
+				role: req.session.role,
+				username: req.session.username
 			});
 		}
 	});

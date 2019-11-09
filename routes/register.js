@@ -8,9 +8,27 @@ const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
+var success = false;
+
 /* GET Register Page */
 router.get('/', function(req, res, next) {
-  res.render('register', { title: 'Register' });
+  pool.query(sql.query.load_programs, (err, data) => {
+    if (err) {
+      unknownError(err, res);
+    } else {
+      res.render('register', {
+        title: 'Register',
+        programs: data.rows,
+        data_undefined: req.query.data_undefined,
+        password_hash: req.query.password_hash,
+        insert_database: req.query.insert_database,
+        no_role: req.query.no_role,
+        unknown: req.query.unknown,
+        user_already_exist: req.query.user_already_exist,
+        success: success
+      });
+    }
+  });
 });
 
 router.post('/', function(req, res, next) {
@@ -62,30 +80,39 @@ router.post('/', function(req, res, next) {
   const username = req.body.username;
   const role = req.body.role;
   const seniority = req.body.seniority;
+  const program = req.body.program;
 
   // If user is a Student, insert to Students
   if (role === 'Student') {
-    pool.query(sql.query.add_student, [username, seniority], (err, data) => {
+    pool.query(sql.query.add_student, [username, seniority, program], (err, data) => {
       if (err) {
+        success = false;
         insertError('Students', err, res);
       } else if (data === undefined) {
+        success = false;
         dataUndefinedError(res);
+      } else {
+        success = true;
+        res.redirect('/register');
       }
     });
     // TODO: prompt student registration successful
-    return res.redirect('/login');
   }
   // If user is an Admin, insert to Admins
   else if (role === 'Admin') {
     pool.query(sql.query.add_admin, [username], (err, data) => {
       if (err) {
+        success = false;
         insertError('Admins', err, res);
       } else if (data === undefined) {
+        success = false;
         dataUndefinedError(res);
+      } else {
+        success = true;
+        res.redirect('/register');
       }
     });
     // TODO prompt admin registration successful
-    return res.redirect('/login');
   }
   // User's role is neither a Student or an Admin
   else {
@@ -95,22 +122,22 @@ router.post('/', function(req, res, next) {
 
 function dataUndefinedError(res) {
   console.error('Data is undefined');
-  return res.redirect('/register?undefined=fail');
+  return res.redirect('/register?data_undefined=fail');
 }
 
 function hashFailedError(err, res) {
   console.error('Hash failed');
-  return res.redirect('/register?hash=fail');
+  return res.redirect('/register?password_hash=fail');
 }
 
 function insertError(databaseName, err, res) {
   console.error('Unable to insert into ' + databaseName, err);
-  return res.redirect('/register?insert=fail');
+  return res.redirect('/register?insert_database=fail');
 }
 
 function noRoleError(res) {
   console.error('Role is neither a Student nor an Admin');
-  return res.redirect('/register?role=fail');
+  return res.redirect('/register?no_role=fail');
 }
 
 function unknownError(err, res) {
@@ -120,7 +147,7 @@ function unknownError(err, res) {
 
 function userExistsError(res) {
   console.info('User already exists in database');
-  return res.redirect('/register?exists=fail');
+  return res.redirect('/register?user_already_exist=fail');
 }
 
 module.exports = router;

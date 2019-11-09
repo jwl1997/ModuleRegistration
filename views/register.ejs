@@ -93,13 +93,61 @@
         <option value="5">Year 5</option>
       </select>
     </div>
+    <div class="form-group" id="div-program" name="div-program" style="display:none;">
+      <label for="modules">Program</label>
+      <select class="form-control" id="program" name="program" required="required">
+        <option value="" disabled="disabled" selected="selected">Select Program</option>
+        <% programs.forEach(program => { %>
+          <option value="<%= program.prog_name %>">
+            <%= program.prog_name %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
     <div class="form-group text-center">
       <a class="d-block small mt-3" href="/login">Return to login</a>
     </div>
-    <div>
+    <div class="form-group text-center">
       <button type="submit" class="btn btn-primary btn-block">Submit</button>
     </div>
   </form>
+  <div class="form-group text-center">
+    <% if (Boolean(data_undefined)) { %>
+      <label style="color: #721c24">Register failed. Data is undefined.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(password_hash)) { %>
+      <label style="color: #721c24">Register failed. Unable to generate hashed password.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(insert_database)) { %>
+      <label style="color: #721c24">Register failed. Unable to insert into database.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(no_role)) { %>
+      <label style="color: #721c24">Register failed. No such role.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(unknown)) { %>
+      <label style="color: #721c24">Register failed. Something went wrong.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+    <% if (Boolean(user_already_exist)) { %>
+      <label style="color: #721c24">Register failed. User already exists in database.</label>
+    <% } else { %>
+      <label></label>
+    <% } %>
+      <% if (success) { %>
+        <label style="color: #4e73df">Successfully registered. You can now login.</label>
+      <% } else { %>
+        <label></label>
+      <% } %>
+  </div>
               </div>
             </div>
           </div>
@@ -133,14 +181,18 @@
       if (document.getElementById('role').value === 'Student') {
         // Display
         document.getElementById('div-seniority').style.display = "block";
+        document.getElementById('div-program').style.display = "block";
         // Compulsory to be Filled
         document.getElementById('seniority').required = "required";
+        document.getElementById('program').required = "required";
       }
       else if (document.getElementById('role').value === 'Admin') {
         // Hide
         document.getElementById('div-seniority').style.display = "none";
+        document.getElementById('div-program').style.display = "none";
         // Not compulsory to be Filled
         document.getElementById('seniority').required = "";
+        document.getElementById('program').required = "";
       }
     }
   </script>
