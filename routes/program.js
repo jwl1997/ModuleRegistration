@@ -10,7 +10,7 @@ const pool = new Pool({
 let programs;
 
 router.get('/', function(req, res, next) {
-	pool.query(sql.query.load_programs, (err, p) => {
+	pool.query(sql.query.load_require, (err, p) => {
 		if (err) {
 		  unknownError(err, res);
 		} else {
@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
       res.render('program', {
         title: 'Programmes',
         programs: programs.rows,
-          role: req.session.role,
+        role: req.session.role,
         username: req.session.username,
         modules: modules.rows,
 
@@ -42,31 +42,46 @@ let program;
 router.post('/', function(req, res, next) {
   program = req.body.program;
 
-	pool.query(sql.query.add_program, [program], (err, data) => {
-		if (err) {
-      insertError('Programs', err, res);
-		} else {
-		  next();
+  pool.query(sql.query.auth_program, [program], (err, data) => {
+    if (!data.rows[0].exists) {
+      console.log("Program does not exist");
+      pool.query(sql.query.add_program, [program], (err, data) => {
+        if (err) {
+          insertError('Programs', err, res);
+        } else {
+          next();
+        }
+      });
+    } else {
+      next();
     }
-	});
+  });
 });
 
 router.post('/', function(req, res, next) {
   const modules = req.body.modules;
 
-  for (let i = 0; i < modules.length; i++) {
-    pool.query(sql.query.add_require,
-      [program, modules[i]], (err, data) => {
+  if (typeof modules === 'string') {
+    pool.query(sql.query.add_require, [program, modules], (err, data) => {
       if (err) {
         insertError('Require', err, res);
+      } else {
+        return res.redirect('/program');
       }
     });
+  } else {
+    for (let i = 0; i < modules.length; i++) {
+      pool.query(sql.query.add_require, [program, modules[i]], (err, data) => {
+        if (err) {
+          insertError('Require', err, res);
+        }
+        if (i === modules.length - 1) {
+          return res.redirect('/program');
+        }
+      });
+    }
   }
-  // TODO: prompt admin insert queries successful
-  return res.redirect('/program');
 });
-
-// TODO: As of now, unable to delete programs that are being referenced in Students
 
 router.get('/delete_program', function(req, res, next) {
   const prog_name = req.query.program;
